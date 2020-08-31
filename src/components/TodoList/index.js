@@ -248,7 +248,7 @@ export default function TodoList({ todoListID }) {
           // </Collapse>
         )}
       </Content>
-      <Footer>
+      <Footer style={{ position: 'fixed', bottom: 0, width: '100%' }}>
         <AddTodo addTodo={addTodo} />
       </Footer>
       <TodoMenu

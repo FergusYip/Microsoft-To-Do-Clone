@@ -80,7 +80,7 @@ export default function Sidebar() {
           />
         </Menu.Item> */}
       </Menu>
-      <List
+      {/* <List
         dataSource={lists}
         renderItem={(list) => (
           <List.Item key={list.id}>
@@ -93,9 +93,14 @@ export default function Sidebar() {
             </Typography.Text>
           </List.Item>
         )}
-      />
+      /> */}
       <Divider />
-      <Menu theme="dark" mode="inline" selectable={false}>
+      <Menu
+        theme="dark"
+        mode="inline"
+        selectable={false}
+        style={{ position: 'fixed', bottom: 0 }}
+      >
         <Menu.Item icon={<PlusOutlined />} onClick={newList}>
           New List
         </Menu.Item>
