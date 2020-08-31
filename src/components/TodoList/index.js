@@ -10,6 +10,7 @@ import {
   Dropdown,
   Row,
   Col,
+  Drawer,
   PageHeader,
 } from 'antd';
 import {
@@ -30,7 +31,7 @@ import AddTodo from './AddTodo';
 import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Sider, Footer } = Layout;
 /*
 Todo:
 id
@@ -117,6 +118,16 @@ export default function TodoList({ todoListID }) {
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
 
+  const [visible, setVisible] = useState(false);
+
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const hideDrawer = () => {
+    setVisible(false);
+  };
+
   function addTodo(newTodo) {
     setTodos((todos) => [...todos, newTodo]);
   }
@@ -133,6 +144,7 @@ export default function TodoList({ todoListID }) {
 
   function selectTodo(todo) {
     setSelectedTodo(todo);
+    showDrawer();
   }
 
   const optionsDropdown = (
@@ -194,77 +206,55 @@ export default function TodoList({ todoListID }) {
 
   return (
     <Layout>
-      <Layout>
-        <Header>
-          <PageHeader
-            className="site-page-header"
-            title="List Title"
-            extra={[
-              <Button shape="round">
-                <ShareAltOutlined />
-              </Button>,
-              <Dropdown
-                overlay={optionsDropdown}
-                placement="bottomRight"
-                trigger={['click']}
-              >
-                <Button shape="round">
-                  <EllipsisOutlined />
-                </Button>
-              </Dropdown>,
-            ]}
+      <PageHeader
+        className="site-page-header"
+        title="List Title"
+        extra={[
+          <Button shape="round">
+            <ShareAltOutlined />
+          </Button>,
+          <Dropdown
+            overlay={optionsDropdown}
+            placement="bottomRight"
+            trigger={['click']}
+          >
+            <Button shape="round">
+              <EllipsisOutlined />
+            </Button>
+          </Dropdown>,
+        ]}
+      />
+      <Content>
+        <ConfigProvider renderEmpty={customizeEmptyTodo}>
+          <List
+            bordered
+            dataSource={todos.filter((todo) => !todo.isComplete)}
+            renderItem={(todo) => (
+              <TodoItem
+                todo={todo}
+                modifyTodo={modifyTodo}
+                selectTodo={selectTodo}
+              />
+            )}
           />
-          {/* <Row justify="space-between">
-            <Col>
-              <Typography.Title>List Title</Typography.Title>
-            </Col>
-            <Col>
-              <Space>
-                <Button shape="round">
-                  <ShareAltOutlined />
-                </Button>
-                <Dropdown
-                  overlay={optionsDropdown}
-                  placement="bottomRight"
-                  trigger={['click']}
-                >
-                  <Button shape="round">
-                    <EllipsisOutlined />
-                  </Button>
-                </Dropdown>
-              </Space>
-            </Col>
-          </Row> */}
-        </Header>
-        <Content>
-          <ConfigProvider renderEmpty={customizeEmptyTodo}>
-            <List
-              bordered
-              dataSource={todos.filter((todo) => !todo.isComplete)}
-              renderItem={(todo) => (
-                <TodoItem
-                  todo={todo}
-                  modifyTodo={modifyTodo}
-                  selectTodo={selectTodo}
-                />
-              )}
-            />
-          </ConfigProvider>
-          {showCompleted && (
-            <CompletedList
-              todos={todos}
-              modifyTodo={modifyTodo}
-              selectTodo={selectTodo}
-            />
-          )}
-          <AddTodo addTodo={addTodo} />
-        </Content>
-      </Layout>
-      {selectedTodo && (
-        <Sider breakpoint="md" collapsedWidth="0" trigger={null} theme="light">
-          <TodoMenu todo={selectedTodo} modifyTodo={modifyTodo}></TodoMenu>
-        </Sider>
-      )}
+        </ConfigProvider>
+        {showCompleted && (
+          <CompletedList
+            todos={todos}
+            modifyTodo={modifyTodo}
+            selectTodo={selectTodo}
+          />
+        )}
+      </Content>
+      <Footer>
+        <AddTodo addTodo={addTodo} />
+      </Footer>
+      <TodoMenu
+        todo={selectedTodo}
+        modifyTodo={modifyTodo}
+        onClose={hideDrawer}
+        visible={visible}
+      />
     </Layout>
   );
 }
