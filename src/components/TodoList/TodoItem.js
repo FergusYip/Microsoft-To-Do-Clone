@@ -49,6 +49,7 @@ export default function TodoItem({ todo, modifyTodo, selectTodo }) {
             icon={todo.isFavorite ? <StarFilled /> : <StarOutlined />}
             onClick={toggleFavorite}
             shape="circle"
+            type="link"
           ></Button>
         </Tooltip>,
       ]}

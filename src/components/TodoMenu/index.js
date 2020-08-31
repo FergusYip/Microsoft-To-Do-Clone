@@ -54,6 +54,7 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
   return (
     todo && (
       <Drawer
+        headerStyle={{ padding: 0 }}
         title={
           <PageHeader
             onBack={() => null}
@@ -65,11 +66,13 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
                   icon={todo.isFavorite ? <StarFilled /> : <StarOutlined />}
                   onClick={toggleFavorite}
                   shape="circle"
+                  type="link"
                 ></Button>
               </Tooltip>
             }
           />
         }
+        bodyStyle={{ paddingTop: 0 }}
         placement="right"
         closable={false}
         onClose={onClose}
