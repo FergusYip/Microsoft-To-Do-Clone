@@ -52,9 +52,9 @@ export default function TodoItem({ todo, modifyTodo, selectTodo }) {
           ></Button>
         </Tooltip>,
       ]}
-      onClick={selectThis}
     >
       <List.Item.Meta
+        onClick={selectThis}
         avatar={
           <Tooltip
             title={todo.isComplete ? 'Mark as todo' : 'Mark as done'}

@@ -8,10 +8,8 @@ import {
   Layout,
   Menu,
   Dropdown,
-  Row,
-  Col,
-  Drawer,
   PageHeader,
+  Collapse,
 } from 'antd';
 import {
   SmileOutlined,
@@ -210,7 +208,7 @@ export default function TodoList({ todoListID }) {
         className="site-page-header"
         title="List Title"
         extra={[
-          <Button shape="round">
+          <Button shape="circle">
             <ShareAltOutlined />
           </Button>,
           <Dropdown
@@ -218,7 +216,7 @@ export default function TodoList({ todoListID }) {
             placement="bottomRight"
             trigger={['click']}
           >
-            <Button shape="round">
+            <Button shape="circle">
               <EllipsisOutlined />
             </Button>
           </Dropdown>,
@@ -239,11 +237,15 @@ export default function TodoList({ todoListID }) {
           />
         </ConfigProvider>
         {showCompleted && (
+          // <Collapse>
+          //   <Collapse.Panel>
           <CompletedList
             todos={todos}
             modifyTodo={modifyTodo}
             selectTodo={selectTodo}
           />
+          //   </Collapse.Panel>
+          // </Collapse>
         )}
       </Content>
       <Footer>

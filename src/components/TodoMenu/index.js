@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   List,
-  Typography,
   Input,
   Space,
   Drawer,
@@ -9,18 +8,19 @@ import {
   PageHeader,
   Button,
   Tooltip,
+  Divider,
+  message,
 } from 'antd';
 import {
   PlusOutlined,
   CoffeeOutlined,
-  BellOutlined,
-  CalendarOutlined,
-  RetweetOutlined,
   PaperClipOutlined,
   StarFilled,
   StarOutlined,
 } from '@ant-design/icons';
 import StepList from './StepList';
+import TodoMenuItem from './TodoMenuItem';
+import { RepeatItem, DueDateItem, RemindMeItem } from './TodoMenuItems';
 
 export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
   const [newStep, setNewStep] = useState('');
@@ -90,35 +90,12 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
               />
             </Space>
           </List.Item>
+          <TodoMenuItem avatar={<CoffeeOutlined />} title="Add to My Day" />
+          <RemindMeItem />
+          <DueDateItem />
+          <RepeatItem />
           <List.Item>
-            <Space>
-              <CoffeeOutlined />
-              Add to My Day
-            </Space>
-          </List.Item>
-          <List.Item>
-            <Space>
-              <BellOutlined />
-              Remind Me
-            </Space>
-          </List.Item>
-          <List.Item>
-            <Space>
-              <CalendarOutlined />
-              Add Due Date
-            </Space>
-          </List.Item>
-          <List.Item>
-            <Space>
-              <RetweetOutlined />
-              Repeat
-            </Space>
-          </List.Item>
-          <List.Item>
-            <Space>
-              <PaperClipOutlined />
-              Add File
-            </Space>
+            <List.Item.Meta avatar={<PaperClipOutlined />} title="Add File" />
           </List.Item>
           <List.Item>
             <Input.TextArea
@@ -129,6 +106,7 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
             />
           </List.Item>
         </List>
+        <Divider />
       </Drawer>
     )
   );
