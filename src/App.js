@@ -11,12 +11,25 @@ function App() {
   return (
     <div className="App">
       <Layout>
-        <Sider breakpoint="sm" collapsedWidth="0" trigger={null}>
+        <Sider
+          theme="light"
+          breakpoint="sm"
+          collapsedWidth="0"
+          trigger={null}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+          }}
+        >
           <Sidebar />
         </Sider>
-        <Content>
-          <TodoList todoListId={null} />
-        </Content>
+        <Layout style={{ marginLeft: 200 }}>
+          <Content style={{ overflow: 'initial' }}>
+            <TodoList todoListId={null} />
+          </Content>
+        </Layout>
       </Layout>
     </div>
   );
