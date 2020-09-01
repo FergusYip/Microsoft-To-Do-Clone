@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Input, Divider, Typography, List, Layout } from 'antd';
+import { Menu, Input, Typography, List, Layout, PageHeader } from 'antd';
 import {
   CoffeeOutlined,
   StarOutlined,
   CalendarOutlined,
   CheckCircleOutlined,
   UnorderedListOutlined,
+  UserOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
 
@@ -37,10 +38,24 @@ export default function Sidebar() {
   }
   return (
     <Layout>
-      <Search
-        placeholder="input search text"
-        onSearch={(value) => console.log(value)}
+      <PageHeader
+        title="Todo"
+        backIcon={false}
+        avatar={{ icon: <UserOutlined /> }} // TODO: User image
       />
+      <span
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          paddingBottom: 16,
+        }}
+      >
+        <Search
+          placeholder="Search"
+          onSearch={(value) => console.log(value)}
+          style={{ width: '80%' }}
+        />
+      </span>
       <Content>
         <Menu mode="inline" defaultSelectedKeys={['1']}>
           <Menu.Item icon={<CoffeeOutlined />}>My Day</Menu.Item>

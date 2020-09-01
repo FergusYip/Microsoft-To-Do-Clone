@@ -226,7 +226,6 @@ export default function TodoList({ todoListID }) {
   return (
     <Layout>
       <PageHeader
-        className="site-page-header"
         title={
           editingTitle ? (
             <Input
