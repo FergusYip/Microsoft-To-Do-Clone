@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -8,6 +8,12 @@ import Sidebar from './components/Sidebar';
 const { Sider, Content } = Layout;
 
 function App() {
+  const [contentMargin, setContentMargin] = useState(0);
+
+  function switchMargin() {
+    setContentMargin((oldMargin) => (oldMargin === 0 ? 200 : 0));
+  }
+
   return (
     <div className="App">
       <Layout>
@@ -22,11 +28,12 @@ function App() {
             position: 'fixed',
             left: 0,
           }}
+          onBreakpoint={switchMargin}
         >
           <Sidebar />
         </Sider>
-        <Layout style={{ marginLeft: 200 }}>
-          <Content style={{ overflow: 'initial' }}>
+        <Layout style={{ marginLeft: contentMargin }}>
+          <Content>
             <TodoList todoListId={null} />
           </Content>
         </Layout>
