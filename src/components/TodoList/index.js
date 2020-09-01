@@ -10,6 +10,9 @@ import {
   Dropdown,
   PageHeader,
   Collapse,
+  Modal,
+  Input,
+  Result,
 } from 'antd';
 import {
   SmileOutlined,
@@ -22,6 +25,7 @@ import {
   EyeOutlined,
   DeleteOutlined,
   ShareAltOutlined,
+  ExclamationCircleOutlined,
 } from '@ant-design/icons';
 
 import TodoItem from './TodoItem';
@@ -30,6 +34,8 @@ import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
 
 const { Header, Content, Sider, Footer } = Layout;
+const { confirm } = Modal;
+
 /*
 Todo:
 id
@@ -103,18 +109,18 @@ const dummyList = {
 };
 
 const customizeEmptyTodo = () => (
-  <div style={{ textAlign: 'center' }}>
-    <Space direction="vertical">
-      <SmileOutlined style={{ fontSize: 32 }} />
-      <Typography.Text>Nothing left todo</Typography.Text>
-    </Space>
-  </div>
+  <Result
+    icon={<SmileOutlined />}
+    title="Nothing todo"
+    // extra={<Button type="primary">Next</Button>}
+  />
 );
 
 export default function TodoList({ todoListID }) {
   const [todos, setTodos] = useState(dummyList.todos);
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [editingTitle, setEditingTitle] = useState(false);
 
   const [visible, setVisible] = useState(false);
 
@@ -147,14 +153,8 @@ export default function TodoList({ todoListID }) {
 
   const optionsDropdown = (
     <Menu>
-      <Menu.Item icon={<EditOutlined />}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.alipay.com/"
-        >
-          Rename List
-        </a>
+      <Menu.Item icon={<EditOutlined />} onClick={handleRename}>
+        Rename List
       </Menu.Item>
       <Menu.Item icon={<SortAscendingOutlined />}>
         <a
@@ -190,23 +190,56 @@ export default function TodoList({ todoListID }) {
         {`${showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item icon={<DeleteOutlined />}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.tmall.com/"
-        >
-          Delete List
-        </a>
+      <Menu.Item icon={<DeleteOutlined />} onClick={showDeleteConfirm}>
+        Delete List
       </Menu.Item>
     </Menu>
   );
+
+  function showDeleteConfirm() {
+    confirm({
+      title: '“List title” will be permanently deleted.',
+      icon: <ExclamationCircleOutlined />,
+      content: "You won't be able to undo this action",
+      okText: 'Delete',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+        }).catch(() => console.log('Oops errors!'));
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
+  function handleRename() {
+    setEditingTitle(true);
+  }
+
+  function confirmRename() {
+    setEditingTitle(false);
+  }
 
   return (
     <Layout>
       <PageHeader
         className="site-page-header"
-        title="List Title"
+        title={
+          editingTitle ? (
+            <Input
+              className="ant-typography"
+              bordered={false}
+              placeholder={'List Title'}
+              onPressEnter={confirmRename}
+              autoFocus
+            />
+          ) : (
+            <Typography.Title level={3}>List Title</Typography.Title>
+          )
+        }
         extra={[
           <Button shape="circle">
             <ShareAltOutlined />
@@ -222,7 +255,9 @@ export default function TodoList({ todoListID }) {
           </Dropdown>,
         ]}
       />
-      <Content>
+      <Content
+      // style={{ padding: 24, display: 'flex', flexDirection: 'column',  }}
+      >
         <ConfigProvider renderEmpty={customizeEmptyTodo}>
           <List
             bordered
