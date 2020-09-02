@@ -9,32 +9,30 @@ import {
   UserOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import { createList } from '../../store/actions/listActions';
+import create from '@ant-design/icons/lib/components/IconFont';
 
 const { Search } = Input;
 const { Content, Footer } = Layout;
 
-const dummyLists = [
-  { id: 1, title: 'Groceries', numTodo: 5 },
-  { id: 2, title: 'Homework', numTodo: 2 },
-  { id: 3, title: 'Movie Watchlist', numTodo: 0 },
-];
+function Sidebar({ lists, createList }) {
+  // const [lists, setLists] = useState(lists);
 
-export default function Sidebar() {
-  const [lists, setLists] = useState([]);
-
-  useEffect(() => {
-    setLists(dummyLists);
-  }, []);
+  // useEffect(() => {
+  //   setLists(dummyLists);
+  // }, []);
 
   function newList() {
     console.log('new list');
-    setLists((lists) => [
-      ...lists,
-      {
-        id: Math.max(lists.map((list) => list.id)) + 1,
-        title: 'Untitled list',
-      },
-    ]);
+    createList(null); // TODO
+    // setLists((lists) => [
+    //   ...lists,
+    //   {
+    //     id: Math.max(lists.map((list) => list.id)) + 1,
+    //     title: 'Untitled list',
+    //   },
+    // ]);
   }
   return (
     <Layout>
@@ -90,3 +88,17 @@ export default function Sidebar() {
     </Layout>
   );
 }
+
+const mapToState = (state) => {
+  return {
+    lists: state.list.lists,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createList: (list) => dispatch(createList(list)),
+  };
+};
+
+export default connect(mapToState, mapDispatchToProps)(Sidebar);
