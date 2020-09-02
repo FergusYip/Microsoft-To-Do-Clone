@@ -6,6 +6,7 @@ import SidebarBody from './layouts/SidebarBody';
 import TodoList from './components/TodoList/index';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route path="/login" exact component={LoginPage} />
         <Route path="/register" exact component={RegisterPage} />
         <SidebarBody>
-          <Route path="/list/:id" component={TodoList} />
+          <ProtectedRoute path="/list/:id" component={TodoList} />
         </SidebarBody>
         <Route path="*">
           <div>404</div>
