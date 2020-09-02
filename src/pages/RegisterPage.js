@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
+import { connect } from 'react-redux';
+import { signUp } from '../store/actions/authActions';
 
-export default function RegisterPage() {
+function RegisterPage({ signUp, authError }) {
   const onFinish = (values) => {
+    values = { ...values, name: values.name.trim() };
     console.log('Success:', values);
+    signUp(values);
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  useEffect(() => {
+    console.log(authError);
+  }, [authError]);
 
   return (
     <AuthCard title="Register">
@@ -23,15 +31,42 @@ export default function RegisterPage() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         requiredMark={false}
+        validateTrigger="onFinished"
       >
         <Space direction="vertical" style={{ width: '100%' }} size="small">
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: 'Please input your name!',
+              },
+              {
+                type: 'string',
+                message: 'Please enter a valid email!',
+              },
+              {
+                whitespace: true,
+                min: 1,
+                message: 'Please input your name!',
+              },
+              {
+                max: 50,
+                message: 'Name must be at most 50 characters!',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
           <Form.Item
             label="Email"
             name="email"
             rules={[
               {
                 required: true,
-                message: 'Please input your username!',
+                message: 'Please input your email!',
               },
               {
                 type: 'email',
@@ -44,7 +79,7 @@ export default function RegisterPage() {
 
           <Form.Item
             label="Password"
-            name="Password"
+            name="password"
             rules={[
               {
                 required: true,
@@ -55,7 +90,7 @@ export default function RegisterPage() {
               },
               {
                 min: 8,
-                message: 'Password must be at least 8 characters',
+                message: 'Password must be at least 8 characters!',
               },
               {
                 max: 32,
@@ -105,3 +140,17 @@ export default function RegisterPage() {
     </AuthCard>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    authError: state.auth.authError,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signUp: (newUser) => dispatch(signUp(newUser)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
