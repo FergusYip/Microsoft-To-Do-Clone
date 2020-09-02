@@ -9,9 +9,10 @@ import {
   UserOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createList } from '../../store/actions/listActions';
-import create from '@ant-design/icons/lib/components/IconFont';
+import { firestoreConnect } from 'react-redux-firebase';
 
 const { Search } = Input;
 const { Content, Footer } = Layout;
@@ -91,7 +92,7 @@ function Sidebar({ lists, createList }) {
 
 const mapToState = (state) => {
   return {
-    lists: state.list.lists,
+    lists: state.firestore.ordered.lists || state.list.lists,
   };
 };
 
@@ -101,4 +102,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapToState, mapDispatchToProps)(Sidebar);
+export default compose(
+  connect(mapToState, mapDispatchToProps),
+  firestoreConnect([{ collection: 'lists' }])
+)(Sidebar);

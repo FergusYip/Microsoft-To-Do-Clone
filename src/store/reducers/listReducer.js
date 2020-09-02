@@ -10,8 +10,13 @@ const listReducer = (state = initState, action) => {
   switch (action.type) {
     case 'CREATE_LIST':
       console.log('Created list', action.list);
+      return state;
+    case 'CREATE_LIST_ERROR':
+      console.log('Create list error', action.err);
+      return state;
+    default:
+      return state;
   }
-  return state;
 };
 
 export default listReducer;
