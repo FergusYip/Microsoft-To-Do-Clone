@@ -107,6 +107,7 @@ function Sidebar({ lists, createList }) {
 }
 
 const mapToState = (state) => {
+  console.log(state);
   return {
     lists: state.firestore.ordered.lists || state.list.lists,
   };

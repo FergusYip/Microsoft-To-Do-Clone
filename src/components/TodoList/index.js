@@ -157,10 +157,6 @@ function TodoList({ list }) {
   }
 
   useEffect(() => {
-    console.log('effect', list);
-  });
-
-  useEffect(() => {
     setTodos(list && list.todos ? list.todos : []);
   }, [list]);
 

@@ -1,16 +1,33 @@
-import React from 'react';
-import { Form, Input, Button, Checkbox, Space, Typography } from 'antd';
+import React, { useEffect } from 'react';
+import {
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Alert,
+  message,
+  Space,
+  Typography,
+  Divider,
+} from 'antd';
 import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
+import { signIn } from '../store/actions/authActions';
+import { connect } from 'react-redux';
 
-export default function LoginPage() {
+function LoginPage({ signIn, authError }) {
   const onFinish = (values) => {
     console.log('Success:', values);
+    signIn(values);
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  useEffect(() => {
+    authError && message.error(authError);
+  }, [authError]);
 
   return (
     <AuthCard title="Login">
@@ -68,6 +85,26 @@ export default function LoginPage() {
       <Link to="/register" component={Typography.Link}>
         Register here!
       </Link>
+      {authError && (
+        <>
+          <Divider />
+          <Alert message={authError} type="error" showIcon />
+        </>
+      )}
     </AuthCard>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    authError: state.auth.authError,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signIn: (creds) => dispatch(signIn(creds)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
