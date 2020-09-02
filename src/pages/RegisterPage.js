@@ -123,6 +123,7 @@ function RegisterPage({ signUp, authError }) {
                 },
               }),
             ]}
+            validateTrigger="onChange"
           >
             <Input.Password />
           </Form.Item>

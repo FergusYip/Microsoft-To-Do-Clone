@@ -5,7 +5,7 @@ import Avatar from 'antd/lib/avatar/avatar';
 import { connect } from 'react-redux';
 import { signOut } from '../../store/actions/authActions';
 
-function SidebarHeader({ signOut }) {
+function SidebarHeader({ signOut, profile }) {
   const avatarMenu = (
     <Menu>
       <Menu.Item key="0" onClick={signOut}>
@@ -19,7 +19,16 @@ function SidebarHeader({ signOut }) {
       title={
         <Row align="middle">
           <Dropdown overlay={avatarMenu} trigger={['click']}>
-            <Avatar icon={<UserOutlined />} />
+            {/* <Avatar icon={<UserOutlined />} /> */}
+            <Avatar>
+              {profile.isLoaded
+                ? profile.name
+                    .split(/\s+/)
+                    .map((word) => word[0])
+                    .join('')
+                    .toUpperCase()
+                : ''}
+            </Avatar>
           </Dropdown>
           <Typography.Title level={3} style={{ margin: 0 }}>
             Todo
@@ -31,10 +40,16 @@ function SidebarHeader({ signOut }) {
   );
 }
 
+const mapStateToProps = (state) => {
+  return {
+    profile: state.firebase.profile,
+  };
+};
+
 const mapDispatchToProps = (dispatch) => {
   return {
     signOut: () => dispatch(signOut()),
   };
 };
 
-export default connect(null, mapDispatchToProps)(SidebarHeader);
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarHeader);
