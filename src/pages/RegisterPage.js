@@ -21,14 +21,19 @@ export default function RegisterPage() {
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        requiredMark={false}
       >
         <Form.Item
-          label="Username"
-          name="username"
+          label="Email"
+          name="email"
           rules={[
             {
               required: true,
               message: 'Please input your username!',
+            },
+            {
+              type: 'email',
+              message: 'Please enter a valid email!',
             },
           ]}
         >

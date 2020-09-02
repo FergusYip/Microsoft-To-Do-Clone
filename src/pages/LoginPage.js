@@ -32,7 +32,7 @@ export default function LoginPage() {
             },
             {
               type: 'email',
-              message: 'Email is not valid!',
+              message: 'Please input a valid email!',
             },
           ]}
         >
@@ -58,7 +58,7 @@ export default function LoginPage() {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Submit
+            Login
           </Button>
         </Form.Item>
       </Form>
