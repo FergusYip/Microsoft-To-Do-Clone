@@ -15,6 +15,7 @@ import { createList } from '../../store/actions/listActions';
 import { firestoreConnect } from 'react-redux-firebase';
 
 import { useHistory } from 'react-router-dom';
+import SidebarHeader from './SidebarHeader';
 
 const { Search } = Input;
 const { Content, Footer } = Layout;
@@ -44,11 +45,7 @@ function Sidebar({ lists, createList }) {
   }
   return (
     <Layout>
-      <PageHeader
-        title="Todo"
-        backIcon={false}
-        avatar={{ icon: <UserOutlined /> }} // TODO: User image
-      />
+      <SidebarHeader />
       <span
         style={{
           display: 'flex',
