@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   List,
   Button,
@@ -26,7 +26,12 @@ import {
   DeleteOutlined,
   ShareAltOutlined,
   ExclamationCircleOutlined,
+  IdcardOutlined,
 } from '@ant-design/icons';
+import { useRouteMatch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
 
 import TodoItem from './TodoItem';
 import AddTodo from './AddTodo';
@@ -116,8 +121,8 @@ const customizeEmptyTodo = () => (
   />
 );
 
-export default function TodoList({ todoListID }) {
-  const [todos, setTodos] = useState(dummyList.todos);
+function TodoList({ list }) {
+  const [todos, setTodos] = useState([]);
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [editingTitle, setEditingTitle] = useState(false);
@@ -150,6 +155,14 @@ export default function TodoList({ todoListID }) {
     setSelectedTodo(todo);
     showDrawer();
   }
+
+  useEffect(() => {
+    console.log('effect', list);
+  });
+
+  useEffect(() => {
+    setTodos(list && list.todos ? list.todos : []);
+  }, [list]);
 
   const optionsDropdown = (
     <Menu>
@@ -223,7 +236,9 @@ export default function TodoList({ todoListID }) {
     setEditingTitle(false);
   }
 
-  return (
+  return !list ? (
+    <p>loading</p>
+  ) : (
     <Layout>
       <PageHeader
         title={
@@ -236,7 +251,7 @@ export default function TodoList({ todoListID }) {
               autoFocus
             />
           ) : (
-            <Typography.Title level={3}>List Title</Typography.Title>
+            <Typography.Title level={3}>{list.title}</Typography.Title>
           )
         }
         extra={[
@@ -285,12 +300,42 @@ export default function TodoList({ todoListID }) {
       <Footer style={{ position: 'fixed', bottom: 0, width: '100%' }}>
         <AddTodo addTodo={addTodo} />
       </Footer>
-      <TodoMenu
+      {/* <TodoMenu
         todo={selectedTodo}
         modifyTodo={modifyTodo}
         onClose={hideDrawer}
         visible={visible}
-      />
+      /> */}
     </Layout>
   );
 }
+
+const mapStateToProps = (state, ownProps) => {
+  console.log(state);
+  const id = ownProps.match.params.id;
+  const lists = state.firestore.data.lists;
+  const list = lists ? state.firestore.data.lists[id] : null;
+  const todos = state.firestore.data.todos;
+  return {
+    list: {
+      ...list,
+      todos:
+        todos && Object.keys(todos).map((key) => ({ ...todos[key], id: key })),
+    },
+  };
+};
+
+export default compose(
+  connect(mapStateToProps),
+  firestoreConnect((props) => [
+    {
+      collection: 'lists',
+      doc: props.match.params.id,
+      storeAs: 'list',
+    },
+    {
+      collection: `lists/${props.match.params.id}/todos`,
+      storeAs: 'todos',
+    },
+  ])
+)(TodoList);

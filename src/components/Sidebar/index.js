@@ -14,10 +14,13 @@ import { connect } from 'react-redux';
 import { createList } from '../../store/actions/listActions';
 import { firestoreConnect } from 'react-redux-firebase';
 
+import { useHistory } from 'react-router-dom';
+
 const { Search } = Input;
 const { Content, Footer } = Layout;
 
 function Sidebar({ lists, createList }) {
+  const history = useHistory();
   // const [lists, setLists] = useState(lists);
 
   // useEffect(() => {
@@ -34,6 +37,10 @@ function Sidebar({ lists, createList }) {
     //     title: 'Untitled list',
     //   },
     // ]);
+  }
+
+  function handleMenuSelect({ item, key, keyPath, domEvent }) {
+    console.log(item, key, keyPath, domEvent);
   }
   return (
     <Layout>
@@ -60,10 +67,19 @@ function Sidebar({ lists, createList }) {
           <Menu.Item icon={<CoffeeOutlined />}>My Day</Menu.Item>
           <Menu.Item icon={<StarOutlined />}>Important</Menu.Item>
           <Menu.Item icon={<CalendarOutlined />}>Planned</Menu.Item>
-          <Menu.Item icon={<CheckCircleOutlined />}>Tasks</Menu.Item>
+          <Menu.Item
+            icon={<CheckCircleOutlined />}
+            onClick={() => console.log('tasks')}
+          >
+            Tasks
+          </Menu.Item>
           <Menu.Divider />
           {lists.map((list) => (
-            <Menu.Item key={list.id} icon={<UnorderedListOutlined />}>
+            <Menu.Item
+              key={list.id}
+              icon={<UnorderedListOutlined />}
+              onClick={() => history.push(`/list/${list.id}`)}
+            >
               {list.title}
               <List.Item>
                 <List.Item.Meta title={list.title}></List.Item.Meta>

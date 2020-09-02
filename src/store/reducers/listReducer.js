@@ -1,8 +1,59 @@
 const initState = {
   lists: [
-    { id: 1, title: 'Groceries', numTodo: 5 },
-    { id: 2, title: 'Homework', numTodo: 2 },
-    { id: 3, title: 'Movie Watchlist', numTodo: 0 },
+    {
+      id: 1,
+      title: 'Groceries',
+      numTodo: 5,
+      sort: null,
+      theme: null,
+      showCompleted: true,
+      todos: [
+        {
+          id: 1,
+          title: 'Eat fruit',
+          isComplete: false,
+          isFavorite: true,
+          steps: [
+            { id: 1, title: 'Peel fruit', isComplete: true },
+            { id: 2, title: 'Cut fruit', isComplete: false },
+          ],
+          remindMe: null,
+          dueDate: null,
+          repeat: null,
+          files: [],
+          Note: '',
+        },
+        {
+          id: 2,
+          title: 'Buy groceries',
+          isComplete: true,
+          isFavorite: true,
+          steps: [
+            { id: 3, title: 'Buy apples', isComplete: true },
+            { id: 4, title: 'Buy Fish', isComplete: true },
+          ],
+          remindMe: null,
+          dueDate: null,
+          repeat: null,
+          files: [],
+          Note: '',
+        },
+        {
+          id: 3,
+          title: 'Finish todolist',
+          isComplete: false,
+          isFavorite: true,
+          steps: [],
+          remindMe: null,
+          dueDate: null,
+          repeat: null,
+          files: [],
+          Note: '',
+        },
+      ],
+    },
+    { id: 2, title: 'Homework', numTodo: 2, todos: [] },
+    { id: 3, title: 'Movie Watchlist', numTodo: 0, todos: [] },
   ],
 };
 

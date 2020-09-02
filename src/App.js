@@ -15,7 +15,7 @@ function App() {
         <Route path="/login" exact component={LoginPage} />
         <Route path="/register" exact component={RegisterPage} />
         <SidebarBody>
-          <Route path="/list" component={TodoList} />
+          <Route path="/list/:id" component={TodoList} />
         </SidebarBody>
         <Route path="*">
           <div>404</div>

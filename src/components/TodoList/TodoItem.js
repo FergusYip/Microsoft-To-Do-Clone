@@ -25,7 +25,7 @@ export default function TodoItem({ todo, modifyTodo, selectTodo }) {
   // }, [todo]);
 
   function getStepsOutline(steps) {
-    if (steps.length === 0) return null;
+    if (!steps || steps.length === 0) return null;
     const completedSteps = steps.filter((step) => step.isComplete);
     return (
       <Space>
