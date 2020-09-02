@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Space } from 'antd';
+import { Form, Input, Button, Space, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 
 export default function RegisterPage() {
@@ -97,6 +98,10 @@ export default function RegisterPage() {
           </Form.Item>
         </Space>
       </Form>
+      <Typography.Text>Already have an account? </Typography.Text>
+      <Link to="/login" component={Typography.Link}>
+        Login here!
+      </Link>
     </AuthCard>
   );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Space } from 'antd';
+import { Form, Input, Button, Checkbox, Space, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 
 export default function LoginPage() {
@@ -57,13 +58,16 @@ export default function LoginPage() {
         <Form.Item name="remember" valuePropName="checked">
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
-
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Login
           </Button>
         </Form.Item>
       </Form>
+      <Typography.Text>Don't have an account? </Typography.Text>
+      <Link to="/register" component={Typography.Link}>
+        Register here!
+      </Link>
     </AuthCard>
   );
 }
