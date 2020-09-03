@@ -3,13 +3,17 @@ export const createTodo = (listId, todo) => {
     const firestore = getFirestore();
     const uid = getState().firebase.auth.uid;
 
-    firestore
+    const document = firestore
       .collection('lists')
       .doc(listId)
       .collection('todos')
-      .add({
+      .doc();
+
+    document
+      .set({
         ...todo,
         ownerId: uid,
+        id: document.id,
       })
       .then(() => {
         dispatch({ type: 'CREATE_TODO', todo });

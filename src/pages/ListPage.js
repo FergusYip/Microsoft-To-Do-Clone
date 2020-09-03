@@ -15,16 +15,11 @@ export const ListPage = ({ list }) => {
 
 const mapStateToProps = (state, ownProps) => {
   const id = ownProps.match.params.id;
-  const lists = state.firestore.data.lists;
-  const list = lists ? state.firestore.data.lists[id] : null;
-  const todos = state.firestore.data.todos;
+  const { list, todos } = state.firestore.data;
   return {
-    listId: id,
     list: {
       ...list,
-      id: id,
-      todos:
-        todos && Object.keys(todos).map((key) => ({ ...todos[key], id: key })),
+      todos: todos && Object.keys(todos).map((key) => todos[key]),
     },
   };
 };

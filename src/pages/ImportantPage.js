@@ -18,10 +18,8 @@ const mapStateToProps = (state, ownProps) => {
   const list = lists ? state.firestore.data.lists[id] : null;
   const todos = state.firestore.data.todos;
   return {
-    listId: id,
     list: {
       ...list,
-      id: id,
       todos:
         todos && Object.keys(todos).map((key) => ({ ...todos[key], id: key })),
     },
