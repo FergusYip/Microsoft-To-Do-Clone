@@ -42,4 +42,4 @@ export default compose(
       storeAs: 'todos',
     },
   ])
-)(TodoList);
+)(ListPage);

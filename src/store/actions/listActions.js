@@ -3,20 +3,18 @@ export const createList = (list) => {
     const firestore = getFirestore();
     const uid = getState().firebase.auth.uid;
 
-    firestore
-      .collection('lists')
-      .add({
-        ...list,
-        ownerId: uid,
-      })
-      .then(({ id }) =>
-        firestore
-          .collection('users')
-          .doc(uid)
-          .collection('list')
-          .doc(id)
-          .set({ title: list.title })
-      )
+    const document = firestore.collection('lists').doc();
+
+    document
+      .set({ ...list, ownerId: uid, id: document.id })
+      // .then(() =>
+      //   firestore
+      //     .collection('users')
+      //     .doc(uid)
+      //     .collection('list')
+      //     .doc(document.id)
+      //     .set({ title: list.title })
+      // )
       .then(() => {
         dispatch({ type: 'CREATE_LIST', list });
       })

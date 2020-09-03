@@ -117,7 +117,7 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({ list, listId, title = list.title }) {
+function TodoList({ list, listId = list.id, title = list.title }) {
   const [todos, setTodos] = useState([]);
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
