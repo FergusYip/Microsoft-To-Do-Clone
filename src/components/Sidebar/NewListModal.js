@@ -1,9 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import { Modal, Form, Input } from 'antd';
 
 const NewListModal = ({ visible, onCreate, onCancel }) => {
   const [form] = Form.useForm();
+
+  const submitForm = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        form.resetFields();
+        onCreate(values);
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  };
 
   return (
     <Modal
@@ -12,17 +24,7 @@ const NewListModal = ({ visible, onCreate, onCancel }) => {
       okText="Create"
       cancelText="Cancel"
       onCancel={onCancel}
-      onOk={() => {
-        form
-          .validateFields()
-          .then((values) => {
-            form.resetFields();
-            onCreate(values);
-          })
-          .catch((info) => {
-            console.log('Validate Failed:', info);
-          });
-      }}
+      onOk={submitForm}
     >
       <Form
         form={form}
@@ -45,7 +47,7 @@ const NewListModal = ({ visible, onCreate, onCancel }) => {
             },
           ]}
         >
-          <Input />
+          <Input onPressEnter={submitForm} autoFocus />
         </Form.Item>
       </Form>
     </Modal>

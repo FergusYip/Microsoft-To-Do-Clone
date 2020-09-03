@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { PageHeader, Menu, Typography, Space, Dropdown, Row } from 'antd';
+import { PageHeader, Menu, Typography, Dropdown, Row } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import { connect } from 'react-redux';
 import { signOut } from '../../store/actions/authActions';
