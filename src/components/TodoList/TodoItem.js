@@ -1,28 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Space, Typography, Tooltip, Checkbox, Button, List } from 'antd';
 import { StarOutlined, StarFilled, CheckOutlined } from '@ant-design/icons';
+import { updateTodo } from '../../store/actions/todoActions';
+import { connect } from 'react-redux';
 
-export default function TodoItem({ todo, modifyTodo, selectTodo }) {
-  // const [isComplete, setIsComplete] = useState();
-  // const [isFavorite, setIsFavorite] = useState();
-
+function TodoItem({ listId, todo, modifyTodo, selectTodo, updateTodo }) {
   function onChange(e) {
     const newIsComplete = e.target.checked;
-    const modifiedTodo = { ...todo };
-    modifiedTodo.isComplete = newIsComplete;
-    modifyTodo(modifiedTodo);
+    updateTodo(listId, { ...todo, isComplete: newIsComplete });
   }
 
   function toggleFavorite() {
-    const modifiedTodo = { ...todo };
-    modifiedTodo.isFavorite = !modifiedTodo.isFavorite;
-    modifyTodo(modifiedTodo);
+    updateTodo(listId, { ...todo, isImportant: !todo.isImportant });
   }
-
-  // useEffect(() => {
-  //   setIsComplete(todo.isComplete);
-  //   setIsFavorite(todo.isFavorite);
-  // }, [todo]);
 
   function getStepsOutline(steps) {
     if (!steps || steps.length === 0) return null;
@@ -46,7 +36,7 @@ export default function TodoItem({ todo, modifyTodo, selectTodo }) {
       actions={[
         <Tooltip title="Favorite" mouseEnterDelay={0.5}>
           <Button
-            icon={todo.isFavorite ? <StarFilled /> : <StarOutlined />}
+            icon={todo.isImportant ? <StarFilled /> : <StarOutlined />}
             onClick={toggleFavorite}
             shape="circle"
             type="link"
@@ -70,3 +60,11 @@ export default function TodoItem({ todo, modifyTodo, selectTodo }) {
     </List.Item>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateTodo: (listId, todo) => dispatch(updateTodo(listId, todo)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(TodoItem);

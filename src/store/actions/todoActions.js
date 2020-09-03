@@ -19,3 +19,21 @@ export const createTodo = (listId, todo) => {
       });
   };
 };
+
+export const updateTodo = (listId, todo) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    firestore
+      .collection('lists')
+      .doc(listId)
+      .collection('todos')
+      .doc(todo.id)
+      .update(todo)
+      .then(() => {
+        dispatch({ type: 'UPDATE_TODO', todo });
+      })
+      .catch((err) => {
+        dispatch({ type: 'UPDATE_TODO_ERROR', err });
+      });
+  };
+};

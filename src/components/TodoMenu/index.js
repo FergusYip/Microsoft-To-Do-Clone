@@ -47,7 +47,7 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
 
   function toggleFavorite() {
     const modifiedTodo = { ...todo };
-    modifiedTodo.isFavorite = !modifiedTodo.isFavorite;
+    modifiedTodo.isImportant = !modifiedTodo.isImportant;
     modifyTodo(modifiedTodo);
   }
 
@@ -63,7 +63,7 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
             extra={
               <Tooltip title="Favorite" mouseEnterDelay={0.5}>
                 <Button
-                  icon={todo.isFavorite ? <StarFilled /> : <StarOutlined />}
+                  icon={todo.isImportant ? <StarFilled /> : <StarOutlined />}
                   onClick={toggleFavorite}
                   shape="circle"
                   type="link"

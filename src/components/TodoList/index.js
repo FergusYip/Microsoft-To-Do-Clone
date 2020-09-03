@@ -42,7 +42,7 @@ Todo:
 id
 title
 isComplete
-isFavorite
+isImportant
 steps: [...]
 Remind me
 Due date
@@ -68,7 +68,7 @@ const dummyList = {
       id: 1,
       title: 'Eat fruit',
       isComplete: false,
-      isFavorite: true,
+      isImportant: true,
       steps: [
         { id: 1, title: 'Peel fruit', isComplete: true },
         { id: 2, title: 'Cut fruit', isComplete: false },
@@ -83,7 +83,7 @@ const dummyList = {
       id: 2,
       title: 'Buy groceries',
       isComplete: true,
-      isFavorite: true,
+      isImportant: true,
       steps: [
         { id: 3, title: 'Buy apples', isComplete: true },
         { id: 4, title: 'Buy Fish', isComplete: true },
@@ -98,7 +98,7 @@ const dummyList = {
       id: 3,
       title: 'Finish todolist',
       isComplete: false,
-      isFavorite: true,
+      isImportant: true,
       steps: [],
       remindMe: null,
       dueDate: null,
@@ -124,10 +124,6 @@ function TodoList({ list, listId, title = list.title }) {
   const [editingTitle, setEditingTitle] = useState(false);
 
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    console.log(listId);
-  }, [listId]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -277,6 +273,7 @@ function TodoList({ list, listId, title = list.title }) {
                 todo={todo}
                 modifyTodo={modifyTodo}
                 selectTodo={selectTodo}
+                listId={listId}
               />
             )}
           />
@@ -288,6 +285,7 @@ function TodoList({ list, listId, title = list.title }) {
             todos={todos}
             modifyTodo={modifyTodo}
             selectTodo={selectTodo}
+            listId={listId}
           />
           //   </Collapse.Panel>
           // </Collapse>

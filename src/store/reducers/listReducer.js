@@ -12,7 +12,7 @@ const initState = {
           id: 1,
           title: 'Eat fruit',
           isComplete: false,
-          isFavorite: true,
+          isImportant: true,
           steps: [
             { id: 1, title: 'Peel fruit', isComplete: true },
             { id: 2, title: 'Cut fruit', isComplete: false },
@@ -27,7 +27,7 @@ const initState = {
           id: 2,
           title: 'Buy groceries',
           isComplete: true,
-          isFavorite: true,
+          isImportant: true,
           steps: [
             { id: 3, title: 'Buy apples', isComplete: true },
             { id: 4, title: 'Buy Fish', isComplete: true },
@@ -42,7 +42,7 @@ const initState = {
           id: 3,
           title: 'Finish todolist',
           isComplete: false,
-          isFavorite: true,
+          isImportant: true,
           steps: [],
           remindMe: null,
           dueDate: null,
