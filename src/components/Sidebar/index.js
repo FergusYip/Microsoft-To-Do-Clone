@@ -128,6 +128,7 @@ function Sidebar({ lists, createList }) {
 const mapToState = (state) => {
   return {
     lists: state.firestore.ordered.lists || state.list.lists,
+    auth: state.firebase.auth,
   };
 };
 
@@ -139,5 +140,7 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapToState, mapDispatchToProps),
-  firestoreConnect([{ collection: 'lists' }])
+  firestoreConnect(({ auth: { uid } }) =>
+    uid ? [{ collection: 'lists', where: ['ownerId', '==', uid] }] : []
+  )
 )(Sidebar);
