@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
+import { connect } from 'react-redux';
+import { createTodo } from '../../store/actions/todoActions';
 
-export default function AddTodo({ addTodo }) {
+function AddTodo({ listId, createTodo, addTodo }) {
   const [newTodo, setNewTodo] = useState('');
 
   function onChange(e) {
@@ -15,8 +17,8 @@ export default function AddTodo({ addTodo }) {
       title: title,
       isComplete: false,
     };
-    addTodo(todo);
     setNewTodo('');
+    createTodo(listId, todo);
   }
 
   return (
@@ -30,3 +32,11 @@ export default function AddTodo({ addTodo }) {
     </div>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createTodo: (listId, todo) => dispatch(createTodo(listId, todo)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(AddTodo);

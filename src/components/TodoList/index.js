@@ -117,13 +117,17 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({ list, title = list.title }) {
+function TodoList({ list, listId, title = list.title }) {
   const [todos, setTodos] = useState([]);
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [editingTitle, setEditingTitle] = useState(false);
 
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    console.log(listId);
+  }, [listId]);
 
   const showDrawer = () => {
     setVisible(true);
@@ -290,7 +294,7 @@ function TodoList({ list, title = list.title }) {
         )}
       </Content>
       <Footer style={{ position: 'fixed', bottom: 0, width: '100%' }}>
-        <AddTodo addTodo={addTodo} />
+        <AddTodo addTodo={addTodo} listId={listId} />
       </Footer>
       {/* <TodoMenu
         todo={selectedTodo}

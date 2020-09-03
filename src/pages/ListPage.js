@@ -2,27 +2,27 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
-// import { useRouteMatch } from 'react-router-dom';
 
 import TodoList from '../components/TodoList';
 
 export const ListPage = ({ list }) => {
   return (
     <div>
-      <TodoList list={list} title={list.title} />
+      <TodoList list={list} />
     </div>
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
   const id = ownProps.match.params.id;
   const lists = state.firestore.data.lists;
   const list = lists ? state.firestore.data.lists[id] : null;
   const todos = state.firestore.data.todos;
   return {
+    listId: id,
     list: {
       ...list,
+      id: id,
       todos:
         todos && Object.keys(todos).map((key) => ({ ...todos[key], id: key })),
     },

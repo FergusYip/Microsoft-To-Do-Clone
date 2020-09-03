@@ -39,9 +39,9 @@ function Sidebar({ lists, createList }) {
   };
 
   const handleOk = (e) => {
-    console.log(e);
     setIsVisible(false);
-    createList(e);
+    const list = { title: e.title.trim() };
+    createList(list);
   };
 
   const handleCancel = (e) => {
