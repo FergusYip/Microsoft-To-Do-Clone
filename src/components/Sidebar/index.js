@@ -6,8 +6,6 @@ import {
   CalendarOutlined,
   CheckCircleOutlined,
   UnorderedListOutlined,
-  UserOutlined,
-  PlusOutlined,
 } from '@ant-design/icons';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -16,6 +14,8 @@ import { firestoreConnect } from 'react-redux-firebase';
 
 import { useHistory } from 'react-router-dom';
 import SidebarHeader from './SidebarHeader';
+import NewListButton from './NewListButton';
+import NewListModal from './NewListModal';
 
 const { Search } = Input;
 const { Content, Footer } = Layout;
@@ -28,21 +28,26 @@ function Sidebar({ lists, createList }) {
   //   setLists(dummyLists);
   // }, []);
 
-  function newList() {
-    console.log('new list');
-    createList(null); // TODO
-    // setLists((lists) => [
-    //   ...lists,
-    //   {
-    //     id: Math.max(lists.map((list) => list.id)) + 1,
-    //     title: 'Untitled list',
-    //   },
-    // ]);
-  }
-
   function handleMenuSelect({ item, key, keyPath, domEvent }) {
     console.log(item, key, keyPath, domEvent);
   }
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const showModal = () => {
+    setIsVisible(true);
+  };
+
+  const handleOk = (e) => {
+    console.log(e);
+    setIsVisible(false);
+    createList(e);
+  };
+
+  const handleCancel = (e) => {
+    setIsVisible(false);
+  };
+
   return (
     <Layout>
       <SidebarHeader />
@@ -61,12 +66,31 @@ function Sidebar({ lists, createList }) {
       </span>
       <Content>
         <Menu mode="inline" defaultSelectedKeys={['1']}>
-          <Menu.Item icon={<CoffeeOutlined />}>My Day</Menu.Item>
-          <Menu.Item icon={<StarOutlined />}>Important</Menu.Item>
-          <Menu.Item icon={<CalendarOutlined />}>Planned</Menu.Item>
+          <Menu.Item
+            icon={<CoffeeOutlined />}
+            onClick={() => history.push('/myday')}
+            title="My Day"
+          >
+            My Day
+          </Menu.Item>
+          <Menu.Item
+            icon={<StarOutlined />}
+            onClick={() => history.push('/important')}
+            title="Important"
+          >
+            Important
+          </Menu.Item>
+          <Menu.Item
+            icon={<CalendarOutlined />}
+            onClick={() => history.push('/planned')}
+            title="Planned"
+          >
+            Planned
+          </Menu.Item>
           <Menu.Item
             icon={<CheckCircleOutlined />}
-            onClick={() => console.log('tasks')}
+            onClick={() => history.push('/tasks')}
+            title="Tasks"
           >
             Tasks
           </Menu.Item>
@@ -76,6 +100,7 @@ function Sidebar({ lists, createList }) {
               key={list.id}
               icon={<UnorderedListOutlined />}
               onClick={() => history.push(`/list/${list.id}`)}
+              title={list.title}
             >
               {list.title}
               <List.Item>
@@ -89,22 +114,18 @@ function Sidebar({ lists, createList }) {
         </Menu>
       </Content>
       <Footer style={{ padding: 0, width: '100%' }}>
-        <Menu
-          mode="inline"
-          selectable={false}
-          style={{ position: 'fixed', bottom: 0, width: '100%' }}
-        >
-          <Menu.Item icon={<PlusOutlined />} onClick={newList}>
-            New List
-          </Menu.Item>
-        </Menu>
+        <NewListButton onClick={showModal} />
+        <NewListModal
+          visible={isVisible}
+          onCreate={handleOk}
+          onCancel={handleCancel}
+        />
       </Footer>
     </Layout>
   );
 }
 
 const mapToState = (state) => {
-  console.log(state);
   return {
     lists: state.firestore.ordered.lists || state.list.lists,
   };
