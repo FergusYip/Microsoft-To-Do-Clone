@@ -12,6 +12,7 @@ export const createTodo = (listId, todo) => {
     document
       .set({
         ...todo,
+        listId,
         ownerId: uid,
         id: document.id,
       })
@@ -24,12 +25,12 @@ export const createTodo = (listId, todo) => {
   };
 };
 
-export const updateTodo = (listId, todo) => {
+export const updateTodo = (todo) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     firestore
       .collection('lists')
-      .doc(listId)
+      .doc(todo.listId)
       .collection('todos')
       .doc(todo.id)
       .update(todo)

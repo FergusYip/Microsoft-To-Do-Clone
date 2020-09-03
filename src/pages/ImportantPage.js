@@ -13,15 +13,10 @@ export const ImportantPage = ({ list }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const id = ownProps.match.params.id;
-  const lists = state.firestore.data.lists;
-  const list = lists ? state.firestore.data.lists[id] : null;
-  const todos = state.firestore.data.todos;
+  const { todos } = state.firestore.data;
   return {
     list: {
-      ...list,
-      todos:
-        todos && Object.keys(todos).map((key) => ({ ...todos[key], id: key })),
+      todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
     },
   };
 };
@@ -30,13 +25,8 @@ export default compose(
   connect(mapStateToProps),
   firestoreConnect((props) => [
     {
-      collection: 'lists',
-      doc: props.match.params.id,
-      storeAs: 'list',
-    },
-    {
-      collection: `lists/${props.match.params.id}/todos`,
-      storeAs: 'todos',
+      collectionGroup: 'todos',
+      where: ['isImportant', '==', true],
     },
   ])
 )(ImportantPage);

@@ -8,11 +8,11 @@ import TodoItemContextMenu from './TodoItemContextMenu';
 function TodoItem({ listId, todo, modifyTodo, selectTodo, updateTodo }) {
   function onChange(e) {
     const newIsComplete = e.target.checked;
-    updateTodo(listId, { ...todo, isComplete: newIsComplete });
+    updateTodo({ ...todo, isComplete: newIsComplete });
   }
 
   function toggleImportant() {
-    updateTodo(listId, { ...todo, isImportant: !todo.isImportant });
+    updateTodo({ ...todo, isImportant: !todo.isImportant });
   }
 
   function getStepsOutline(steps) {
@@ -66,7 +66,7 @@ function TodoItem({ listId, todo, modifyTodo, selectTodo, updateTodo }) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateTodo: (listId, todo) => dispatch(updateTodo(listId, todo)),
+    updateTodo: (todo) => dispatch(updateTodo(todo)),
   };
 };
 
