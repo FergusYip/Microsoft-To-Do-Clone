@@ -12,6 +12,7 @@ import {
   TasksPage,
   LoginPage,
   RegisterPage,
+  ListPage,
 } from './pages';
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
           <ProtectedRoute path="/important" exact component={ImportantPage} />
           <ProtectedRoute path="/planned" component={PlannedPage} />
           <ProtectedRoute path="/tasks" component={TasksPage} />
-          <ProtectedRoute path="/list/:id" component={TodoList} />
+          <ProtectedRoute path="/list/:id" component={ListPage} />
         </SidebarBody>
         <Route path="*">
           <div>404</div>

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Typography } from 'antd';
+import TodoList from '../components/TodoList';
 
 export const ImportantPage = () => {
   return (
     <div>
-      <Typography.Title>Important</Typography.Title>
+      <TodoList list={[]} title={'Important'} />
     </div>
   );
 };

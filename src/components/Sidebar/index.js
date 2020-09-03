@@ -113,7 +113,7 @@ function Sidebar({ lists, createList }) {
           ))}
         </Menu>
       </Content>
-      <Footer style={{ padding: 0, width: '100%' }}>
+      <Footer style={{ position: 'fixed', bottom: 0, padding: 0, width: 200 }}>
         <NewListButton onClick={showModal} />
         <NewListModal
           visible={isVisible}

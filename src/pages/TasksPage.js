@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Typography } from 'antd';
+import TodoList from '../components/TodoList';
 
 export const TasksPage = () => {
   return (
     <div>
-      <Typography.Title>Tasks</Typography.Title>
+      <TodoList list={[]} title={'Tasks'} />
     </div>
   );
 };

@@ -5,11 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 const NewListButton = ({ onClick }) => {
   return (
-    <Menu
-      mode="inline"
-      selectable={false}
-      style={{ position: 'fixed', bottom: 0, width: '100%' }}
-    >
+    <Menu mode="inline" selectable={false}>
       <Menu.Item icon={<PlusOutlined />} onClick={onClick}>
         New List
       </Menu.Item>
