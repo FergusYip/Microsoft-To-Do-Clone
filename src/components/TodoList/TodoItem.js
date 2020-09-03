@@ -11,7 +11,7 @@ function TodoItem({ listId, todo, modifyTodo, selectTodo, updateTodo }) {
     updateTodo(listId, { ...todo, isComplete: newIsComplete });
   }
 
-  function toggleFavorite() {
+  function toggleImportant() {
     updateTodo(listId, { ...todo, isImportant: !todo.isImportant });
   }
 
@@ -36,10 +36,10 @@ function TodoItem({ listId, todo, modifyTodo, selectTodo, updateTodo }) {
     <TodoItemContextMenu>
       <List.Item
         actions={[
-          <Tooltip title="Favorite" mouseEnterDelay={0.5}>
+          <Tooltip title="Important" mouseEnterDelay={0.5}>
             <Button
               icon={todo.isImportant ? <StarFilled /> : <StarOutlined />}
-              onClick={toggleFavorite}
+              onClick={toggleImportant}
               shape="circle"
               type="link"
             ></Button>

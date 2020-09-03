@@ -45,7 +45,7 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
     setNewStep('');
   }
 
-  function toggleFavorite() {
+  function toggleImportant() {
     const modifiedTodo = { ...todo };
     modifiedTodo.isImportant = !modifiedTodo.isImportant;
     modifyTodo(modifiedTodo);
@@ -61,10 +61,10 @@ export default function TodoMenu({ todo, modifyTodo, visible, onClose }) {
             title={todo.title}
             backIcon={<Checkbox checked={todo.isComplete} />}
             extra={
-              <Tooltip title="Favorite" mouseEnterDelay={0.5}>
+              <Tooltip title="Important" mouseEnterDelay={0.5}>
                 <Button
                   icon={todo.isImportant ? <StarFilled /> : <StarOutlined />}
-                  onClick={toggleFavorite}
+                  onClick={toggleImportant}
                   shape="circle"
                   type="link"
                 ></Button>
