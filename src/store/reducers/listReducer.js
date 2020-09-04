@@ -65,6 +65,12 @@ const listReducer = (state = initState, action) => {
     case 'CREATE_LIST_ERROR':
       console.log('Create list error', action.err);
       return state;
+    case 'DELETE_LIST':
+      console.log('deleted list');
+      return state;
+    case 'DELETE_LIST_ERROR':
+      console.log('delete list error', action.err);
+      return state;
     default:
       return state;
   }

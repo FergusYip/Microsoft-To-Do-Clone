@@ -17,6 +17,10 @@ const NewListModal = ({ visible, onCreate, onCancel }) => {
       });
   };
 
+  const resetForm = () => {
+    form.resetFields();
+  };
+
   return (
     <Modal
       visible={visible}
@@ -25,6 +29,7 @@ const NewListModal = ({ visible, onCreate, onCancel }) => {
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={submitForm}
+      afterClose={resetForm}
     >
       <Form
         form={form}

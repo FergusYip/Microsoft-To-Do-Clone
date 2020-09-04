@@ -32,6 +32,8 @@ import TodoItem from './TodoItem';
 import AddTodo from './AddTodo';
 import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
+import { deleteList } from '../../store/actions/listActions';
+import { connect } from 'react-redux';
 
 const { Header, Content, Sider, Footer } = Layout;
 const { confirm } = Modal;
@@ -116,7 +118,7 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({ list, listId = list.id, title = list.title }) {
+function TodoList({ list, listId = list.id, title = list.title, deleteList }) {
   const [todos, setTodos] = useState([]);
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
@@ -202,13 +204,14 @@ function TodoList({ list, listId = list.id, title = list.title }) {
 
   function showDeleteConfirm() {
     confirm({
-      title: '“List title” will be permanently deleted.',
+      title: `“${title}” will be permanently deleted.`,
       icon: <ExclamationCircleOutlined />,
       content: "You won't be able to undo this action",
       okText: 'Delete',
       okType: 'danger',
       cancelText: 'Cancel',
       onOk() {
+        deleteList(list);
         return new Promise((resolve, reject) => {
           setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
         }).catch(() => console.log('Oops errors!'));
@@ -303,4 +306,10 @@ function TodoList({ list, listId = list.id, title = list.title }) {
   );
 }
 
-export default TodoList;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteList: (list) => dispatch(deleteList(list)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(TodoList);
