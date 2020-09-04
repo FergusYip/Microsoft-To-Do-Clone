@@ -1,3 +1,6 @@
+import { combineReducers } from 'redux';
+import createListReducer from './listReducers/createListReducer';
+
 const initState = {
   lists: [
     {
@@ -60,12 +63,12 @@ const initState = {
 
 const listReducer = (state = initState, action) => {
   switch (action.type) {
-    case 'CREATE_LIST':
-      console.log('Created list', action.list);
-      return state;
-    case 'CREATE_LIST_ERROR':
-      console.log('Create list error', action.err);
-      return state;
+    // case 'CREATE_LIST':
+    //   console.log('Created list', action.list);
+    //   return state;
+    // case 'CREATE_LIST_ERROR':
+    //   console.log('Create list error', action.err);
+    //   return state;
     case 'UPDATE_LIST_LOADING':
       return { ...state, isLoading: action.isLoading };
     case 'UPDATE_LIST':
@@ -85,4 +88,9 @@ const listReducer = (state = initState, action) => {
   }
 };
 
-export default listReducer;
+// export default listReducer;
+
+export default combineReducers({
+  createListReducer,
+  listReducer,
+});
