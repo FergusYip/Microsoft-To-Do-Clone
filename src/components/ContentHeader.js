@@ -1,38 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import {
-  List,
-  Button,
-  ConfigProvider,
-  Typography,
-  Space,
-  Layout,
-  Menu,
-  Dropdown,
-  PageHeader,
-  Collapse,
-  Modal,
-  Input,
-  Result,
-} from 'antd';
-import {
-  SmileOutlined,
-  EllipsisOutlined,
-  EditOutlined,
-  SortAscendingOutlined,
-  BgColorsOutlined,
-  PrinterOutlined,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  DeleteOutlined,
-  ShareAltOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons';
-
-import { deleteList } from '../store/actions/listActions';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-const { confirm } = Modal;
+import { Typography, PageHeader, Input } from 'antd';
 
-const ContentHeader = ({ title, isRenaming, onRenamed, children }) => {
+const ContentHeader = ({
+  title,
+  isRenaming,
+  onRenamed,
+  onCancel,
+  children,
+}) => {
+  function handleKeyDown(event) {
+    if (event.key === 'Escape' || event.keyCode === 27) {
+      onCancel();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown, false);
+  }, []);
+
   const confirmRename = (e) => {
     onRenamed(e.target.value);
   };
@@ -44,7 +30,7 @@ const ContentHeader = ({ title, isRenaming, onRenamed, children }) => {
           <Input
             className="ant-typography"
             bordered={false}
-            placeholder={title}
+            defaultValue={title}
             onPressEnter={confirmRename}
             autoFocus
             style={{

@@ -91,12 +91,17 @@ export const ListPage = ({ list, deleteList }) => {
     console.log(newName);
   }
 
+  function onRenameCancel() {
+    setIsRenaming(false);
+  }
+
   return (
     <div>
       <ContentHeader
         title={list.title}
         isRenaming={isRenaming}
         onRenamed={onRenamed}
+        onCancel={onRenameCancel}
       >
         <Button key="share" shape="circle">
           <ShareAltOutlined />
