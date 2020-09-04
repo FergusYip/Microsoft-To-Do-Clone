@@ -74,10 +74,6 @@ function TodoMenu({ selectedTodoDetails, onClose, updateTodo }) {
     updateTodo({ ...selectedTodo, isImportant: !selectedTodo.isImportant });
   }
 
-  useEffect(() => {
-    console.log('todo', selectedTodo);
-  }, [selectedTodo]);
-
   return (
     <Drawer
       headerStyle={{ padding: 0 }}

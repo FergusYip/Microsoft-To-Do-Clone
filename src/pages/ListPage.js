@@ -131,7 +131,6 @@ export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
 const mapStateToProps = (state, ownProps) => {
   const { isLoading } = state.list;
   const { list, todos } = state.firestore.data;
-  console.log(todos);
   return {
     isLoading,
     list: {

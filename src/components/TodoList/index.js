@@ -172,10 +172,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     deleteList: (list) => dispatch(deleteList(list)),
     selectTodo: (listId, todoID) => dispatch(selectTodo(listId, todoID)),
-    deselectTodo: () => {
-      console.log('deselecting');
-      dispatch(deselectTodo());
-    },
+    deselectTodo: () => dispatch(deselectTodo()),
   };
 };
 
