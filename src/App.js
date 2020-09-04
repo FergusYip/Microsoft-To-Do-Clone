@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import HomePage from './pages/HomePage';
 import SidebarBody from './layouts/SidebarBody';
-import TodoList from './components/TodoList/index';
-import ProtectedRoute from './ProtectedRoute';
+import ProtectedRoute from './routes/ProtectedRoute';
+import UnprotectedRoute from './routes/UnprotectedRoute';
 import {
   MyDayPage,
   ImportantPage,
@@ -20,12 +20,12 @@ function App() {
     <Router>
       <Switch>
         <Route path="/" exact component={HomePage} />
-        <Route path="/login" exact component={LoginPage} />
-        <Route path="/register" exact component={RegisterPage} />
+        <UnprotectedRoute path="/login" exact component={LoginPage} />
+        <UnprotectedRoute path="/register" exact component={RegisterPage} />
         <SidebarBody>
           <ProtectedRoute path="/myday" exact component={MyDayPage} />
           <ProtectedRoute path="/important" exact component={ImportantPage} />
-          <ProtectedRoute path="/planned" component={PlannedPage} />
+          <ProtectedRoute path="planned" component={PlannedPage} />
           <ProtectedRoute path="/tasks" component={TasksPage} />
           <ProtectedRoute path="/list/:id" component={ListPage} />
         </SidebarBody>

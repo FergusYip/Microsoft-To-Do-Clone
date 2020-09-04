@@ -40,6 +40,7 @@ function LoginPage({ signIn, authError }) {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         requiredMark={false}
+        validateTrigger="onFinished"
       >
         <Space direction="vertical" style={{ width: '100%' }}>
           <Form.Item
