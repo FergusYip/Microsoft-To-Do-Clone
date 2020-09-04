@@ -234,36 +234,6 @@ function TodoList({ list, listId = list.id, title = list.title, deleteList }) {
     <p>loading</p>
   ) : (
     <Layout>
-      <PageHeader
-        title={
-          editingTitle ? (
-            <Input
-              className="ant-typography"
-              bordered={false}
-              placeholder={'List Title'}
-              onPressEnter={confirmRename}
-              autoFocus
-            />
-          ) : (
-            <Typography.Title level={3}>{title}</Typography.Title>
-          )
-        }
-        extra={[
-          <Button key="share" shape="circle">
-            <ShareAltOutlined />
-          </Button>,
-          <Dropdown
-            overlay={optionsDropdown}
-            placement="bottomRight"
-            trigger={['click']}
-            key="more"
-          >
-            <Button shape="circle">
-              <EllipsisOutlined />
-            </Button>
-          </Dropdown>,
-        ]}
-      />
       <Content
       // style={{ padding: 24, display: 'flex', flexDirection: 'column',  }}
       >
