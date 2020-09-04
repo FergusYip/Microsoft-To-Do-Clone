@@ -16,13 +16,15 @@ function AddTodo({ listId, createTodo, addTodo }) {
     const todo = {
       title: title,
       isComplete: false,
+      isImportant: false,
+      steps: [],
     };
     setNewTodo('');
     createTodo(listId, todo);
   }
 
   return (
-    <div>
+    <div style={{ padding: 16, display: 'flex' }}>
       <Input
         placeholder="New Todo"
         onChange={onChange}

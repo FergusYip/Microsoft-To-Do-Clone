@@ -4,7 +4,7 @@ import 'firebase/auth';
 import 'firebase/functions';
 
 var firebaseConfig = {
-  apiKey: 'AIzaSyBjcndwPdnAdMQU2oANZbm0CPv1TqNC-S4',
+  apiKey: process.env.REACT_APP_FB_API,
   authDomain: 'todo-react-app-34634.firebaseapp.com',
   databaseURL: 'https://todo-react-app-34634.firebaseio.com',
   projectId: 'todo-react-app-34634',

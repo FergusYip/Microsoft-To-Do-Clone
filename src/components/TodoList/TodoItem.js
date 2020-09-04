@@ -5,7 +5,7 @@ import { updateTodo } from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
 import TodoItemContextMenu from './TodoItemContextMenu';
 
-function TodoItem({ todo, modifyTodo, selectTodo, updateTodo }) {
+function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
   function onChange(e) {
     const newIsComplete = e.target.checked;
     updateTodo({ ...todo, isComplete: newIsComplete });
@@ -28,8 +28,8 @@ function TodoItem({ todo, modifyTodo, selectTodo, updateTodo }) {
     );
   }
 
-  function selectThis() {
-    selectTodo(todo);
+  function handleOnClick() {
+    onClick(todo.listId, todo.id);
   }
 
   return (
@@ -47,7 +47,7 @@ function TodoItem({ todo, modifyTodo, selectTodo, updateTodo }) {
         ]}
       >
         <List.Item.Meta
-          onClick={selectThis}
+          onClick={handleOnClick}
           avatar={
             <Tooltip
               title={todo.isComplete ? 'Mark as todo' : 'Mark as done'}

@@ -13,6 +13,8 @@ import {
   Modal,
   Input,
   Result,
+  Row,
+  Col,
 } from 'antd';
 import {
   SmileOutlined,
@@ -34,6 +36,7 @@ import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
 import { deleteList } from '../../store/actions/listActions';
 import { connect } from 'react-redux';
+import { selectTodo, deselectTodo } from '../../store/actions/selectionAction';
 
 const { Header, Content, Sider, Footer } = Layout;
 const { confirm } = Modal;
@@ -118,117 +121,24 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({ list, listId = list.id, title = list.title, deleteList }) {
+function TodoList({
+  list,
+  listId = list.id,
+  title = list.title,
+  selectTodo,
+  deselectTodo,
+}) {
   const [todos, setTodos] = useState([]);
   const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
-  const [editingTitle, setEditingTitle] = useState(false);
-
-  const [visible, setVisible] = useState(false);
-
-  const showDrawer = () => {
-    setVisible(true);
-  };
-
-  const hideDrawer = () => {
-    setVisible(false);
-  };
 
   function addTodo(newTodo) {
     setTodos((todos) => [...todos, newTodo]);
   }
 
-  function modifyTodo(modifiedTodo) {
-    setTodos((todos) =>
-      todos.map((todo) => (todo.id === modifiedTodo.id ? modifiedTodo : todo))
-    );
-  }
-
-  function updateShowCompleted() {
-    setShowCompleted((showCompleted) => !showCompleted);
-  }
-
-  function selectTodo(todo) {
-    setSelectedTodo(todo);
-    showDrawer();
-  }
-
   useEffect(() => {
     setTodos(list && list.todos ? list.todos : []);
   }, [list]);
-
-  const optionsDropdown = (
-    <Menu>
-      <Menu.Item icon={<EditOutlined />} onClick={handleRename}>
-        Rename List
-      </Menu.Item>
-      <Menu.Item icon={<SortAscendingOutlined />}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.taobao.com/"
-        >
-          Sort
-        </a>
-      </Menu.Item>
-      <Menu.Item icon={<BgColorsOutlined />}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.tmall.com/"
-        >
-          Change Theme
-        </a>
-      </Menu.Item>
-      <Menu.Item icon={<PrinterOutlined />}>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="http://www.tmall.com/"
-        >
-          Print List
-        </a>
-      </Menu.Item>
-      <Menu.Item
-        icon={showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
-        onClick={updateShowCompleted}
-      >
-        {`${showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item icon={<DeleteOutlined />} onClick={showDeleteConfirm}>
-        Delete List
-      </Menu.Item>
-    </Menu>
-  );
-
-  function showDeleteConfirm() {
-    confirm({
-      title: `“${title}” will be permanently deleted.`,
-      icon: <ExclamationCircleOutlined />,
-      content: "You won't be able to undo this action",
-      okText: 'Delete',
-      okType: 'danger',
-      cancelText: 'Cancel',
-      onOk() {
-        deleteList(list);
-        return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-        }).catch(() => console.log('Oops errors!'));
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
-  }
-
-  function handleRename() {
-    setEditingTitle(true);
-  }
-
-  function confirmRename() {
-    setEditingTitle(false);
-  }
 
   return !list ? (
     <p>loading</p>
@@ -241,37 +151,19 @@ function TodoList({ list, listId = list.id, title = list.title, deleteList }) {
           <List
             bordered
             dataSource={todos.filter((todo) => !todo.isComplete)}
-            renderItem={(todo) => (
-              <TodoItem
-                todo={todo}
-                modifyTodo={modifyTodo}
-                selectTodo={selectTodo}
-              />
-            )}
+            renderItem={(todo) => <TodoItem todo={todo} onClick={selectTodo} />}
           />
         </ConfigProvider>
         {showCompleted && (
           // <Collapse>
           //   <Collapse.Panel>
-          <CompletedList
-            todos={todos}
-            modifyTodo={modifyTodo}
-            selectTodo={selectTodo}
-            listId={listId}
-          />
+          <CompletedList todos={todos} onClick={selectTodo} listId={listId} />
           //   </Collapse.Panel>
           // </Collapse>
         )}
       </Content>
-      <Footer style={{ position: 'fixed', bottom: 0, width: '100%' }}>
-        <AddTodo addTodo={addTodo} listId={listId} />
-      </Footer>
-      {/* <TodoMenu
-        todo={selectedTodo}
-        modifyTodo={modifyTodo}
-        onClose={hideDrawer}
-        visible={visible}
-      /> */}
+      <AddTodo addTodo={addTodo} listId={listId} />
+      <TodoMenu onClose={deselectTodo} />
     </Layout>
   );
 }
@@ -279,6 +171,11 @@ function TodoList({ list, listId = list.id, title = list.title, deleteList }) {
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteList: (list) => dispatch(deleteList(list)),
+    selectTodo: (listId, todoID) => dispatch(selectTodo(listId, todoID)),
+    deselectTodo: () => {
+      console.log('deselecting');
+      dispatch(deselectTodo());
+    },
   };
 };
 

@@ -40,5 +40,6 @@ export const updateTodo = (todo) => {
       .catch((err) => {
         dispatch({ type: 'UPDATE_TODO_ERROR', err });
       });
+    console.log('update', todo);
   };
 };
