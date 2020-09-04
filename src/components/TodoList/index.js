@@ -26,7 +26,6 @@ import {
   DeleteOutlined,
   ShareAltOutlined,
   ExclamationCircleOutlined,
-  IdcardOutlined,
 } from '@ant-design/icons';
 
 import TodoItem from './TodoItem';
@@ -247,13 +246,14 @@ function TodoList({ list, listId = list.id, title = list.title }) {
           )
         }
         extra={[
-          <Button shape="circle">
+          <Button key="share" shape="circle">
             <ShareAltOutlined />
           </Button>,
           <Dropdown
             overlay={optionsDropdown}
             placement="bottomRight"
             trigger={['click']}
+            key="more"
           >
             <Button shape="circle">
               <EllipsisOutlined />
@@ -273,7 +273,6 @@ function TodoList({ list, listId = list.id, title = list.title }) {
                 todo={todo}
                 modifyTodo={modifyTodo}
                 selectTodo={selectTodo}
-                listId={listId}
               />
             )}
           />

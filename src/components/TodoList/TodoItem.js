@@ -5,7 +5,7 @@ import { updateTodo } from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
 import TodoItemContextMenu from './TodoItemContextMenu';
 
-function TodoItem({ listId, todo, modifyTodo, selectTodo, updateTodo }) {
+function TodoItem({ todo, modifyTodo, selectTodo, updateTodo }) {
   function onChange(e) {
     const newIsComplete = e.target.checked;
     updateTodo({ ...todo, isComplete: newIsComplete });

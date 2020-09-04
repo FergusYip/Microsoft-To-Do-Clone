@@ -14,7 +14,6 @@ export const ListPage = ({ list }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const id = ownProps.match.params.id;
   const { list, todos } = state.firestore.data;
   return {
     list: {

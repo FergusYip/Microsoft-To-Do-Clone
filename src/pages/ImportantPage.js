@@ -1,10 +1,27 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import React, { useState, useEffect } from 'react';
+import { connect, useSelector } from 'react-redux';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import TodoList from '../components/TodoList';
 
-export const ImportantPage = ({ list }) => {
+const ImportantPage = () => {
+  useFirestoreConnect([
+    {
+      collectionGroup: 'todos',
+      where: ['isImportant', '==', true],
+    },
+  ]);
+
+  const { todos } = useSelector((state) => state.firestore.data);
+
+  const [list, setList] = useState({});
+
+  useEffect(() => {
+    setList({
+      title: 'Important',
+      todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
+    });
+  }, [todos]);
+
   return (
     <div>
       <TodoList list={list} title={'Important'} />
@@ -12,21 +29,4 @@ export const ImportantPage = ({ list }) => {
   );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const { todos } = state.firestore.data;
-  return {
-    list: {
-      todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
-    },
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  firestoreConnect((props) => [
-    {
-      collectionGroup: 'todos',
-      where: ['isImportant', '==', true],
-    },
-  ])
-)(ImportantPage);
+export default ImportantPage;
