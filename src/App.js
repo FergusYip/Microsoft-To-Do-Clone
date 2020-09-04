@@ -25,7 +25,7 @@ function App() {
         <SidebarBody>
           <ProtectedRoute path="/myday" exact component={MyDayPage} />
           <ProtectedRoute path="/important" exact component={ImportantPage} />
-          <ProtectedRoute path="planned" component={PlannedPage} />
+          <ProtectedRoute path="/planned" component={PlannedPage} />
           <ProtectedRoute path="/tasks" component={TasksPage} />
           <ProtectedRoute path="/list/:id" component={ListPage} />
         </SidebarBody>
