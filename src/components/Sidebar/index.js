@@ -127,7 +127,7 @@ function Sidebar({ lists, createList }) {
 
 const mapToState = (state) => {
   return {
-    lists: state.firestore.ordered.lists || state.list.lists,
+    lists: state.firestore.ordered.lists || [],
     auth: state.firebase.auth,
   };
 };
