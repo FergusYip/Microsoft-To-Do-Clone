@@ -123,7 +123,7 @@ const customizeEmptyTodo = () => (
 
 function TodoList({
   list,
-  listId = list.id,
+  listID = list.id,
   title = list.title,
   selectTodo,
   deselectTodo,
@@ -157,12 +157,12 @@ function TodoList({
         {showCompleted && (
           // <Collapse>
           //   <Collapse.Panel>
-          <CompletedList todos={todos} onClick={selectTodo} listId={listId} />
+          <CompletedList todos={todos} onClick={selectTodo} listID={listID} />
           //   </Collapse.Panel>
           // </Collapse>
         )}
       </Content>
-      <AddTodo addTodo={addTodo} listId={listId} />
+      <AddTodo addTodo={addTodo} listID={listID} />
       <TodoMenu onClose={deselectTodo} />
     </Layout>
   );
@@ -171,7 +171,7 @@ function TodoList({
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteList: (list) => dispatch(deleteList(list)),
-    selectTodo: (listId, todoID) => dispatch(selectTodo(listId, todoID)),
+    selectTodo: (listID, todoID) => dispatch(selectTodo(listID, todoID)),
     deselectTodo: () => dispatch(deselectTodo()),
   };
 };

@@ -1,19 +1,12 @@
-export const createTodo = (listId, todo) => {
+export const createTodo = (todo) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
-    const uid = getState().firebase.auth.uid;
 
-    const document = firestore
-      .collection('lists')
-      .doc(listId)
-      .collection('todos')
-      .doc();
+    const document = firestore.collection('todos').doc();
 
     document
       .set({
         ...todo,
-        listId,
-        ownerId: uid,
         id: document.id,
       })
       .then(() => {
@@ -29,8 +22,6 @@ export const updateTodo = (todo) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     firestore
-      .collection('lists')
-      .doc(todo.listId)
       .collection('todos')
       .doc(todo.id)
       .update(todo)
@@ -40,6 +31,5 @@ export const updateTodo = (todo) => {
       .catch((err) => {
         dispatch({ type: 'UPDATE_TODO_ERROR', err });
       });
-    console.log('update', todo);
   };
 };

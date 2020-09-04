@@ -156,7 +156,8 @@ export default compose(
       storeAs: 'list',
     },
     {
-      collection: `lists/${props.match.params.id}/todos`,
+      collection: 'todos',
+      where: ['listID', '==', props.match.params.id],
       storeAs: 'todos',
     },
   ])

@@ -29,7 +29,7 @@ function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
   }
 
   function handleOnClick() {
-    onClick(todo.listId, todo.id);
+    onClick(todo.listID, todo.id);
   }
 
   return (

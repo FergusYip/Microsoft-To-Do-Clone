@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { connect } from 'react-redux';
 import { createTodo } from '../../store/actions/todoActions';
 
-function AddTodo({ listId, createTodo, addTodo }) {
+function AddTodo({ listID, createTodo, addTodo }) {
   const [newTodo, setNewTodo] = useState('');
 
   function onChange(e) {
@@ -15,12 +15,13 @@ function AddTodo({ listId, createTodo, addTodo }) {
     if (!title) return;
     const todo = {
       title: title,
+      listID: listID,
       isComplete: false,
       isImportant: false,
       steps: [],
     };
     setNewTodo('');
-    createTodo(listId, todo);
+    createTodo(todo);
   }
 
   return (
@@ -37,7 +38,7 @@ function AddTodo({ listId, createTodo, addTodo }) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createTodo: (listId, todo) => dispatch(createTodo(listId, todo)),
+    createTodo: (todo) => dispatch(createTodo(todo)),
   };
 };
 
