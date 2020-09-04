@@ -55,6 +55,7 @@ const initState = {
     { id: 2, title: 'Homework', numTodo: 2, todos: [] },
     { id: 3, title: 'Movie Watchlist', numTodo: 0, todos: [] },
   ],
+  isLoading: false,
 };
 
 const listReducer = (state = initState, action) => {
@@ -64,6 +65,14 @@ const listReducer = (state = initState, action) => {
       return state;
     case 'CREATE_LIST_ERROR':
       console.log('Create list error', action.err);
+      return state;
+    case 'UPDATE_LIST_LOADING':
+      return { ...state, isLoading: action.isLoading };
+    case 'UPDATE_LIST':
+      console.log('Update list', action.list);
+      return state;
+    case 'UPDATE_LIST_ERROR':
+      console.log('Update list error', action.err);
       return state;
     case 'DELETE_LIST':
       console.log('deleted list');

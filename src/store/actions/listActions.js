@@ -26,6 +26,25 @@ export const createList = (list) => {
   };
 };
 
+export const updateList = (list) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    dispatch({ type: 'UPDATE_LIST_LOADING', isLoading: true });
+
+    const firestore = getFirestore();
+    firestore
+      .collection('lists')
+      .doc(list.id)
+      .update(list)
+      .then(() => {
+        dispatch({ type: 'UPDATE_LIST_LOADING', isLoading: false });
+        dispatch({ type: 'UPDATE_LIST', list });
+      })
+      .catch((err) => {
+        dispatch({ type: 'UPDATE_LIST_ERROR', err });
+      });
+  };
+};
+
 export const deleteList = (list) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();

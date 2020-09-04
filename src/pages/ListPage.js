@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 
 import TodoList from '../components/TodoList';
 import ContentHeader from '../components/ContentHeader';
-import { Button, Dropdown, Menu, Modal } from 'antd';
+import { message, Button, Dropdown, Menu, Modal } from 'antd';
 import {
   ShareAltOutlined,
   EllipsisOutlined,
@@ -18,11 +18,11 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
-import { deleteList } from '../store/actions/listActions';
+import { updateList, deleteList } from '../store/actions/listActions';
 
 const { confirm } = Modal;
 
-export const ListPage = ({ list, deleteList }) => {
+export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
   const [showCompleted, setShowCompleted] = useState(list.showCompleted);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [isRenaming, setIsRenaming] = useState(false);
@@ -82,13 +82,19 @@ export const ListPage = ({ list, deleteList }) => {
     });
   }
 
+  useEffect(() => {
+    if (!isLoading && isRenaming) {
+      setIsRenaming(false);
+      message.success(`List has been renamed to "${list.title}"`);
+    }
+  }, [isLoading]);
+
   function handleRename() {
     setIsRenaming(true);
   }
 
-  function onRenamed(newName) {
-    setIsRenaming(false);
-    console.log(newName);
+  function onRenamed(newTitle) {
+    updateList({ ...list, title: newTitle });
   }
 
   function onRenameCancel() {
@@ -123,8 +129,10 @@ export const ListPage = ({ list, deleteList }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const { isLoading } = state.list;
   const { list, todos } = state.firestore.data;
   return {
+    isLoading,
     list: {
       ...list,
       todos: todos && Object.keys(todos).map((key) => todos[key]),
@@ -134,6 +142,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    updateList: (list) => dispatch(updateList(list)),
     deleteList: (list) => dispatch(deleteList(list)),
   };
 };
