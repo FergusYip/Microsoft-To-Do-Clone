@@ -41,6 +41,7 @@ const ContentHeader = ({
               lineHeight: 1.35,
               padding: 0,
             }}
+            onBlur={onCancel}
           />
         ) : (
           <Typography.Title level={3}>{title}</Typography.Title>
