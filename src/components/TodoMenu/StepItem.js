@@ -1,21 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { List, Checkbox, Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
-export default function StepItem({ step, modifyStep, onRemove }) {
-  const [isComplete, setIsComplete] = useState();
-
-  useEffect(() => {
-    setIsComplete(step.isComplete);
-  }, [step]);
-
-  function onChange(e) {
-    const newIsComplete = e.target.checked;
-    setIsComplete(newIsComplete);
-
-    const modifiedStep = { ...step };
-    modifiedStep.isComplete = newIsComplete;
-    modifyStep(modifiedStep);
+export default function StepItem({ step, onUpdate, onRemove }) {
+  function handleOnChange(e) {
+    onUpdate({ ...step, isComplete: e.target.checked });
   }
 
   function handleRemove() {
@@ -31,7 +20,9 @@ export default function StepItem({ step, modifyStep, onRemove }) {
       ]}
     >
       <List.Item.Meta
-        avatar={<Checkbox checked={isComplete} onChange={onChange} />}
+        avatar={
+          <Checkbox checked={step.isComplete} onChange={handleOnChange} />
+        }
         title={step.title}
       ></List.Item.Meta>
     </List.Item>

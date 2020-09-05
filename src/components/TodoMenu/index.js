@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   List,
   Input,
@@ -25,6 +25,7 @@ import {
   updateTodo,
   addStep,
   removeStep,
+  updateStep,
 } from '../../store/actions/todoActions';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -35,6 +36,7 @@ function TodoMenu({
   updateTodo,
   addStep,
   removeStep,
+  updateStep,
 }) {
   const [newStep, setNewStep] = useState('');
 
@@ -66,14 +68,19 @@ function TodoMenu({
     setNewStep(e.target.value);
   }
 
-  function stepInputSubmit() {
-    if (!newStep) return;
-    addStep(selectedTodo, newStep);
+  function stepInputSubmit(e) {
+    const trimmedStep = newStep.trim();
     setNewStep('');
+    if (!trimmedStep) return;
+    addStep(selectedTodo, trimmedStep);
   }
 
   function stepRemove(step) {
     removeStep(selectedTodo, step);
+  }
+
+  function stepUpdate(step) {
+    updateStep(selectedTodo, step);
   }
 
   function onChangeCompletion(e) {
@@ -82,6 +89,13 @@ function TodoMenu({
 
   function toggleImportant() {
     updateTodo({ ...selectedTodo, isImportant: !selectedTodo.isImportant });
+  }
+
+  function updateNote(e) {
+    const newNote = e.target.value;
+    if (newNote !== selectedTodo.note) {
+      updateTodo({ ...selectedTodo, note: newNote });
+    }
   }
 
   return (
@@ -124,7 +138,7 @@ function TodoMenu({
         <>
           <StepList
             steps={selectedTodo.steps}
-            modifyStep={null}
+            onUpdate={stepUpdate}
             onRemove={stepRemove}
           />
           <List>
@@ -155,6 +169,8 @@ function TodoMenu({
                 autoSize={{ minRows: 4 }}
                 bordered={false}
                 style={{ resize: 'none' }}
+                onBlur={updateNote}
+                defaultValue={selectedTodo.note}
               />
             </List.Item>
           </List>
@@ -177,6 +193,7 @@ const mapDispatchToProps = (dispatch) => {
     updateTodo: (todo) => dispatch(updateTodo(todo)),
     addStep: (todo, stepTitle) => dispatch(addStep(todo, stepTitle)),
     removeStep: (todo, step) => dispatch(removeStep(todo, step)),
+    updateStep: (todo, step) => dispatch(updateStep(todo, step)),
   };
 };
 

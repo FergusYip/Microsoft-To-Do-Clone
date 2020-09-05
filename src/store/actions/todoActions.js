@@ -74,3 +74,26 @@ export const removeStep = (todo, step) => {
       });
   };
 };
+
+export const updateStep = (todo, step) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    firestore
+      .collection('todos')
+      .doc(todo.id)
+      .update({
+        steps: todo.steps.map((s) => {
+          if (s.id === step.id) {
+            return step;
+          }
+          return s;
+        }),
+      })
+      .then(() => {
+        dispatch({ type: 'UPDATE_STEP', todo });
+      })
+      .catch((err) => {
+        dispatch({ type: 'UPDATE_STEP_ERR', err });
+      });
+  };
+};
