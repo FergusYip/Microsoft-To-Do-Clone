@@ -93,9 +93,16 @@ function TodoMenu({
   }
 
   function updateNote(e) {
-    const newNote = e.target.value;
+    const newNote = e.target.value.trim();
     if (newNote !== selectedTodo.note) {
       updateTodo({ ...selectedTodo, note: newNote });
+    }
+  }
+
+  function handleNoteKeyDown(e) {
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      e.target.value += '\t';
     }
   }
 
@@ -178,6 +185,8 @@ function TodoMenu({
                 style={{ resize: 'none' }}
                 onBlur={updateNote}
                 defaultValue={selectedTodo.note}
+                maxLength={500}
+                onKeyDown={handleNoteKeyDown}
               />
             </List.Item>
           </List>
