@@ -32,6 +32,10 @@ function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
     onClick(todo.listID, todo.id);
   }
 
+  function checkboxOnClick(e) {
+    e.stopPropagation();
+  }
+
   return (
     <TodoItemContextMenu>
       <List.Item
@@ -53,7 +57,11 @@ function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
               title={todo.isComplete ? 'Mark as todo' : 'Mark as done'}
               mouseEnterDelay={0.5}
             >
-              <Checkbox onChange={onChange} checked={todo.isComplete} />
+              <Checkbox
+                onChange={onChange}
+                checked={todo.isComplete}
+                onClick={checkboxOnClick}
+              />
             </Tooltip>
           }
           title={todo.title}

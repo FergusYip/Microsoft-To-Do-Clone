@@ -52,6 +52,7 @@ function TodoList({ todos, list, selectTodo, deselectTodo }) {
           <List
             bordered
             dataSource={todos.filter((todo) => !todo.isComplete)}
+            rowKey={(todo) => todo.id}
             renderItem={(todo) => <TodoItem todo={todo} onClick={selectTodo} />}
           />
         </ConfigProvider>
