@@ -70,7 +70,6 @@ function TodoMenu({
 
   function stepInputSubmit(e) {
     e.preventDefault();
-    document.activeElement.blur();
     const cleanedStep = newStep.trim().replace(/\s+/, ' ');
     setNewStep('');
     if (!cleanedStep) return;
@@ -146,7 +145,7 @@ function TodoMenu({
           <List>
             <List.Item>
               <Space>
-                <PlusOutlined />
+                <PlusOutlined onClick={stepInputSubmit} />
                 <Input.TextArea
                   placeholder={
                     selectedTodo.steps.length === 0 ? 'Add Step' : 'Next Step'
