@@ -29,7 +29,7 @@ function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
   }
 
   function handleOnClick() {
-    onClick(todo.listID, todo.id);
+    onClick(todo);
   }
 
   function checkboxOnClick(e) {

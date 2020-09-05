@@ -41,11 +41,8 @@ function TodoMenu({ selectedTodoDetails, onClose, updateTodo }) {
     return selectedTodoDetails
       ? [
           {
-            collection: 'lists',
-            doc: selectedTodoDetails.listID,
-            subcollections: [
-              { collection: 'todos', doc: selectedTodoDetails.todoID },
-            ],
+            collection: 'todos',
+            doc: selectedTodoDetails.todoID,
             storeAs: 'selectedTodo',
           },
         ]

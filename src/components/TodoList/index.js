@@ -71,7 +71,7 @@ function TodoList({ todos, list, selectTodo, deselectTodo }) {
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteList: (list) => dispatch(deleteList(list)),
-    selectTodo: (listID, todoID) => dispatch(selectTodo(listID, todoID)),
+    selectTodo: (todo) => dispatch(selectTodo(todo)),
     deselectTodo: () => dispatch(deselectTodo()),
   };
 };
