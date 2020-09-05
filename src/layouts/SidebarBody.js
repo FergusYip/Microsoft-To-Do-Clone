@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Layout } from 'antd';
-import TodoList from '../components/TodoList';
 import Sidebar from '../components/Sidebar';
 
 const { Sider, Content } = Layout;

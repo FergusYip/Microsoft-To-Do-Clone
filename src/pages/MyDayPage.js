@@ -1,14 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Typography } from 'antd';
-import TodoList from '../components/TodoList';
+// import TodoList from '../components/TodoList';
 
 export const MyDayPage = () => {
-  return (
-    <div>
-      <TodoList list={[]} title={'My Day'} />
-    </div>
-  );
+  return <div>{/* <TodoList list={[]} title={'My Day'} /> */}</div>;
 };
 
 const mapStateToProps = (state) => ({});

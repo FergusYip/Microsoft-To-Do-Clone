@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import TodoList from '../components/TodoList';
 

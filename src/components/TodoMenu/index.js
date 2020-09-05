@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   List,
   Input,
@@ -9,7 +9,6 @@ import {
   Button,
   Tooltip,
   Divider,
-  message,
 } from 'antd';
 import {
   PlusOutlined,

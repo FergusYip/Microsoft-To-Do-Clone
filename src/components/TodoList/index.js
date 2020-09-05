@@ -1,34 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {
-  List,
-  Button,
-  ConfigProvider,
-  Typography,
-  Space,
-  Layout,
-  Menu,
-  Dropdown,
-  PageHeader,
-  Collapse,
-  Modal,
-  Input,
-  Result,
-  Row,
-  Col,
-} from 'antd';
-import {
-  SmileOutlined,
-  EllipsisOutlined,
-  EditOutlined,
-  SortAscendingOutlined,
-  BgColorsOutlined,
-  PrinterOutlined,
-  EyeInvisibleOutlined,
-  EyeOutlined,
-  DeleteOutlined,
-  ShareAltOutlined,
-  ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import React, { useEffect } from 'react';
+import { List, ConfigProvider, Layout, Result } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
 
 import TodoItem from './TodoItem';
 import AddTodo from './AddTodo';
@@ -36,10 +8,11 @@ import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
 import { deleteList } from '../../store/actions/listActions';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { selectTodo, deselectTodo } from '../../store/actions/selectionAction';
-
-const { Header, Content, Sider, Footer } = Layout;
-const { confirm } = Modal;
+import { firestoreConnect } from 'react-redux-firebase';
+import Loading from '../Loading';
+const { Content } = Layout;
 
 /*
 Todo:
@@ -62,57 +35,6 @@ title
 isComplete
 */
 
-const dummyList = {
-  title: 'Todo list',
-  sort: null,
-  theme: null,
-  showCompleted: true,
-  todos: [
-    {
-      id: 1,
-      title: 'Eat fruit',
-      isComplete: false,
-      isImportant: true,
-      steps: [
-        { id: 1, title: 'Peel fruit', isComplete: true },
-        { id: 2, title: 'Cut fruit', isComplete: false },
-      ],
-      remindMe: null,
-      dueDate: null,
-      repeat: null,
-      files: [],
-      Note: '',
-    },
-    {
-      id: 2,
-      title: 'Buy groceries',
-      isComplete: true,
-      isImportant: true,
-      steps: [
-        { id: 3, title: 'Buy apples', isComplete: true },
-        { id: 4, title: 'Buy Fish', isComplete: true },
-      ],
-      remindMe: null,
-      dueDate: null,
-      repeat: null,
-      files: [],
-      Note: '',
-    },
-    {
-      id: 3,
-      title: 'Finish todolist',
-      isComplete: false,
-      isImportant: true,
-      steps: [],
-      remindMe: null,
-      dueDate: null,
-      repeat: null,
-      files: [],
-      Note: '',
-    },
-  ],
-};
-
 const customizeEmptyTodo = () => (
   <Result
     icon={<SmileOutlined />}
@@ -121,28 +43,10 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({
-  list,
-  listID = list.id,
-  title = list.title,
-  selectTodo,
-  deselectTodo,
-}) {
-  const [todos, setTodos] = useState([]);
-  const [showCompleted, setShowCompleted] = useState(dummyList.showCompleted);
-  const [selectedTodo, setSelectedTodo] = useState(null);
+function TodoList({ todos, list, selectTodo, deselectTodo }) {
+  useEffect(() => console.log(list, list && list.showCompleted), [list]);
 
-  function addTodo(newTodo) {
-    setTodos((todos) => [...todos, newTodo]);
-  }
-
-  useEffect(() => {
-    setTodos(list && list.todos ? list.todos : []);
-  }, [list]);
-
-  return !list ? (
-    <p>loading</p>
-  ) : (
+  return list && todos ? (
     <Layout>
       <Content
       // style={{ padding: 24, display: 'flex', flexDirection: 'column',  }}
@@ -154,19 +58,25 @@ function TodoList({
             renderItem={(todo) => <TodoItem todo={todo} onClick={selectTodo} />}
           />
         </ConfigProvider>
-        {showCompleted && (
-          // <Collapse>
-          //   <Collapse.Panel>
-          <CompletedList todos={todos} onClick={selectTodo} listID={listID} />
-          //   </Collapse.Panel>
-          // </Collapse>
+        {list.showCompleted && (
+          <CompletedList todos={todos} onClick={selectTodo} listID={list.id} />
         )}
       </Content>
-      <AddTodo addTodo={addTodo} listID={listID} />
+      <AddTodo listID={list.id} />
       <TodoMenu onClose={deselectTodo} />
     </Layout>
+  ) : (
+    <Loading />
   );
 }
+
+const mapStateToProps = (state, ownProps) => {
+  const { todos, list } = state.firestore.data;
+  return {
+    list,
+    todos: todos && Object.keys(todos).map((key) => todos[key]),
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -176,4 +86,17 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(TodoList);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  firestoreConnect(({ list }) =>
+    list
+      ? [
+          {
+            collection: 'todos',
+            where: ['listID', '==', list.id],
+            storeAs: 'todos',
+          },
+        ]
+      : []
+  )
+)(TodoList);

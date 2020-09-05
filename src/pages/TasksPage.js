@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect, useSelector } from 'react-redux';
 import TodoList from '../components/TodoList';
 import { useFirestoreConnect } from 'react-redux-firebase';
+import ContentHeader from '../components/ContentHeader';
+import { Button, Dropdown, Menu } from 'antd';
+import {
+  EllipsisOutlined,
+  SortAscendingOutlined,
+  BgColorsOutlined,
+  PrinterOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+} from '@ant-design/icons';
+import { updateList } from '../store/actions/listActions';
 
-const TasksPage = ({ tasksID }) => {
+const TasksPage = ({ tasksID, updateList }) => {
   useFirestoreConnect(
     tasksID
       ? [
@@ -12,32 +23,45 @@ const TasksPage = ({ tasksID }) => {
             doc: tasksID,
             storeAs: 'list',
           },
-          {
-            collection: 'lists',
-            doc: tasksID,
-            subcollections: [{ collection: 'todos' }],
-            storeAs: 'todos',
-          },
         ]
       : []
   );
 
-  const { list: listDetails, todos } = useSelector(
-    (state) => state.firestore.data
+  const { list } = useSelector((state) => state.firestore.data);
+
+  const updateShowCompleted = () => {
+    updateList({ ...list, showCompleted: !list.showCompleted });
+  };
+
+  const optionsDropdown = list && (
+    <Menu>
+      <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
+      <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
+      <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
+      <Menu.Item
+        icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        onClick={updateShowCompleted}
+      >
+        {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
+      </Menu.Item>
+    </Menu>
   );
-
-  const [list, setList] = useState({});
-
-  useEffect(() => {
-    setList({
-      ...listDetails,
-      todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
-    });
-  }, [listDetails, todos]);
 
   return (
     <div>
-      <TodoList list={list} title={'Tasks'} />
+      <ContentHeader title={'Tasks'}>
+        <Dropdown
+          overlay={optionsDropdown}
+          placement="bottomRight"
+          trigger={['click']}
+          key="more"
+        >
+          <Button shape="circle">
+            <EllipsisOutlined />
+          </Button>
+        </Dropdown>
+      </ContentHeader>
+      <TodoList />
     </div>
   );
 };
@@ -48,4 +72,10 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(TasksPage);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateList: (list) => dispatch(updateList(list)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);

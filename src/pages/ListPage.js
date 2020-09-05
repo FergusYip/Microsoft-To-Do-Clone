@@ -23,25 +23,9 @@ import { updateList, deleteList } from '../store/actions/listActions';
 const { confirm } = Modal;
 
 export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
-  const [showCompleted, setShowCompleted] = useState(list.showCompleted);
-  const [selectedTodo, setSelectedTodo] = useState(null);
   const [isRenaming, setIsRenaming] = useState(false);
 
-  const [visible, setVisible] = useState(false);
-
-  const showDrawer = () => {
-    setVisible(true);
-  };
-
-  const hideDrawer = () => {
-    setVisible(false);
-  };
-
-  function updateShowCompleted() {
-    setShowCompleted((showCompleted) => !showCompleted);
-  }
-
-  const optionsDropdown = (
+  const optionsDropdown = list && (
     <Menu>
       <Menu.Item icon={<EditOutlined />} onClick={handleRename}>
         Rename List
@@ -50,10 +34,10 @@ export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
       <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
       <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
       <Menu.Item
-        icon={showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
-        onClick={updateShowCompleted}
+        icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        // onClick={updateShowCompleted}
       >
-        {`${showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
+        {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item icon={<DeleteOutlined />} onClick={showDeleteConfirm}>
@@ -87,7 +71,7 @@ export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
       setIsRenaming(false);
       message.success(`List has been renamed to "${list.title}"`);
     }
-  }, [isLoading]);
+  }, [isLoading, list, isRenaming]);
 
   function handleRename() {
     setIsRenaming(true);

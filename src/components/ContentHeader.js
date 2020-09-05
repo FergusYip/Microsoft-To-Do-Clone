@@ -9,15 +9,14 @@ const ContentHeader = ({
   onCancel,
   children,
 }) => {
-  function handleKeyDown(event) {
-    if (event.key === 'Escape' || event.keyCode === 27) {
-      onCancel();
-    }
-  }
-
   useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === 'Escape' || event.keyCode === 27) {
+        onCancel();
+      }
+    }
     document.addEventListener('keydown', handleKeyDown, false);
-  }, []);
+  }, [onCancel]);
 
   const confirmRename = (e) => {
     onRenamed(e.target.value);

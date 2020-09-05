@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, Input, Typography, List, Layout, PageHeader } from 'antd';
+import React, { useState } from 'react';
+import { Menu, Input, Typography, List, Layout } from 'antd';
 import {
   CoffeeOutlined,
   StarOutlined,
@@ -28,9 +28,9 @@ function Sidebar({ lists, createList }) {
   //   setLists(dummyLists);
   // }, []);
 
-  function handleMenuSelect({ item, key, keyPath, domEvent }) {
-    console.log(item, key, keyPath, domEvent);
-  }
+  // function handleMenuSelect({ item, key, keyPath, domEvent }) {
+  //   console.log(item, key, keyPath, domEvent);
+  // }
 
   const [isVisible, setIsVisible] = useState(false);
 

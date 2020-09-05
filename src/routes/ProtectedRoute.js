@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import { Result, Spin } from 'antd';
+import Loading from '../components/Loading';
 
 const ProtectedRoute = ({ component: Component, auth, ...rest }) => {
   return auth.isLoaded ? (
@@ -11,7 +11,7 @@ const ProtectedRoute = ({ component: Component, auth, ...rest }) => {
       <Redirect to="/login" />
     )
   ) : (
-    <Result icon={<Spin size="large" />} title="Loading" />
+    <Loading />
   );
 };
 

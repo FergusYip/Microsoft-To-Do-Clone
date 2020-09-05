@@ -1,6 +1,6 @@
-import React, { Component, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Menu, Modal } from 'antd';
+import { Menu } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const NewListButton = ({ onClick }) => {

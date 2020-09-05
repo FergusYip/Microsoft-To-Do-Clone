@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { List, Dropdown, Menu, DatePicker, TimePicker } from 'antd';
+import React from 'react';
+import { List, Dropdown, Menu } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 
 export default function RemindMeItem() {
