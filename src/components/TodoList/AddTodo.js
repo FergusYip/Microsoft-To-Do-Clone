@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { connect } from 'react-redux';
 import { createTodo } from '../../store/actions/todoActions';
 
-function AddTodo({ listID, createTodo, addTodo }) {
+function AddTodo({ listID, createTodo }) {
   const [newTodo, setNewTodo] = useState('');
 
   function onChange(e) {

@@ -19,10 +19,17 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { updateList, deleteList } from '../store/actions/listActions';
+import Loading from '../components/Loading';
 
 const { confirm } = Modal;
 
-export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
+export const ListPage = ({
+  list,
+  todos,
+  deleteList,
+  updateList,
+  isLoading,
+}) => {
   const [isRenaming, setIsRenaming] = useState(false);
 
   const optionsDropdown = list && (
@@ -85,7 +92,7 @@ export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
     setIsRenaming(false);
   }
 
-  return (
+  return list && todos ? (
     <div>
       <ContentHeader
         title={list.title}
@@ -107,20 +114,20 @@ export const ListPage = ({ list, deleteList, updateList, isLoading }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList list={list} />
+      <TodoList list={list} todos={todos} />
     </div>
+  ) : (
+    <Loading />
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { isLoading } = state.list;
+  // const { isLoading } = state.list;
   const { list, todos } = state.firestore.data;
   return {
-    isLoading,
-    list: {
-      ...list,
-      todos: todos && Object.keys(todos).map((key) => todos[key]),
-    },
+    // isLoading,
+    list,
+    todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
   };
 };
 

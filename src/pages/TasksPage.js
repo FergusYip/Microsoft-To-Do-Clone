@@ -1,9 +1,10 @@
 import React from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import TodoList from '../components/TodoList';
-import { useFirestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect } from 'react-redux-firebase';
 import ContentHeader from '../components/ContentHeader';
 import { Button, Dropdown, Menu } from 'antd';
+import { compose } from 'redux';
 import {
   EllipsisOutlined,
   SortAscendingOutlined,
@@ -14,21 +15,7 @@ import {
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
 
-const TasksPage = ({ tasksID, updateList }) => {
-  useFirestoreConnect(
-    tasksID
-      ? [
-          {
-            collection: 'lists',
-            doc: tasksID,
-            storeAs: 'list',
-          },
-        ]
-      : []
-  );
-
-  const { list } = useSelector((state) => state.firestore.data);
-
+const TasksPage = ({ updateList, list, todos }) => {
   const updateShowCompleted = () => {
     updateList({ ...list, showCompleted: !list.showCompleted });
   };
@@ -61,14 +48,17 @@ const TasksPage = ({ tasksID, updateList }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList />
+      <TodoList list={list} todos={todos} />
     </div>
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const { list, todos } = state.firestore.data;
   return {
     tasksID: state.firebase.profile.tasks,
+    list,
+    todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
   };
 };
 
@@ -78,4 +68,22 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  firestoreConnect((props) =>
+    props.tasksID
+      ? [
+          {
+            collection: 'lists',
+            doc: props.tasksID,
+            storeAs: 'list',
+          },
+          {
+            collection: 'todos',
+            where: ['listID', '==', props.tasksID],
+            storeAs: 'todos',
+          },
+        ]
+      : []
+  )
+)(TasksPage);

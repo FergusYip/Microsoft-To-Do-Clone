@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { List, ConfigProvider, Layout, Result } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
@@ -10,7 +10,6 @@ import { deleteList } from '../../store/actions/listActions';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { selectTodo, deselectTodo } from '../../store/actions/selectionAction';
-import { firestoreConnect } from 'react-redux-firebase';
 import Loading from '../Loading';
 const { Content } = Layout;
 
@@ -44,8 +43,6 @@ const customizeEmptyTodo = () => (
 );
 
 function TodoList({ todos, list, selectTodo, deselectTodo }) {
-  useEffect(() => console.log(list, list && list.showCompleted), [list]);
-
   return list && todos ? (
     <Layout>
       <Content
@@ -70,14 +67,6 @@ function TodoList({ todos, list, selectTodo, deselectTodo }) {
   );
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const { todos, list } = state.firestore.data;
-  return {
-    list,
-    todos: todos && Object.keys(todos).map((key) => todos[key]),
-  };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteList: (list) => dispatch(deleteList(list)),
@@ -86,17 +75,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect(({ list }) =>
-    list
-      ? [
-          {
-            collection: 'todos',
-            where: ['listID', '==', list.id],
-            storeAs: 'todos',
-          },
-        ]
-      : []
-  )
-)(TodoList);
+export default compose(connect(null, mapDispatchToProps))(TodoList);
