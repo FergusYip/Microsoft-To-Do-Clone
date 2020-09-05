@@ -1,18 +1,17 @@
-import React from 'react';
-import { List, Dropdown, Menu } from 'antd';
+import React, { useState } from 'react';
+import { List, Dropdown, Menu, TimePicker, DatePicker } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 
 export default function RemindMeItem() {
-  // const [displayMenu, setDisplayMenu] = useState(null);
-  // const [selectingDate, setSelectingDate] = useState(false);
+  const [selectingDate, setSelectingDate] = useState(false);
 
   const id = 'remind_me_item';
 
-  // function onChange(value, dateString) {
-  //   console.log('Selected Time: ', value);
-  //   console.log('Formatted Selected Time: ', dateString);
-  //   setSelectingDate(false);
-  // }
+  function onChange(value, dateString) {
+    console.log('Selected Time: ', value);
+    console.log('Formatted Selected Time: ', dateString);
+    setSelectingDate(false);
+  }
 
   const menu = (
     <Menu>
@@ -21,21 +20,18 @@ export default function RemindMeItem() {
       <Menu.Item>Next Week</Menu.Item>
       <Menu.Divider />
       <Menu.Item>
-        {/* <Menu.Item onClick={() => setSelectingDate(true)}> */}
-        Pick a Date & Time
+        <Menu.Item onClick={() => setSelectingDate(true)}>
+          Pick a Date & Time
+        </Menu.Item>
       </Menu.Item>
     </Menu>
   );
 
-  // useEffect(() => {
-  //   setDisplayMenu(menu);
-  // }, []);
-
-  // const timePicker = () => {
-  //   return (
-  //     <TimePicker use12Hours format="h:mm a" onChange={onChange} open={true} />
-  //   );
-  // };
+  const timePicker = () => {
+    return (
+      <TimePicker use12Hours format="h:mm a" onChange={onChange} open={false} />
+    );
+  };
 
   const getRoot = () => {
     return document.getElementById(id);
@@ -50,7 +46,7 @@ export default function RemindMeItem() {
         trigger={['click']}
         getPopupContainer={getRoot}
       >
-        {/* {selectingDate ? (
+        {selectingDate ? (
           <DatePicker
             placeholder="Pick a Date & Time"
             bordered={false}
@@ -60,9 +56,9 @@ export default function RemindMeItem() {
             getPopupContainer={getRoot}
             renderExtraFooter={timePicker}
           />
-        ) : ( */}
-        <List.Item.Meta avatar={<BellOutlined />} title="Remind Me" />
-        {/* )} */}
+        ) : (
+          <List.Item.Meta avatar={<BellOutlined />} title="Remind Me" />
+        )}
       </Dropdown>
     </List.Item>
   );
