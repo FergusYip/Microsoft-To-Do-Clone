@@ -157,10 +157,6 @@ function TodoMenu({
                   value={newStep}
                   bordered={false}
                   style={{
-                    //   padding: 0,
-                    //   color: 'rgba(0, 0, 0, 0.85)',
-                    //   fontSize: 14,
-                    //   lineHeight: '1.5715',
                     resize: 'none',
                   }}
                   autoSize={{ minRows: 1 }}

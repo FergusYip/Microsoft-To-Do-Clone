@@ -33,6 +33,7 @@ export default function StepItem({ step, onUpdate, onRemove }) {
     }
     return title;
   }
+
   function showDeleteConfirm() {
     confirm({
       title: `“${shortenTitle(step.title)}” will be permanently deleted.`,
@@ -47,6 +48,12 @@ export default function StepItem({ step, onUpdate, onRemove }) {
       onCancel() {},
     });
   }
+
+  const isCompleteStyles = step.isComplete
+    ? {
+        textDecoration: 'line-through',
+      }
+    : {};
 
   return (
     <List.Item
@@ -75,10 +82,10 @@ export default function StepItem({ step, onUpdate, onRemove }) {
             defaultValue={step.title}
             style={{
               padding: 0,
-              color: 'rgba(0, 0, 0, 0.85)',
               fontSize: 14,
               lineHeight: '1.5715',
               resize: 'none',
+              ...isCompleteStyles,
             }}
             autoSize={{ minRows: 1 }}
             maxLength={100}

@@ -34,7 +34,6 @@ const ContentHeader = ({
             autoFocus
             style={{
               marginBottom: '0.5em',
-              color: 'rgba(0, 0, 0, 0.85)',
               fontWeight: 600,
               fontSize: '24px',
               lineHeight: 1.35,
