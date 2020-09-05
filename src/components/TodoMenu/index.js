@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   List,
   Input,
@@ -165,7 +165,6 @@ function TodoMenu({
                   onChange={stepInputOnChange}
                   onPressEnter={stepInputSubmit}
                   value={newStep}
-                  bordered={false}
                   style={{
                     resize: 'none',
                   }}
