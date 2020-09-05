@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { List, Checkbox, Button, Input } from 'antd';
-import { CloseOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Modal, List, Checkbox, Button, Input } from 'antd';
+import { CloseOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+
+const { confirm } = Modal;
 
 export default function StepItem({ step, onUpdate, onRemove }) {
   const [editingTitle, setEditingTitle] = useState(false);
@@ -25,6 +27,27 @@ export default function StepItem({ step, onUpdate, onRemove }) {
 
   const handleTitleFocus = () => setEditingTitle(true);
 
+  function shortenTitle(title) {
+    if (title.length > 20) {
+      return `${title.substr(0, 20)}...`;
+    }
+    return title;
+  }
+  function showDeleteConfirm() {
+    confirm({
+      title: `“${shortenTitle(step.title)}” will be permanently deleted.`,
+      icon: <ExclamationCircleOutlined />,
+      content: "You won't be able to undo this action.",
+      okText: 'Delete step',
+      okType: 'danger',
+      cancelText: 'Cancel',
+      onOk() {
+        handleRemove();
+      },
+      onCancel() {},
+    });
+  }
+
   return (
     <List.Item
       actions={
@@ -34,7 +57,7 @@ export default function StepItem({ step, onUpdate, onRemove }) {
               <Button
                 type="text"
                 shape="circle"
-                onClick={handleRemove}
+                onClick={showDeleteConfirm}
                 style={{ padding: 0, height: 26, width: 26 }}
               >
                 <CloseOutlined />
