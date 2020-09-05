@@ -76,9 +76,15 @@ export const ListPage = ({
   useEffect(() => {
     if (!isLoading && isRenaming) {
       setIsRenaming(false);
-      message.success(`List has been renamed to "${list.title}"`);
+      message.success({
+        content: `List has been renamed to "${list.title}"`,
+        duration: 1.5,
+        style: {
+          marginTop: '5%',
+        },
+      });
     }
-  }, [isLoading, list, isRenaming]);
+  }, [isLoading]);
 
   function handleRename() {
     setIsRenaming(true);
@@ -122,10 +128,10 @@ export const ListPage = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  // const { isLoading } = state.list;
+  const { isLoading } = state.list.listReducer;
   const { list, todos } = state.firestore.data;
   return {
-    // isLoading,
+    isLoading,
     list,
     todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
   };

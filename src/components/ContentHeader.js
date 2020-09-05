@@ -5,13 +5,13 @@ import { Typography, PageHeader, Input } from 'antd';
 const ContentHeader = ({
   title,
   isRenaming,
-  onRenamed,
-  onCancel,
   children,
+  onRenamed = () => {},
+  onCancel = () => {},
 }) => {
   useEffect(() => {
     function handleKeyDown(event) {
-      if (event.key === 'Escape' || event.keyCode === 27) {
+      if ((event.key === 'Escape' || event.keyCode === 27) && isRenaming) {
         onCancel();
       }
     }
