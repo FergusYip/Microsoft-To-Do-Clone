@@ -30,6 +30,8 @@ import {
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
+const step_input_id = 'step_input_area';
+
 function TodoMenu({
   selectedTodoDetails,
   onClose,
@@ -74,6 +76,7 @@ function TodoMenu({
     setNewStep('');
     if (!cleanedStep) return;
     addStep(selectedTodo, cleanedStep);
+    document.getElementById(step_input_id).focus();
   }
 
   function stepRemove(step) {
@@ -154,6 +157,7 @@ function TodoMenu({
               <Space>
                 <PlusOutlined onClick={stepInputSubmit} />
                 <Input.TextArea
+                  id={step_input_id}
                   placeholder={
                     selectedTodo.steps.length === 0 ? 'Add Step' : 'Next Step'
                   }
