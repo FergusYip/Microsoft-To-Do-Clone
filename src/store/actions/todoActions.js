@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const createTodo = (todo) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
@@ -30,6 +32,45 @@ export const updateTodo = (todo) => {
       })
       .catch((err) => {
         dispatch({ type: 'UPDATE_TODO_ERROR', err });
+      });
+  };
+};
+
+export const addStep = (todo, stepTitle) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    firestore
+      .collection('todos')
+      .doc(todo.id)
+      .update({
+        steps: [
+          ...todo.steps,
+          { title: stepTitle, isComplete: false, id: uuidv4() },
+        ],
+      })
+      .then(() => {
+        dispatch({ type: 'ADD_STEP', todo });
+      })
+      .catch((err) => {
+        dispatch({ type: 'ADD_STEP_ERR', err });
+      });
+  };
+};
+
+export const removeStep = (todo, step) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    firestore
+      .collection('todos')
+      .doc(todo.id)
+      .update({
+        steps: todo.steps.filter((s) => s.id !== step.id),
+      })
+      .then(() => {
+        dispatch({ type: 'REMOVE_STEP', todo });
+      })
+      .catch((err) => {
+        dispatch({ type: 'REMOVE_STEP_ERR', err });
       });
   };
 };

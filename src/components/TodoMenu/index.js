@@ -21,11 +21,21 @@ import StepList from './StepList';
 import TodoMenuItem from './TodoMenuItem';
 import { RepeatItem, DueDateItem, RemindMeItem } from './TodoMenuItems';
 import { connect, useSelector } from 'react-redux';
-import { updateTodo } from '../../store/actions/todoActions';
+import {
+  updateTodo,
+  addStep,
+  removeStep,
+} from '../../store/actions/todoActions';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 
-function TodoMenu({ selectedTodoDetails, onClose, updateTodo }) {
+function TodoMenu({
+  selectedTodoDetails,
+  onClose,
+  updateTodo,
+  addStep,
+  removeStep,
+}) {
   const [newStep, setNewStep] = useState('');
 
   // function modifyStep(modifiedStep) {
@@ -58,12 +68,16 @@ function TodoMenu({ selectedTodoDetails, onClose, updateTodo }) {
 
   function stepInputSubmit() {
     if (!newStep) return;
+    addStep(selectedTodo, newStep);
     setNewStep('');
   }
+
+  function stepRemove(step) {
+    removeStep(selectedTodo, step);
+  }
+
   function onChangeCompletion(e) {
-    const newIsComplete = e.target.checked;
-    updateTodo({ ...selectedTodo, isComplete: newIsComplete });
-    console.log(e.target.checked);
+    updateTodo({ ...selectedTodo, isComplete: e.target.checked });
   }
 
   function toggleImportant() {
@@ -108,7 +122,11 @@ function TodoMenu({ selectedTodoDetails, onClose, updateTodo }) {
     >
       {selectedTodo && (
         <>
-          <StepList steps={selectedTodo.steps} modifyStep={null} />
+          <StepList
+            steps={selectedTodo.steps}
+            modifyStep={null}
+            onRemove={stepRemove}
+          />
           <List>
             <List.Item>
               <Space>
@@ -157,6 +175,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateTodo: (todo) => dispatch(updateTodo(todo)),
+    addStep: (todo, stepTitle) => dispatch(addStep(todo, stepTitle)),
+    removeStep: (todo, step) => dispatch(removeStep(todo, step)),
   };
 };
 
