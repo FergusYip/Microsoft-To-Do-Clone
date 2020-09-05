@@ -69,10 +69,12 @@ function TodoMenu({
   }
 
   function stepInputSubmit(e) {
-    const trimmedStep = newStep.trim();
+    e.preventDefault();
+    document.activeElement.blur();
+    const cleanedStep = newStep.trim().replace(/\s+/, ' ');
     setNewStep('');
-    if (!trimmedStep) return;
-    addStep(selectedTodo, trimmedStep);
+    if (!cleanedStep) return;
+    addStep(selectedTodo, cleanedStep);
   }
 
   function stepRemove(step) {
@@ -145,7 +147,7 @@ function TodoMenu({
             <List.Item>
               <Space>
                 <PlusOutlined />
-                <Input
+                <Input.TextArea
                   placeholder={
                     selectedTodo.steps.length === 0 ? 'Add Step' : 'Next Step'
                   }
@@ -153,6 +155,16 @@ function TodoMenu({
                   onChange={stepInputOnChange}
                   onPressEnter={stepInputSubmit}
                   value={newStep}
+                  bordered={false}
+                  style={{
+                    //   padding: 0,
+                    //   color: 'rgba(0, 0, 0, 0.85)',
+                    //   fontSize: 14,
+                    //   lineHeight: '1.5715',
+                    resize: 'none',
+                  }}
+                  autoSize={{ minRows: 1 }}
+                  maxLength={100}
                 />
               </Space>
             </List.Item>

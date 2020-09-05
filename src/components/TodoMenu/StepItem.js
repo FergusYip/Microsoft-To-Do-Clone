@@ -19,7 +19,7 @@ export default function StepItem({ step, onUpdate, onRemove }) {
     e.preventDefault();
     document.activeElement.blur();
     setEditingTitle(false);
-    const newTitle = e.target.value.trim();
+    const newTitle = e.target.value.trim().replace(/\s+/, ' ');
     if (newTitle && newTitle !== step.title) {
       onUpdate({ ...step, title: newTitle });
     }
@@ -71,7 +71,6 @@ export default function StepItem({ step, onUpdate, onRemove }) {
         }
         title={
           <Input.TextArea
-            className="ant-typography"
             bordered={false}
             defaultValue={step.title}
             style={{
