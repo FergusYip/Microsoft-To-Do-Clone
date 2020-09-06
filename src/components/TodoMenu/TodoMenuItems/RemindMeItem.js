@@ -11,10 +11,12 @@ import {
 } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import { connect } from 'react-redux';
+import { updateTodo } from '../../../store/actions/todoActions';
 
 const TIME_FORMAT = 'ddd h:mma';
 
-export default function RemindMeItem() {
+function RemindMeItem({ todo, updateTodo }) {
   const [selectingDate, setSelectingDate] = useState(false);
   const [reminderToday, setReminderToday] = useState(null);
   const [reminderTomorrow, setReminderTomorrow] = useState(null);
@@ -65,13 +67,39 @@ export default function RemindMeItem() {
   }
 
   function selectToday() {
-    console.log(reminderToday);
+    updateTodo({ ...todo, remindMe: reminderToday.toDate() });
   }
   function selectTomorrow() {
-    console.log(reminderTomorrow);
+    updateTodo({ ...todo, remindMe: reminderTomorrow.toDate() });
   }
   function selectNextWeek() {
-    console.log(reminderNextWeek);
+    updateTodo({ ...todo, remindMe: reminderNextWeek.toDate() });
+  }
+
+  function getReminderTitle(remindMe) {
+    if (!remindMe) return 'Remind Me';
+
+    const reminder = moment.unix(remindMe.seconds);
+    const now = moment();
+
+    const dateDiff = Math.round(moment.duration(now.diff(reminder)).asDays());
+    return (
+      <>
+        <Typography.Text>
+          Remind me at {reminder.format('h:mm a')}
+        </Typography.Text>
+        <br />
+        <Typography.Text>
+          {Math.abs(dateDiff) > 1
+            ? reminder.format('ddd, D MMMM')
+            : dateDiff === 0
+            ? 'Today'
+            : dateDiff === -1
+            ? 'Tomorrow'
+            : 'Yesterday'}
+        </Typography.Text>
+      </>
+    );
   }
 
   const menu = (
@@ -153,9 +181,27 @@ export default function RemindMeItem() {
             onBlur={() => setSelectingDate(false)}
           />
         ) : (
-          <List.Item.Meta avatar={<BellOutlined />} title="Remind Me" />
+          <List.Item.Meta
+            avatar={<BellOutlined />}
+            title={todo ? getReminderTitle(todo.remindMe) : ''}
+          />
         )}
       </Dropdown>
     </List.Item>
   );
 }
+
+const mapStateToProps = (state) => {
+  const todoID = state.selectedTodoDetails && state.selectedTodoDetails.todoID;
+  if (!todoID) return {};
+  const todo = state.firestore.data.todos && state.firestore.data.todos[todoID];
+  return { todo };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateTodo: (todo) => dispatch(updateTodo(todo)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RemindMeItem);
