@@ -1,15 +1,109 @@
-import React from 'react';
-import { List, Dropdown, Menu } from 'antd';
+import React, { useState } from 'react';
+import { List, Dropdown, Menu, Row, Col, Typography } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { connect } from 'react-redux';
+import { updateTodo } from '../../../store/actions/todoActions';
 
-export default function DueDateItem() {
+const TIME_FORMAT = 'ddd';
+
+function DueDateItem({ todo, updateTodo }) {
+  const [dueToday, setDueToday] = useState(null);
+  const [dueTomorrow, setDueTomorrow] = useState(null);
+  const [dueNextWeek, setDueNextWeek] = useState(null);
+
   const id = 'due_date_item';
+
+  function getDueToday() {
+    const reminder = moment().startOf('day');
+    return reminder;
+  }
+
+  function getDueTomorrow() {
+    return moment().add(1, 'days').startOf('day');
+  }
+
+  function getDueNextWeek() {
+    return moment().day(7).startOf('day');
+  }
+
+  function setReminderTimes() {
+    setDueToday(getDueToday());
+    setDueTomorrow(getDueTomorrow());
+    setDueNextWeek(getDueNextWeek());
+  }
+
+  function selectToday() {
+    updateTodo({ ...todo, dueDate: dueToday.toDate() });
+  }
+  function selectTomorrow() {
+    updateTodo({ ...todo, dueDate: dueTomorrow.toDate() });
+  }
+  function selectNextWeek() {
+    updateTodo({ ...todo, dueDate: dueNextWeek.toDate() });
+  }
+
+  function getDueDateTitle(dueDate) {
+    if (!dueDate) return 'Add Due Date';
+
+    const due = moment.unix(dueDate.seconds);
+    const now = moment();
+
+    const dateDiff = Math.round(moment.duration(now.diff(due)).asDays());
+    return (
+      <>
+        <Typography.Text>
+          Due{' '}
+          {Math.abs(dateDiff) > 1
+            ? due.format('ddd, D MMMM')
+            : dateDiff === 0
+            ? 'Today'
+            : dateDiff === -1
+            ? 'Tomorrow'
+            : 'Yesterday'}
+        </Typography.Text>
+      </>
+    );
+  }
 
   const menu = (
     <Menu>
-      <Menu.Item>Today</Menu.Item>
-      <Menu.Item>Tomorrow</Menu.Item>
-      <Menu.Item>Next Week</Menu.Item>
+      <Menu.Item onClick={selectToday}>
+        <Row>
+          <Col flex="auto">
+            <Typography.Text>Today</Typography.Text>
+          </Col>
+          <Col flex={0}>
+            <Typography.Text type="secondary" style={{ textAlign: 'right' }}>
+              {dueToday && dueToday.format(TIME_FORMAT)}
+            </Typography.Text>
+          </Col>
+        </Row>
+      </Menu.Item>
+      <Menu.Item onClick={selectTomorrow}>
+        <Row>
+          <Col flex="auto">
+            <Typography.Text>Tomorrow</Typography.Text>
+          </Col>
+          <Col flex={0}>
+            <Typography.Text type="secondary" style={{ textAlign: 'right' }}>
+              {dueTomorrow && dueTomorrow.format(TIME_FORMAT)}
+            </Typography.Text>
+          </Col>
+        </Row>
+      </Menu.Item>
+      <Menu.Item onClick={selectNextWeek}>
+        <Row>
+          <Col flex="auto">
+            <Typography.Text>Next Week</Typography.Text>
+          </Col>
+          <Col flex={0}>
+            <Typography.Text type="secondary" style={{ textAlign: 'right' }}>
+              {dueNextWeek && dueNextWeek.format(TIME_FORMAT)}
+            </Typography.Text>
+          </Col>
+        </Row>
+      </Menu.Item>
       <Menu.Divider />
       <Menu.Item>Pick a Date</Menu.Item>
     </Menu>
@@ -27,9 +121,27 @@ export default function DueDateItem() {
         arrow
         trigger={['click']}
         getPopupContainer={getRoot}
+        onVisibleChange={setReminderTimes}
       >
-        <List.Item.Meta avatar={<CalendarOutlined />} title="Add Due Date" />
+        <List.Item.Meta
+          avatar={<CalendarOutlined />}
+          title={todo && getDueDateTitle(todo.dueDate)}
+        />
       </Dropdown>
     </List.Item>
   );
 }
+const mapStateToProps = (state) => {
+  const todoID = state.selectedTodoDetails && state.selectedTodoDetails.todoID;
+  if (!todoID) return {};
+  const todo = state.firestore.data.todos && state.firestore.data.todos[todoID];
+  return { todo };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateTodo: (todo) => dispatch(updateTodo(todo)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DueDateItem);
