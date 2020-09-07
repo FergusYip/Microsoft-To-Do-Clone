@@ -3,7 +3,7 @@ import { List } from 'antd';
 
 import TodoItem from './TodoItem';
 
-export default function CompletedList({ listID, todos, modifyTodo, onClick }) {
+export default function CompletedList({ todos, modifyTodo, onClick }) {
   return (
     <div>
       {todos.filter((todo) => todo.isComplete).length !== 0 && (
@@ -12,12 +12,7 @@ export default function CompletedList({ listID, todos, modifyTodo, onClick }) {
           bordered
           dataSource={todos.filter((todo) => todo.isComplete)}
           renderItem={(todo) => (
-            <TodoItem
-              todo={todo}
-              modifyTodo={modifyTodo}
-              onClick={onClick}
-              listID={listID}
-            />
+            <TodoItem todo={todo} modifyTodo={modifyTodo} onClick={onClick} />
           )}
         />
       )}

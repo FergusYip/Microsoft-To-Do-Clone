@@ -14,8 +14,10 @@ import {
   EyeOutlined,
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
+import AddTodo from '../components/TodoList/AddTodo';
+import Loading from '../components/Loading';
 
-const TasksPage = ({ updateList, list, todos }) => {
+const TasksPage = ({ updateList, list, todos, tasksID }) => {
   const updateShowCompleted = () => {
     updateList({ ...list, showCompleted: !list.showCompleted });
   };
@@ -34,7 +36,7 @@ const TasksPage = ({ updateList, list, todos }) => {
     </Menu>
   );
 
-  return (
+  return list ? (
     <div>
       <ContentHeader title={'Tasks'}>
         <Dropdown
@@ -48,8 +50,11 @@ const TasksPage = ({ updateList, list, todos }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList list={list} todos={todos} />
+      <TodoList todos={todos} showCompleted={list.showCompleted} />
+      <AddTodo listID={tasksID} />
     </div>
+  ) : (
+    <Loading />
   );
 };
 

@@ -20,6 +20,7 @@ import {
 } from '@ant-design/icons';
 import { updateList, deleteList } from '../store/actions/listActions';
 import Loading from '../components/Loading';
+import AddTodo from '../components/TodoList/AddTodo';
 
 const { confirm } = Modal;
 
@@ -120,7 +121,8 @@ export const ListPage = ({
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList list={list} todos={todos} />
+      <TodoList todos={todos} />
+      <AddTodo listID={list.id} />
     </div>
   ) : (
     <Loading />

@@ -3,7 +3,6 @@ import { List, ConfigProvider, Layout, Result } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
 import TodoItem from './TodoItem';
-import AddTodo from './AddTodo';
 import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
 import { deleteList } from '../../store/actions/listActions';
@@ -42,8 +41,8 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({ todos, list, selectTodo, deselectTodo }) {
-  return list && todos ? (
+function TodoList({ todos, selectTodo, deselectTodo, showCompleted }) {
+  return todos ? (
     <Layout>
       <Content
       // style={{ padding: 24, display: 'flex', flexDirection: 'column',  }}
@@ -56,11 +55,8 @@ function TodoList({ todos, list, selectTodo, deselectTodo }) {
             renderItem={(todo) => <TodoItem todo={todo} onClick={selectTodo} />}
           />
         </ConfigProvider>
-        {list.showCompleted && (
-          <CompletedList todos={todos} onClick={selectTodo} listID={list.id} />
-        )}
+        {showCompleted && <CompletedList todos={todos} onClick={selectTodo} />}
       </Content>
-      <AddTodo listID={list.id} />
       <TodoMenu onClose={deselectTodo} />
     </Layout>
   ) : (

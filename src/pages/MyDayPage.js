@@ -15,13 +15,14 @@ import {
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
 import moment from 'moment';
+import AddTodo from '../components/TodoList/AddTodo';
 
-export const MyDayPage = ({ list, todos }) => {
+export const MyDayPage = ({ todos, tasksID }) => {
   // const updateShowCompleted = () => {
   //   updateList({ ...list, showCompleted: !list.showCompleted });
   // };
 
-  const optionsDropdown = list && (
+  const optionsDropdown = (
     <Menu>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
       <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
@@ -49,7 +50,8 @@ export const MyDayPage = ({ list, todos }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList list={list} todos={todos} />
+      <TodoList todos={todos} />
+      <AddTodo listID={tasksID} />
     </div>
   );
 };
