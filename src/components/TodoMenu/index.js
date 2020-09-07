@@ -12,14 +12,17 @@ import {
 } from 'antd';
 import {
   PlusOutlined,
-  CoffeeOutlined,
   PaperClipOutlined,
   StarFilled,
   StarOutlined,
 } from '@ant-design/icons';
 import StepList from './StepList';
-import TodoMenuItem from './TodoMenuItem';
-import { RepeatItem, DueDateItem, RemindMeItem } from './TodoMenuItems';
+import {
+  RepeatItem,
+  DueDateItem,
+  RemindMeItem,
+  MyDayItem,
+} from './TodoMenuItems';
 import { connect, useSelector } from 'react-redux';
 import {
   updateTodo,
@@ -173,7 +176,7 @@ function TodoMenu({
                 />
               </Space>
             </List.Item>
-            <TodoMenuItem avatar={<CoffeeOutlined />} title="Add to My Day" />
+            <MyDayItem />
             <RemindMeItem />
             <DueDateItem />
             <RepeatItem />
