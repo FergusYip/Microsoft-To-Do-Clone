@@ -15,28 +15,34 @@ import {
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
-import Loading from '../components/Loading';
 
-const TasksPage = ({ updateList, list, todos, tasksID }) => {
+const TasksPage = ({ updateList, list, todos, tasksID, requesting }) => {
   const updateShowCompleted = () => {
-    updateList({ ...list, showCompleted: !list.showCompleted });
+    console.log(list);
+    list && updateList({ ...list, showCompleted: !list.showCompleted });
   };
 
-  const optionsDropdown = list && (
-    <Menu>
+  const optionsDropdown = (
+    <Menu selectable={!!list}>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
       <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
       <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
       <Menu.Item
-        icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        icon={
+          list && list.showCompleted ? (
+            <EyeInvisibleOutlined />
+          ) : (
+            <EyeOutlined />
+          )
+        }
         onClick={updateShowCompleted}
       >
-        {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
+        {`${list && list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
       </Menu.Item>
     </Menu>
   );
 
-  return list ? (
+  return (
     <div>
       <ContentHeader title={'Tasks'}>
         <Dropdown
@@ -50,11 +56,13 @@ const TasksPage = ({ updateList, list, todos, tasksID }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} showCompleted={list.showCompleted} />
+      <TodoList
+        todos={todos}
+        isLoading={requesting.todos}
+        showCompleted={list && list.showCompleted}
+      />
       <AddTodo listID={tasksID} />
     </div>
-  ) : (
-    <Loading />
   );
 };
 
@@ -63,7 +71,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     tasksID: state.firebase.profile.tasks,
     list,
-    todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
+    todos: todos ? Object.values(todos) : [],
+    requesting: state.firestore.status.requesting,
   };
 };
 

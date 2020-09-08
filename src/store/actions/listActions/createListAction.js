@@ -31,7 +31,7 @@ export const createList = (list) => {
     const uid = getState().firebase.auth.uid;
     const document = firestore.collection('lists').doc();
     document
-      .set({ ...list, ownerId: uid, id: document.id })
+      .set({ ...list, owner: uid, id: document.id })
       // .then(() =>
       //   firestore
       //     .collection('users')

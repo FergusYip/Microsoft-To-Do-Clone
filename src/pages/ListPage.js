@@ -24,6 +24,16 @@ import AddTodo from '../components/TodoList/AddTodo';
 
 const { confirm } = Modal;
 
+/*
+Print list
+List name
+Completion
+Title
+notes
+Due date
+Importance
+*/
+
 export const ListPage = ({
   list,
   todos,
@@ -122,7 +132,11 @@ export const ListPage = ({
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} isLoading={requesting.todos} />
+      <TodoList
+        todos={todos}
+        isLoading={requesting.todos}
+        showCompleted={list && list.showCompleted}
+      />
       <AddTodo listID={list && list.id} />
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Input, Typography, Spin, List, Layout, Row } from 'antd';
+import { Menu, Input, Typography, Spin, List, Layout } from 'antd';
 import {
   CoffeeOutlined,
   StarOutlined,
@@ -20,18 +20,8 @@ import NewListModal from './NewListModal';
 const { Search } = Input;
 const { Content, Footer } = Layout;
 
-function Sidebar({ lists, createList, requested, auth }) {
-  console.log(requested);
+function Sidebar({ lists, createList, requested, auth, tasksID }) {
   const history = useHistory();
-  // const [lists, setLists] = useState(lists);
-
-  // useEffect(() => {
-  //   setLists(dummyLists);
-  // }, []);
-
-  // function handleMenuSelect({ item, key, keyPath, domEvent }) {
-  //   console.log(item, key, keyPath, domEvent);
-  // }
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -97,22 +87,24 @@ function Sidebar({ lists, createList, requested, auth }) {
           </Menu.Item>
           <Menu.Divider />
           {lists &&
-            lists.map((list) => (
-              <Menu.Item
-                key={list.id}
-                icon={<UnorderedListOutlined />}
-                onClick={() => history.push(`/list/${list.id}`)}
-                title={list.title}
-              >
-                {list.title}
-                <List.Item>
-                  <List.Item.Meta title={list.title}></List.Item.Meta>
-                  <Typography.Text>
-                    {list.numTodo > 0 ? list.numTodo : ''}
-                  </Typography.Text>
-                </List.Item>
-              </Menu.Item>
-            ))}
+            lists
+              .filter((list) => list.id !== tasksID)
+              .map((list) => (
+                <Menu.Item
+                  key={list.id}
+                  icon={<UnorderedListOutlined />}
+                  onClick={() => history.push(`/list/${list.id}`)}
+                  title={list.title}
+                >
+                  {list.title}
+                  <List.Item>
+                    <List.Item.Meta title={list.title}></List.Item.Meta>
+                    <Typography.Text>
+                      {list.numTodo > 0 ? list.numTodo : ''}
+                    </Typography.Text>
+                  </List.Item>
+                </Menu.Item>
+              ))}
         </Menu>
         {!requested.lists && (
           <span
@@ -141,6 +133,7 @@ function Sidebar({ lists, createList, requested, auth }) {
 
 const mapToState = (state) => {
   return {
+    tasksID: state.firebase.profile.tasks,
     lists: state.firestore.ordered.lists || [],
     auth: state.firebase.auth,
     requested: state.firestore.status.requested,
@@ -160,7 +153,7 @@ export default compose(
       ? [
           {
             collection: 'lists',
-            where: ['ownerId', '==', uid],
+            where: ['owner', '==', uid],
             storeAs: 'lists',
           },
         ]

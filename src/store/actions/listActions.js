@@ -8,7 +8,7 @@ export const createList = (list) => {
     const document = firestore.collection('lists').doc();
 
     document
-      .set({ ...list, ownerId: uid, id: document.id })
+      .set({ ...list, owner: uid, id: document.id })
       // .then(() =>
       //   firestore
       //     .collection('users')
