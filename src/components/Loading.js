@@ -29,7 +29,7 @@ export default function Loading() {
           transform: 'translate(-50%,-50%)',
         }}
       >
-        <Result icon={<Spin size="large" />} title="Loading" />
+        <Result icon={<Spin size="large" />} />
       </section>
     </div>
   );
