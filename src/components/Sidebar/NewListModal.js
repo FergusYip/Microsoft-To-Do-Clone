@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Form, Input } from 'antd';
 
 const NewListModal = ({ visible, onCreate, onCancel }) => {
   const [form] = Form.useForm();
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (visible && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [visible]);
 
   const submitForm = () => {
     form
@@ -52,7 +60,7 @@ const NewListModal = ({ visible, onCreate, onCancel }) => {
             },
           ]}
         >
-          <Input onPressEnter={submitForm} autoFocus />
+          <Input ref={inputRef} onPressEnter={submitForm} autoFocus />
         </Form.Item>
       </Form>
     </Modal>
