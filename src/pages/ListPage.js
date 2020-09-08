@@ -30,7 +30,7 @@ export const ListPage = ({
   deleteList,
   updateList,
   isLoading,
-  requested,
+  requesting,
 }) => {
   const [isRenaming, setIsRenaming] = useState(false);
 
@@ -100,10 +100,10 @@ export const ListPage = ({
     setIsRenaming(false);
   }
 
-  return requested.list && requested.todos ? (
+  return (
     <div>
       <ContentHeader
-        title={list.title}
+        title={list && list.title}
         isRenaming={isRenaming}
         onRenamed={onRenamed}
         onCancel={onRenameCancel}
@@ -122,22 +122,21 @@ export const ListPage = ({
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} />
-      <AddTodo listID={list.id} />
+      <TodoList todos={todos} isLoading={requesting.todos} />
+      <AddTodo listID={list && list.id} />
     </div>
-  ) : (
-    <Loading />
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const id = ownProps.match.params.id;
   const { isLoading } = state.list.listReducer;
-  const { list, todos } = state.firestore.data;
+  const { lists, todos } = state.firestore.data;
   return {
     isLoading,
-    list,
-    todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
-    requested: state.firestore.status.requested,
+    list: lists && lists[id],
+    todos: todos ? Object.values(todos) : [],
+    requesting: state.firestore.status.requesting,
   };
 };
 
@@ -151,11 +150,6 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect((props) => [
-    {
-      collection: 'lists',
-      doc: props.match.params.id,
-      storeAs: 'list',
-    },
     {
       collection: 'todos',
       where: ['listID', '==', props.match.params.id],

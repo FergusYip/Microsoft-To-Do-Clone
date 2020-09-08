@@ -41,16 +41,23 @@ const customizeEmptyTodo = () => (
   />
 );
 
-function TodoList({ todos, selectTodo, deselectTodo, showCompleted }) {
-  return todos ? (
+function TodoList({
+  todos,
+  selectTodo,
+  deselectTodo,
+  showCompleted,
+  isLoading,
+}) {
+  return (
     <Layout>
       <Content
       // style={{ padding: 24, display: 'flex', flexDirection: 'column',  }}
       >
         <ConfigProvider renderEmpty={customizeEmptyTodo}>
           <List
+            loading={isLoading}
             bordered
-            dataSource={todos.filter((todo) => !todo.isComplete)}
+            dataSource={todos && todos.filter((todo) => !todo.isComplete)}
             rowKey={(todo) => todo.id}
             renderItem={(todo) => <TodoItem todo={todo} onClick={selectTodo} />}
           />
@@ -59,8 +66,6 @@ function TodoList({ todos, selectTodo, deselectTodo, showCompleted }) {
       </Content>
       <TodoMenu onClose={deselectTodo} />
     </Layout>
-  ) : (
-    <Loading />
   );
 }
 

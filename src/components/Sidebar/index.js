@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Input, Typography, List, Layout } from 'antd';
+import { Menu, Input, Typography, Spin, List, Layout } from 'antd';
 import {
   CoffeeOutlined,
   StarOutlined,
@@ -20,7 +20,8 @@ import NewListModal from './NewListModal';
 const { Search } = Input;
 const { Content, Footer } = Layout;
 
-function Sidebar({ lists, createList }) {
+function Sidebar({ lists, createList, requested, auth }) {
+  console.log(requested);
   const history = useHistory();
   // const [lists, setLists] = useState(lists);
 
@@ -95,22 +96,28 @@ function Sidebar({ lists, createList }) {
             Tasks
           </Menu.Item>
           <Menu.Divider />
-          {lists.map((list) => (
-            <Menu.Item
-              key={list.id}
-              icon={<UnorderedListOutlined />}
-              onClick={() => history.push(`/list/${list.id}`)}
-              title={list.title}
-            >
-              {list.title}
-              <List.Item>
-                <List.Item.Meta title={list.title}></List.Item.Meta>
-                <Typography.Text>
-                  {list.numTodo > 0 ? list.numTodo : ''}
-                </Typography.Text>
-              </List.Item>
+          {requested[`lists`] ? (
+            lists.map((list) => (
+              <Menu.Item
+                key={list.id}
+                icon={<UnorderedListOutlined />}
+                onClick={() => history.push(`/list/${list.id}`)}
+                title={list.title}
+              >
+                {list.title}
+                <List.Item>
+                  <List.Item.Meta title={list.title}></List.Item.Meta>
+                  <Typography.Text>
+                    {list.numTodo > 0 ? list.numTodo : ''}
+                  </Typography.Text>
+                </List.Item>
+              </Menu.Item>
+            ))
+          ) : (
+            <Menu.Item disabled>
+              <Spin />
             </Menu.Item>
-          ))}
+          )}
         </Menu>
       </Content>
       <Footer style={{ position: 'fixed', bottom: 0, padding: 0, width: 200 }}>
@@ -129,6 +136,7 @@ const mapToState = (state) => {
   return {
     lists: state.firestore.ordered.lists || [],
     auth: state.firebase.auth,
+    requested: state.firestore.status.requested,
   };
 };
 
@@ -141,6 +149,14 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
   connect(mapToState, mapDispatchToProps),
   firestoreConnect(({ auth: { uid } }) =>
-    uid ? [{ collection: 'lists', where: ['ownerId', '==', uid] }] : []
+    uid
+      ? [
+          {
+            collection: 'lists',
+            where: ['ownerId', '==', uid],
+            storeAs: 'lists',
+          },
+        ]
+      : []
   )
 )(Sidebar);
