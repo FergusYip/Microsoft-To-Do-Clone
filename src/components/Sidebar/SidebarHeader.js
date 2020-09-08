@@ -20,7 +20,7 @@ function SidebarHeader({ signOut, profile }) {
           <Dropdown overlay={avatarMenu} trigger={['click']}>
             {/* <Avatar icon={<UserOutlined />} /> */}
             <Avatar>
-              {profile.isLoaded
+              {profile.isLoaded && profile.name
                 ? profile.name
                     .split(/\s+/)
                     .map((word) => word[0])

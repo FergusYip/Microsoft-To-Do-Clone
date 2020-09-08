@@ -32,6 +32,7 @@ import {
 } from '../../store/actions/todoActions';
 import { useFirestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
+import UploadFileItem from './TodoMenuItems/UploadFileItem';
 
 const step_input_id = 'step_input_area';
 
@@ -147,6 +148,7 @@ function TodoMenu({
       onClose={onClose}
       visible={!!selectedTodoDetails}
       width={300}
+      style={{ overflowX: 'hidden' }}
     >
       {selectedTodo && (
         <>
@@ -180,9 +182,7 @@ function TodoMenu({
             <RemindMeItem />
             <DueDateItem />
             <RepeatItem />
-            <List.Item>
-              <List.Item.Meta avatar={<PaperClipOutlined />} title="Add File" />
-            </List.Item>
+            <UploadFileItem />
             <List.Item>
               <Input.TextArea
                 placeholder="Add Note"
