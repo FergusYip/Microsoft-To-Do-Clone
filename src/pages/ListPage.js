@@ -30,6 +30,7 @@ export const ListPage = ({
   deleteList,
   updateList,
   isLoading,
+  requested,
 }) => {
   const [isRenaming, setIsRenaming] = useState(false);
 
@@ -99,7 +100,7 @@ export const ListPage = ({
     setIsRenaming(false);
   }
 
-  return list && todos ? (
+  return requested.list && requested.todos ? (
     <div>
       <ContentHeader
         title={list.title}
@@ -136,6 +137,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading,
     list,
     todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
+    requested: state.firestore.status.requested,
   };
 };
 
