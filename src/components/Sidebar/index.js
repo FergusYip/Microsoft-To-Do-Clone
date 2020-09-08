@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, Input, Typography, Spin, List, Layout } from 'antd';
+import { Menu, Input, Typography, Spin, List, Layout, Row } from 'antd';
 import {
   CoffeeOutlined,
   StarOutlined,
@@ -96,7 +96,7 @@ function Sidebar({ lists, createList, requested, auth }) {
             Tasks
           </Menu.Item>
           <Menu.Divider />
-          {requested[`lists`] ? (
+          {lists &&
             lists.map((list) => (
               <Menu.Item
                 key={list.id}
@@ -112,13 +112,20 @@ function Sidebar({ lists, createList, requested, auth }) {
                   </Typography.Text>
                 </List.Item>
               </Menu.Item>
-            ))
-          ) : (
-            <Menu.Item disabled>
-              <Spin />
-            </Menu.Item>
-          )}
+            ))}
         </Menu>
+        {!requested.lists && (
+          <span
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              padding: 16,
+              backgroundColor: 'white',
+            }}
+          >
+            <Spin />
+          </span>
+        )}
       </Content>
       <Footer style={{ position: 'fixed', bottom: 0, padding: 0, width: 200 }}>
         <NewListButton onClick={showModal} />
