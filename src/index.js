@@ -4,16 +4,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { Provider, useSelector } from 'react-redux';
-import {
-  reduxFirestore,
-  getFirestore,
-  createFirestoreInstance,
-} from 'redux-firestore';
-import {
-  ReactReduxFirebaseProvider,
-  getFirebase,
-  isLoaded,
-} from 'react-redux-firebase';
+import { createFirestoreInstance } from 'redux-firestore';
+import { ReactReduxFirebaseProvider, isLoaded } from 'react-redux-firebase';
 import firebaseConfig from './config/firebaseConfig';
 import firebase from 'firebase/app';
 import Loading from './components/Loading';

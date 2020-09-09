@@ -4,7 +4,7 @@ import { firebaseReducer } from 'react-redux-firebase';
 import { persistReducer } from 'redux-persist';
 
 import storage from 'redux-persist/lib/storage';
-import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
+// import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 
 import authReducer from './authReducer';
 import listReducer from './listReducer';
