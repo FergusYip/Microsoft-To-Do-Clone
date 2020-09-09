@@ -24,7 +24,9 @@ function LoginPage({ signIn, authError }) {
   };
 
   useEffect(() => {
-    authError && message.error(authError, 3);
+    if (authError) {
+      message.error(authError, 3);
+    }
   }, [authError]);
 
   return (

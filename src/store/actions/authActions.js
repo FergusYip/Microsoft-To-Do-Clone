@@ -1,5 +1,6 @@
 export const signIn = (credentials) => {
   return (dispatch, getState, { getFirebase }) => {
+    dispatch({ type: 'LOGIN_LOADING' });
     const firebase = getFirebase();
     firebase
       .auth()
