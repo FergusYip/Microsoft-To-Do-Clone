@@ -45,22 +45,45 @@ export const updateList = (list) => {
   };
 };
 
-export const deleteList = (list) => {
-  return (dispatch, getState, { getFirebase, getFirestore }) => {
-    const firestore = getFirestore();
+// export const deleteList = (list) => {
+//   return async (dispatch, getState, { getFirebase, getFirestore }) => {
+//     if (!list) {
+//       dispatch({ type: 'DELETE_LIST_ERROR', err: { message: 'list is null' } });
+//     }
 
-    const document = firestore.collection('lists').doc(list.id);
+//     dispatch({ type: 'DELETE_LIST_LOADING', isLoading: true });
+//     const firestore = getFirestore();
 
-    document
-      .delete()
-      .then(function () {
-        deleteAtPath(`/list${list.id}/todos`);
-        console.log('Document successfully deleted!');
-        dispatch({ type: 'DELETE_LIST', list });
-      })
-      .catch(function (err) {
-        console.error('Error removing document: ', err);
-        dispatch({ type: 'DELETE_LIST_ERROR', err });
-      });
-  };
-};
+//     const todos = await firestore
+//       .collection('todos')
+//       .where('listID', '==', list.id)
+//       .get();
+
+//     console.log(todos);
+
+//     // Get a new write batch
+//     const batch = firestore.batch();
+
+//     const listRef = firestore.collection('lists').doc(list.id);
+//     batch.delete(listRef);
+
+//     todos.forEach((todo) => {
+//       const todoRef = firestore.collection('todos').doc(todo.id);
+//       batch.delete(todoRef);
+//     });
+
+//     // Commit the batch
+//     batch
+//       .commit()
+//       .then(function () {
+//         console.log('Document successfully deleted!');
+//         dispatch({ type: 'DELETE_LIST', list, isLoading: false });
+//       })
+//       .catch(function (err) {
+//         console.error('Error removing document: ', err);
+//         dispatch({ type: 'DELETE_LIST_ERROR', err, isLoading: false });
+//       });
+
+//     console.log('done');
+//   };
+// };

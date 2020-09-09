@@ -18,9 +18,11 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
-import { updateList, deleteList } from '../store/actions/listActions';
-import Loading from '../components/Loading';
+import { updateList } from '../store/actions/listActions';
+import { deleteList } from '../store/actions/listActions/deleteListAction';
+
 import AddTodo from '../components/TodoList/AddTodo';
+import { useHistory, Redirect } from 'react-router-dom';
 
 const { confirm } = Modal;
 
@@ -43,6 +45,10 @@ export const ListPage = ({
   requesting,
 }) => {
   const [isRenaming, setIsRenaming] = useState(false);
+
+  useEffect(() => {
+    console.log(requesting);
+  }, [requesting]);
 
   const optionsDropdown = list && (
     <Menu>
@@ -75,9 +81,6 @@ export const ListPage = ({
       cancelText: 'Cancel',
       onOk() {
         deleteList(list);
-        return new Promise((resolve, reject) => {
-          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
-        }).catch(() => console.log('Oops errors!'));
       },
       onCancel() {
         console.log('Cancel');
@@ -110,7 +113,9 @@ export const ListPage = ({
     setIsRenaming(false);
   }
 
-  return (
+  return !list ? (
+    <Redirect to="/myday" />
+  ) : (
     <div>
       <ContentHeader
         title={list && list.title}

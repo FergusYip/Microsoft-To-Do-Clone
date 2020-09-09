@@ -1,15 +1,15 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+
 import { List, ConfigProvider, Layout, Result } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
 
 import TodoItem from './TodoItem';
 import CompletedList from './CompletedList';
 import TodoMenu from '../TodoMenu/index';
-import { deleteList } from '../../store/actions/listActions';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+
 import { selectTodo, deselectTodo } from '../../store/actions/selectionAction';
-import Loading from '../Loading';
 const { Content } = Layout;
 
 /*
@@ -71,7 +71,6 @@ function TodoList({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteList: (list) => dispatch(deleteList(list)),
     selectTodo: (todo) => dispatch(selectTodo(todo)),
     deselectTodo: () => dispatch(deselectTodo()),
   };
