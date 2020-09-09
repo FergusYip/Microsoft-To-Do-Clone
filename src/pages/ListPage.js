@@ -82,24 +82,24 @@ export const ListPage = ({
   }
 
   useEffect(() => {
-    if (!isLoading && isRenaming) {
-      setIsRenaming(false);
+    if (isRenaming) {
       message.success({
         content: `List has been renamed to "${list.title}"`,
         duration: 1.5,
-        style: {
-          marginTop: '5%',
-        },
       });
     }
-  }, [isLoading]);
+    setIsRenaming(false);
+  }, [list]);
 
   function handleRename() {
     setIsRenaming(true);
   }
 
   function onRenamed(newTitle) {
-    updateList({ ...list, title: newTitle });
+    const newTitleCleaned = newTitle.trim().replace(/\s+/, ' ');
+    if (newTitleCleaned.length && newTitleCleaned !== list.title) {
+      updateList({ ...list, title: newTitleCleaned });
+    }
   }
 
   function onRenameCancel() {
