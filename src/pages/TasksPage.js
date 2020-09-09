@@ -21,7 +21,7 @@ const TasksPage = ({ updateList, list, todos, tasksID }) => {
   };
 
   const optionsDropdown = (
-    <Menu selectable={!!list}>
+    <Menu selectable={false}>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
       <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
       <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
@@ -67,7 +67,7 @@ const mapStateToProps = (state, ownProps) => {
     tasksID,
     list: lists && lists[[tasksID]],
     todos: todos
-      ? Object.values(todos).filter((todo) => todo.listID === tasksID)
+      ? Object.values(todos).filter((todo) => todo && todo.listID === tasksID)
       : [],
   };
 };

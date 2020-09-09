@@ -55,7 +55,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     tasksID: state.firebase.profile.tasks,
     todos: todos
-      ? Object.values(todos).filter((todo) => todayIsMyDay(todo))
+      ? Object.values(todos).filter((todo) => todo && todayIsMyDay(todo))
       : [],
   };
 };

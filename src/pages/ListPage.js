@@ -144,7 +144,7 @@ const mapStateToProps = (state, ownProps) => {
     isLoading,
     list: lists && lists[id],
     todos: todos
-      ? Object.values(todos).filter((todo) => todo.listID === id)
+      ? Object.values(todos).filter((todo) => todo && todo.listID === id)
       : [],
   };
 };

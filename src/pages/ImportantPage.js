@@ -53,7 +53,9 @@ const mapStateToProps = (state, ownProps) => {
   const { todos } = state.firestore.data;
   return {
     tasksID: state.firebase.profile.tasks,
-    todos: todos ? Object.values(todos).filter((todo) => todo.isImportant) : [],
+    todos: todos
+      ? Object.values(todos).filter((todo) => todo && todo.isImportant)
+      : [],
   };
 };
 
