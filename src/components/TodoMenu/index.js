@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   List,
   Input,
@@ -10,12 +10,7 @@ import {
   Tooltip,
   Divider,
 } from 'antd';
-import {
-  PlusOutlined,
-  PaperClipOutlined,
-  StarFilled,
-  StarOutlined,
-} from '@ant-design/icons';
+import { PlusOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 import StepList from './StepList';
 import {
   RepeatItem,
@@ -113,6 +108,27 @@ function TodoMenu({
     }
   }
 
+  function handleRename(e) {
+    e.preventDefault();
+    document.activeElement.blur();
+    const newTitle = e.target.value.trim().replace(/\s+/, ' ');
+    if (newTitle && newTitle !== selectedTodo.title) {
+      updateTodo({ ...selectedTodo, title: newTitle });
+    } else {
+      setTodoTitle(selectedTodo.title);
+    }
+  }
+
+  const [todoTitle, setTodoTitle] = useState('');
+
+  useEffect(() => {
+    setTodoTitle(selectedTodo ? selectedTodo.title : '');
+  }, [selectedTodo]);
+
+  function handleTodoTitleChange(e) {
+    setTodoTitle(e.target.value);
+  }
+
   return (
     <Drawer
       headerStyle={{ padding: 0 }}
@@ -120,7 +136,29 @@ function TodoMenu({
         selectedTodo && (
           <PageHeader
             onBack={() => null}
-            title={selectedTodo.title}
+            title={
+              <Input.TextArea
+                bordered={false}
+                value={todoTitle}
+                style={{
+                  marginRight: 0,
+                  marginBottom: 0,
+                  color: 'rgba(0, 0, 0, 0.85)',
+                  fontWeight: 600,
+                  fontSize: '18px',
+                  lineHeight: '32px',
+                  whiteSpace: 'normal',
+                  width: 172,
+                  padding: 0,
+                  resize: 'none',
+                }}
+                autoSize={{ minRows: 1 }}
+                maxLength={50}
+                onPressEnter={handleRename}
+                onBlur={handleRename}
+                onChange={handleTodoTitleChange}
+              />
+            }
             backIcon={
               <Checkbox
                 checked={selectedTodo.isComplete}
