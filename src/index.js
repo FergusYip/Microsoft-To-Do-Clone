@@ -2,11 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from './store/reducers/rootReducer';
 
 import { Provider, useSelector } from 'react-redux';
-import thunk from 'redux-thunk';
 import {
   reduxFirestore,
   getFirestore,
@@ -20,14 +17,8 @@ import {
 import firebaseConfig from './config/firebaseConfig';
 import firebase from 'firebase/app';
 import Loading from './components/Loading';
-
-const store = createStore(
-  rootReducer,
-  compose(
-    applyMiddleware(thunk.withExtraArgument({ getFirestore, getFirebase })),
-    reduxFirestore(firebaseConfig)
-  )
-);
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from './store';
 
 const rrfConfig = {
   userProfile: 'users',
@@ -53,9 +44,11 @@ ReactDOM.render(
   <React.StrictMode>
     <ReactReduxFirebaseProvider {...rrfProps}>
       <Provider store={store}>
-        <AuthIsLoaded>
-          <App />
-        </AuthIsLoaded>
+        <PersistGate persistor={persistor}>
+          <AuthIsLoaded>
+            <App />
+          </AuthIsLoaded>
+        </PersistGate>
       </Provider>
     </ReactReduxFirebaseProvider>
   </React.StrictMode>,
