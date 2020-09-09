@@ -26,7 +26,7 @@ function LoginPage({ signIn, authError }) {
   };
 
   useEffect(() => {
-    authError && message.error(authError);
+    authError && message.error(authError, 3);
   }, [authError]);
 
   return (
@@ -86,12 +86,6 @@ function LoginPage({ signIn, authError }) {
       <Link to="/register" component={Typography.Link}>
         Register here!
       </Link>
-      {authError && (
-        <>
-          <Divider />
-          <Alert message={authError} type="error" showIcon />
-        </>
-      )}
     </AuthCard>
   );
 }

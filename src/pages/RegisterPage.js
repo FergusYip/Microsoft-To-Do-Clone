@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Button, Space, Typography } from 'antd';
+import { Form, Input, Button, Space, Typography, message } from 'antd';
 import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 import { connect } from 'react-redux';
@@ -17,7 +17,7 @@ function RegisterPage({ signUp, authError }) {
   };
 
   useEffect(() => {
-    console.log(authError);
+    authError && message.error(authError, 3);
   }, [authError]);
 
   return (
