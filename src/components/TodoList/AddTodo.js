@@ -26,7 +26,7 @@ function AddTodo({ listID, createTodo, todoFields }) {
   }
 
   return (
-    <div style={{ padding: 16, display: 'flex' }}>
+    <div style={{ padding: 16, display: 'flex', height: 64 }}>
       <Input
         placeholder="New Todo"
         onChange={onChange}

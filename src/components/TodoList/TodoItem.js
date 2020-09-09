@@ -1,5 +1,5 @@
 import React from 'react';
-import { Space, Typography, Tooltip, Checkbox, Button, List } from 'antd';
+import { Space, Typography, Tooltip, Checkbox, Button, List, Card } from 'antd';
 import { StarOutlined, StarFilled, CheckOutlined } from '@ant-design/icons';
 import { updateTodo } from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
@@ -54,36 +54,42 @@ function TodoItem({
 
   return (
     <TodoItemContextMenu onVisibleChange={handleContextVisibleChange}>
-      <List.Item
-        actions={[
-          <Tooltip title="Important" mouseEnterDelay={0.5}>
-            <Button
-              icon={todo.isImportant ? <StarFilled /> : <StarOutlined />}
-              onClick={toggleImportant}
-              shape="circle"
-              type="link"
-            ></Button>
-          </Tooltip>,
-        ]}
+      <Card
+        style={{ width: '100%', marginTop: 8, marginBottom: 8 }}
+        size="small"
       >
-        <List.Item.Meta
-          onClick={handleOnClick}
-          avatar={
-            <Tooltip
-              title={todo.isComplete ? 'Mark as todo' : 'Mark as done'}
-              mouseEnterDelay={0.5}
-            >
-              <Checkbox
-                onChange={onChange}
-                checked={todo.isComplete}
-                onClick={checkboxOnClick}
-              />
-            </Tooltip>
-          }
-          title={todo.title}
-          description={getStepsOutline(todo.steps)}
-        />
-      </List.Item>
+        <List.Item
+          style={{ padding: 0 }}
+          actions={[
+            <Tooltip title="Important" mouseEnterDelay={0.5}>
+              <Button
+                icon={todo.isImportant ? <StarFilled /> : <StarOutlined />}
+                onClick={toggleImportant}
+                shape="circle"
+                type="link"
+              ></Button>
+            </Tooltip>,
+          ]}
+        >
+          <List.Item.Meta
+            onClick={handleOnClick}
+            avatar={
+              <Tooltip
+                title={todo.isComplete ? 'Mark as todo' : 'Mark as done'}
+                mouseEnterDelay={0.5}
+              >
+                <Checkbox
+                  onChange={onChange}
+                  checked={todo.isComplete}
+                  onClick={checkboxOnClick}
+                />
+              </Tooltip>
+            }
+            title={todo.title}
+            description={getStepsOutline(todo.steps)}
+          />
+        </List.Item>
+      </Card>
     </TodoItemContextMenu>
   );
 }

@@ -46,6 +46,7 @@ const ContentHeader = ({
         )
       }
       extra={children}
+      style={{ height: 85 }}
     />
   );
 };

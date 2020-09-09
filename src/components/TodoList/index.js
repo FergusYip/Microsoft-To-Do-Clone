@@ -51,7 +51,6 @@ function TodoList({
   const [visibleTodoMenu, setVisibleTodoMenu] = useState(false);
 
   function handleOnClick(todo) {
-    console.log(todo)
     selectTodo(todo);
     setVisibleTodoMenu(true);
   }
@@ -62,19 +61,31 @@ function TodoList({
   }
 
   return (
-    <Layout>
+    <Layout
+      style={{
+        minHeight: 'calc(100vh - 85px - 64px)',
+        maxHeight: 'calc(100vh - 85px - 64px)',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+      }}
+    >
       <Content
-      // style={{ padding: 24, display: 'flex', flexDirection: 'column',  }}
+        style={{
+          width: '95%',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
       >
         <ConfigProvider renderEmpty={customizeEmptyTodo}>
           <List
             loading={isLoading}
-            bordered
+            // bordered
             dataSource={todos && todos.filter((todo) => !todo.isComplete)}
             rowKey={(todo) => todo.id}
             renderItem={(todo) => (
               <TodoItem todo={todo} onClick={handleOnClick} />
             )}
+            style={{ overflowX: 'hidden' }}
           />
         </ConfigProvider>
         {showCompleted && (
