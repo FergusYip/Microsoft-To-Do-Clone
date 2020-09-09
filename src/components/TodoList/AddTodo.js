@@ -3,7 +3,7 @@ import { Input } from 'antd';
 import { connect } from 'react-redux';
 import { createTodo } from '../../store/actions/todoActions';
 
-function AddTodo({ listID, createTodo }) {
+function AddTodo({ listID, createTodo, todoFields }) {
   const [newTodo, setNewTodo] = useState('');
 
   function onChange(e) {
@@ -19,6 +19,7 @@ function AddTodo({ listID, createTodo }) {
       isComplete: false,
       isImportant: false,
       steps: [],
+      ...todoFields,
     };
     setNewTodo('');
     createTodo(todo);

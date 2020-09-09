@@ -44,7 +44,7 @@ const ImportantPage = ({ todos, tasksID }) => {
         </Dropdown>
       </ContentHeader>
       <TodoList todos={todos} />
-      <AddTodo listID={tasksID} />
+      <AddTodo listID={tasksID} todoFields={{ isImportant: true }} />
     </div>
   );
 };

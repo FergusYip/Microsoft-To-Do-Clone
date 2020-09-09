@@ -13,7 +13,7 @@ import {
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
-import { todayIsMyDay } from '../utils/myDay';
+import { todayIsMyDay, getToday } from '../utils/myDay';
 
 export const MyDayPage = ({ todos, tasksID }) => {
   const optionsDropdown = (
@@ -45,7 +45,7 @@ export const MyDayPage = ({ todos, tasksID }) => {
         </Dropdown>
       </ContentHeader>
       <TodoList todos={todos} />
-      <AddTodo listID={tasksID} />
+      <AddTodo listID={tasksID} todoFields={{ myDay: getToday() }} />
     </div>
   );
 };

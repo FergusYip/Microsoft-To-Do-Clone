@@ -6,19 +6,28 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 
 const ProtectedRoute = ({ component: Component, auth, requested, ...rest }) => {
+  useEffect(() => {
+    console.log(requested);
+  }, requested);
   const isLoaded =
     Object.values(requested).length &&
     Object.values(requested).some((isRequested) => isRequested);
 
-  return isLoaded && auth.isLoaded ? (
-    auth.uid ? (
+  if (!auth.isLoaded) {
+    return <Loading />;
+  }
+
+  if (!auth.uid) {
+    return <Redirect to="/login" />;
+  }
+
+  if (isLoaded) {
+    return (
       <Route {...rest} render={(props) => <Component {...rest} {...props} />} />
-    ) : (
-      <Redirect to="/login" />
-    )
-  ) : (
-    <Loading />
-  );
+    );
+  }
+
+  return <Loading />;
 };
 
 const mapStateToProps = (state) => {
