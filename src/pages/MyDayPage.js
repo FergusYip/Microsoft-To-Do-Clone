@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TodoList from '../components/TodoList';
-import { firestoreConnect } from 'react-redux-firebase';
 import ContentHeader from '../components/ContentHeader';
 import { Button, Dropdown, Menu } from 'antd';
-import { compose } from 'redux';
 import {
   EllipsisOutlined,
   SortAscendingOutlined,
@@ -14,15 +12,10 @@ import {
   EyeOutlined,
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
-import moment from 'moment';
 import AddTodo from '../components/TodoList/AddTodo';
 import { todayIsMyDay } from '../utils/myDay';
 
 export const MyDayPage = ({ todos, tasksID, requesting }) => {
-  // const updateShowCompleted = () => {
-  //   updateList({ ...list, showCompleted: !list.showCompleted });
-  // };
-
   const optionsDropdown = (
     <Menu>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>

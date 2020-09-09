@@ -1,32 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useFirestoreConnect } from 'react-redux-firebase';
+import React from 'react';
+import { connect } from 'react-redux';
 import TodoList from '../components/TodoList';
+import ContentHeader from '../components/ContentHeader';
+import { Button, Dropdown, Menu } from 'antd';
+import {
+  EllipsisOutlined,
+  SortAscendingOutlined,
+  BgColorsOutlined,
+  PrinterOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+} from '@ant-design/icons';
+import { updateList } from '../store/actions/listActions';
+import AddTodo from '../components/TodoList/AddTodo';
 
-const ImportantPage = () => {
-  useFirestoreConnect([
-    {
-      collectionGroup: 'todos',
-      where: ['isImportant', '==', true],
-    },
-  ]);
-
-  const { todos } = useSelector((state) => state.firestore.data);
-
-  const [list, setList] = useState({});
-
-  useEffect(() => {
-    setList({
-      title: 'Important',
-      todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
-    });
-  }, [todos]);
+const ImportantPage = ({ todos, tasksID, requesting }) => {
+  const optionsDropdown = (
+    <Menu>
+      <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
+      <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
+      <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
+      {/* <Menu.Item
+        icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+        onClick={updateShowCompleted}
+      >
+        {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
+      </Menu.Item> */}
+    </Menu>
+  );
 
   return (
     <div>
-      <TodoList list={list} title={'Important'} />
+      <ContentHeader title={'Important'}>
+        <Dropdown
+          overlay={optionsDropdown}
+          placement="bottomRight"
+          trigger={['click']}
+          key="more"
+        >
+          <Button shape="circle">
+            <EllipsisOutlined />
+          </Button>
+        </Dropdown>
+      </ContentHeader>
+      <TodoList todos={todos} isLoading={requesting.todos} />
+      <AddTodo listID={tasksID} />
     </div>
   );
 };
 
-export default ImportantPage;
+const mapStateToProps = (state, ownProps) => {
+  const { todos } = state.firestore.data;
+  return {
+    tasksID: state.firebase.profile.tasks,
+    todos: todos ? Object.values(todos).filter((todo) => todo.isImportant) : [],
+    requesting: state.firestore.status.requesting,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateList: (list) => dispatch(updateList(list)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ImportantPage);
