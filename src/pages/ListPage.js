@@ -154,7 +154,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     isLoading,
     list: lists && lists[id],
-    todos: todos ? Object.values(todos) : [],
+    todos: todos
+      ? Object.values(todos).filter((todo) => todo.listID === id)
+      : [],
     requesting: state.firestore.status.requesting,
   };
 };
@@ -166,13 +168,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect((props) => [
-    {
-      collection: 'todos',
-      where: ['listID', '==', props.match.params.id],
-      storeAs: 'todos',
-    },
-  ])
-)(ListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ListPage);

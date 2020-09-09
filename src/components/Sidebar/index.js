@@ -156,6 +156,11 @@ export default compose(
             where: ['owner', '==', uid],
             storeAs: 'lists',
           },
+          {
+            collection: 'todos',
+            where: ['owner', '==', uid],
+            storeAs: 'todos',
+          },
         ]
       : []
   )

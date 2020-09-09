@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const createTodo = (todo) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
+    const uid = getState().firebase.auth.uid;
 
     const document = firestore.collection('todos').doc();
 
@@ -10,6 +11,7 @@ export const createTodo = (todo) => {
       .set({
         ...todo,
         id: document.id,
+        owner: uid,
       })
       .then(() => {
         dispatch({ type: 'CREATE_TODO', todo });

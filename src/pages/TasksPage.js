@@ -76,7 +76,9 @@ const mapStateToProps = (state, ownProps) => {
   return {
     tasksID,
     list: lists && lists[[tasksID]],
-    todos: todos ? Object.values(todos) : [],
+    todos: todos
+      ? Object.values(todos).filter((todo) => todo.listID === tasksID)
+      : [],
     requesting: state.firestore.status.requesting,
   };
 };
@@ -87,17 +89,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect((props) =>
-    props.tasksID
-      ? [
-          {
-            collection: 'todos',
-            where: ['listID', '==', props.tasksID],
-            storeAs: 'todos',
-          },
-        ]
-      : []
-  )
-)(TasksPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);
