@@ -15,7 +15,7 @@ import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
 import { todayIsMyDay } from '../utils/myDay';
 
-export const MyDayPage = ({ todos, tasksID, requesting }) => {
+export const MyDayPage = ({ todos, tasksID }) => {
   const optionsDropdown = (
     <Menu>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
@@ -44,7 +44,7 @@ export const MyDayPage = ({ todos, tasksID, requesting }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} isLoading={requesting.todos} />
+      <TodoList todos={todos} />
       <AddTodo listID={tasksID} />
     </div>
   );
@@ -57,7 +57,6 @@ const mapStateToProps = (state, ownProps) => {
     todos: todos
       ? Object.values(todos).filter((todo) => todayIsMyDay(todo))
       : [],
-    requesting: state.firestore.status.requesting,
   };
 };
 

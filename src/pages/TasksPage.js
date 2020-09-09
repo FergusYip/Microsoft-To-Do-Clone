@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import TodoList from '../components/TodoList';
-import { firestoreConnect } from 'react-redux-firebase';
 import ContentHeader from '../components/ContentHeader';
 import { Button, Dropdown, Menu } from 'antd';
-import { compose } from 'redux';
 import {
   EllipsisOutlined,
   SortAscendingOutlined,
@@ -16,11 +14,7 @@ import {
 import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
 
-const TasksPage = ({ updateList, list, todos, tasksID, requesting }) => {
-  useEffect(() => {
-    console.log(requesting);
-  }, [requesting]);
-
+const TasksPage = ({ updateList, list, todos, tasksID }) => {
   const updateShowCompleted = () => {
     console.log(list);
     list && updateList({ ...list, showCompleted: !list.showCompleted });
@@ -60,11 +54,7 @@ const TasksPage = ({ updateList, list, todos, tasksID, requesting }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList
-        todos={todos}
-        isLoading={requesting.todos}
-        showCompleted={list && list.showCompleted}
-      />
+      <TodoList todos={todos} showCompleted={list && list.showCompleted} />
       <AddTodo listID={tasksID} />
     </div>
   );
@@ -79,7 +69,6 @@ const mapStateToProps = (state, ownProps) => {
     todos: todos
       ? Object.values(todos).filter((todo) => todo.listID === tasksID)
       : [],
-    requesting: state.firestore.status.requesting,
   };
 };
 

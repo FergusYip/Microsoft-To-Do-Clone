@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
 
 import TodoList from '../components/TodoList';
 import ContentHeader from '../components/ContentHeader';
@@ -42,13 +40,8 @@ export const ListPage = ({
   deleteList,
   updateList,
   isLoading,
-  requesting,
 }) => {
   const [isRenaming, setIsRenaming] = useState(false);
-
-  useEffect(() => {
-    console.log(requesting);
-  }, [requesting]);
 
   const optionsDropdown = list && (
     <Menu>
@@ -137,11 +130,7 @@ export const ListPage = ({
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList
-        todos={todos}
-        isLoading={requesting.todos}
-        showCompleted={list && list.showCompleted}
-      />
+      <TodoList todos={todos} showCompleted={list && list.showCompleted} />
       <AddTodo listID={list && list.id} />
     </div>
   );
@@ -157,7 +146,6 @@ const mapStateToProps = (state, ownProps) => {
     todos: todos
       ? Object.values(todos).filter((todo) => todo.listID === id)
       : [],
-    requesting: state.firestore.status.requesting,
   };
 };
 

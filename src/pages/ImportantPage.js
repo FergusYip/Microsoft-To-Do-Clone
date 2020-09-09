@@ -14,7 +14,7 @@ import {
 import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
 
-const ImportantPage = ({ todos, tasksID, requesting }) => {
+const ImportantPage = ({ todos, tasksID }) => {
   const optionsDropdown = (
     <Menu>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
@@ -43,7 +43,7 @@ const ImportantPage = ({ todos, tasksID, requesting }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} isLoading={requesting.todos} />
+      <TodoList todos={todos} />
       <AddTodo listID={tasksID} />
     </div>
   );
@@ -54,7 +54,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     tasksID: state.firebase.profile.tasks,
     todos: todos ? Object.values(todos).filter((todo) => todo.isImportant) : [],
-    requesting: state.firestore.status.requesting,
   };
 };
 

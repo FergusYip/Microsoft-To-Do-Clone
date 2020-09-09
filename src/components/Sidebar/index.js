@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Menu, Input, Typography, Spin, List, Layout } from 'antd';
 import {
   CoffeeOutlined,
@@ -7,10 +7,8 @@ import {
   CheckCircleOutlined,
   UnorderedListOutlined,
 } from '@ant-design/icons';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createList } from '../../store/actions/listActions';
-import { firestoreConnect } from 'react-redux-firebase';
 
 import { useHistory } from 'react-router-dom';
 import SidebarHeader from './SidebarHeader';
@@ -20,7 +18,7 @@ import NewListModal from './NewListModal';
 const { Search } = Input;
 const { Content, Footer } = Layout;
 
-function Sidebar({ lists, createList, requested, auth, tasksID }) {
+function Sidebar({ lists, createList, auth, tasksID }) {
   const history = useHistory();
 
   const [isVisible, setIsVisible] = useState(false);
@@ -106,7 +104,7 @@ function Sidebar({ lists, createList, requested, auth, tasksID }) {
                 </Menu.Item>
               ))}
         </Menu>
-        {!requested.lists && (
+        {/* {!requested.lists && (
           <span
             style={{
               display: 'flex',
@@ -117,7 +115,7 @@ function Sidebar({ lists, createList, requested, auth, tasksID }) {
           >
             <Spin />
           </span>
-        )}
+        )} */}
       </Content>
       <Footer style={{ position: 'fixed', bottom: 0, padding: 0, width: 200 }}>
         <NewListButton onClick={showModal} />
@@ -136,7 +134,6 @@ const mapToState = (state) => {
     tasksID: state.firebase.profile.tasks,
     lists: state.firestore.ordered.lists || [],
     auth: state.firebase.auth,
-    requested: state.firestore.status.requested,
   };
 };
 
@@ -146,22 +143,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(
-  connect(mapToState, mapDispatchToProps),
-  firestoreConnect(({ auth: { uid } }) =>
-    uid
-      ? [
-          {
-            collection: 'lists',
-            where: ['owner', '==', uid],
-            storeAs: 'lists',
-          },
-          {
-            collection: 'todos',
-            where: ['owner', '==', uid],
-            storeAs: 'todos',
-          },
-        ]
-      : []
-  )
-)(Sidebar);
+export default connect(mapToState, mapDispatchToProps)(Sidebar);
