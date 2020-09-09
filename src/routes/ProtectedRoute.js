@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 import Loading from '../components/Loading';
@@ -6,9 +6,6 @@ import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
 
 const ProtectedRoute = ({ component: Component, auth, requested, ...rest }) => {
-  useEffect(() => {
-    console.log(requested);
-  }, requested);
   const isLoaded =
     Object.values(requested).length &&
     Object.values(requested).some((isRequested) => isRequested);

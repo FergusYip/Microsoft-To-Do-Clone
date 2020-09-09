@@ -18,15 +18,13 @@ import {
   RemindMeItem,
   MyDayItem,
 } from './TodoMenuItems';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import {
   updateTodo,
   addStep,
   removeStep,
   updateStep,
 } from '../../store/actions/todoActions';
-import { useFirestoreConnect } from 'react-redux-firebase';
-import { compose } from 'redux';
 import UploadFileItem from './TodoMenuItems/UploadFileItem';
 
 const step_input_id = 'step_input_area';
@@ -244,4 +242,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default compose(connect(mapStateToProps, mapDispatchToProps))(TodoMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(TodoMenu);

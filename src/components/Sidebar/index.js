@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, Input, Typography, Spin, List, Layout } from 'antd';
+import React, { useState } from 'react';
+import { Menu, Input, Typography, List, Layout } from 'antd';
 import {
   CoffeeOutlined,
   StarOutlined,

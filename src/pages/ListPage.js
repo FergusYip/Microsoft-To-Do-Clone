@@ -20,7 +20,7 @@ import { updateList } from '../store/actions/listActions';
 import { deleteList } from '../store/actions/listActions/deleteListAction';
 
 import AddTodo from '../components/TodoList/AddTodo';
-import { useHistory, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 const { confirm } = Modal;
 

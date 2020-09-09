@@ -4,11 +4,9 @@ import {
   Input,
   Button,
   Checkbox,
-  Alert,
   message,
   Space,
   Typography,
-  Divider,
 } from 'antd';
 import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
