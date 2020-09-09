@@ -79,13 +79,11 @@ function TodoList({
         <ConfigProvider renderEmpty={customizeEmptyTodo}>
           <List
             loading={isLoading}
-            // bordered
             dataSource={todos && todos.filter((todo) => !todo.isComplete)}
             rowKey={(todo) => todo.id}
             renderItem={(todo) => (
               <TodoItem todo={todo} onClick={handleOnClick} />
             )}
-            style={{ overflowX: 'hidden' }}
           />
         </ConfigProvider>
         {showCompleted && (
