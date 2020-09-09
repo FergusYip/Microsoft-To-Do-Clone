@@ -17,7 +17,7 @@ import { updateList } from '../store/actions/listActions';
 import moment from 'moment';
 import AddTodo from '../components/TodoList/AddTodo';
 
-export const MyDayPage = ({ todos, tasksID }) => {
+export const MyDayPage = ({ todos, tasksID, requesting }) => {
   // const updateShowCompleted = () => {
   //   updateList({ ...list, showCompleted: !list.showCompleted });
   // };
@@ -50,18 +50,18 @@ export const MyDayPage = ({ todos, tasksID }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} />
+      <TodoList todos={todos} isLoading={requesting.todos} />
       <AddTodo listID={tasksID} />
     </div>
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { list, todos } = state.firestore.data;
+  const { todos } = state.firestore.data;
   return {
     tasksID: state.firebase.profile.tasks,
-    list,
     todos: todos ? Object.keys(todos).map((key) => todos[key]) : [],
+    requesting: state.firestore.status.requesting,
   };
 };
 
@@ -73,20 +73,11 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  firestoreConnect((props) =>
-    props.tasksID
-      ? [
-          {
-            collection: 'lists',
-            doc: props.tasksID,
-            storeAs: 'list',
-          },
-          {
-            collection: 'todos',
-            where: ['myDay', '==', moment().startOf('day').toDate()],
-            storeAs: 'todos',
-          },
-        ]
-      : []
-  )
+  firestoreConnect([
+    {
+      collection: 'todos',
+      where: ['myDay', '==', moment().startOf('day').toDate()],
+      storeAs: 'todos',
+    },
+  ])
 )(MyDayPage);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import TodoList from '../components/TodoList';
 import { firestoreConnect } from 'react-redux-firebase';
@@ -17,6 +17,10 @@ import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
 
 const TasksPage = ({ updateList, list, todos, tasksID, requesting }) => {
+  useEffect(() => {
+    console.log(requesting);
+  }, [requesting]);
+
   const updateShowCompleted = () => {
     console.log(list);
     list && updateList({ ...list, showCompleted: !list.showCompleted });
@@ -67,10 +71,11 @@ const TasksPage = ({ updateList, list, todos, tasksID, requesting }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const { list, todos } = state.firestore.data;
+  const tasksID = state.firebase.profile.tasks;
+  const { lists, todos } = state.firestore.data;
   return {
-    tasksID: state.firebase.profile.tasks,
-    list,
+    tasksID,
+    list: lists && lists[[tasksID]],
     todos: todos ? Object.values(todos) : [],
     requesting: state.firestore.status.requesting,
   };
@@ -87,11 +92,6 @@ export default compose(
   firestoreConnect((props) =>
     props.tasksID
       ? [
-          {
-            collection: 'lists',
-            doc: props.tasksID,
-            storeAs: 'list',
-          },
           {
             collection: 'todos',
             where: ['listID', '==', props.tasksID],

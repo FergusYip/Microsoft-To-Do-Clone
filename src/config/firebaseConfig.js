@@ -5,30 +5,13 @@ import 'firebase/functions';
 
 var firebaseConfig = {
   apiKey: process.env.REACT_APP_FB_API,
-  authDomain: 'todo-react-app-34634.firebaseapp.com',
-  databaseURL: 'https://todo-react-app-34634.firebaseio.com',
-  projectId: 'todo-react-app-34634',
-  storageBucket: 'todo-react-app-34634.appspot.com',
-  messagingSenderId: '877263611593',
-  appId: '1:877263611593:web:909d44aba1aeee800b4f18',
-  measurementId: 'G-SK2EWDTZM9',
+  authDomain: 'react-todo-app-5409e.firebaseapp.com',
+  databaseURL: 'https://react-todo-app-5409e.firebaseio.com',
+  projectId: 'react-todo-app-5409e',
+  storageBucket: 'react-todo-app-5409e.appspot.com',
+  messagingSenderId: '307287085404',
+  appId: '1:307287085404:web:30710acfe88df098b07199',
 };
-
-/**
- * Call the 'recursiveDelete' callable function with a path to initiate
- * a server-side delete.
- */
-export function deleteAtPath(path) {
-  var deleteFn = firebase.functions().httpsCallable('recursiveDelete');
-  deleteFn({ path: path })
-    .then(function (result) {
-      console.log('Delete success: ' + JSON.stringify(result));
-    })
-    .catch(function (err) {
-      console.log('Delete failed, see console,');
-      console.warn(err);
-    });
-}
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
