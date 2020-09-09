@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
@@ -48,6 +48,19 @@ function TodoList({
   showCompleted,
   isLoading,
 }) {
+  const [visibleTodoMenu, setVisibleTodoMenu] = useState(false);
+
+  function handleOnClick(todo) {
+    console.log(todo)
+    selectTodo(todo);
+    setVisibleTodoMenu(true);
+  }
+
+  function handleCloseMenu() {
+    setVisibleTodoMenu(false);
+    deselectTodo();
+  }
+
   return (
     <Layout>
       <Content
@@ -59,12 +72,16 @@ function TodoList({
             bordered
             dataSource={todos && todos.filter((todo) => !todo.isComplete)}
             rowKey={(todo) => todo.id}
-            renderItem={(todo) => <TodoItem todo={todo} onClick={selectTodo} />}
+            renderItem={(todo) => (
+              <TodoItem todo={todo} onClick={handleOnClick} />
+            )}
           />
         </ConfigProvider>
-        {showCompleted && <CompletedList todos={todos} onClick={selectTodo} />}
+        {showCompleted && (
+          <CompletedList todos={todos} onClick={handleOnClick} />
+        )}
       </Content>
-      <TodoMenu onClose={deselectTodo} />
+      <TodoMenu onClose={handleCloseMenu} visible={visibleTodoMenu} />
     </Layout>
   );
 }

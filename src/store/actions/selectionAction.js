@@ -4,7 +4,7 @@ export const DESELECT_TODO = 'DESELECT_TODO';
 export const selectTodo = (todo) => {
   return {
     type: SELECT_TODO,
-    selection: { listID: todo.listID, todoID: todo.id },
+    selection: todo.id,
   };
 };
 

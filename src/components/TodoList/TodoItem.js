@@ -4,8 +4,16 @@ import { StarOutlined, StarFilled, CheckOutlined } from '@ant-design/icons';
 import { updateTodo } from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
 import TodoItemContextMenu from './TodoItemContextMenu';
+import { selectTodo, deselectTodo } from '../../store/actions/selectionAction';
 
-function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
+function TodoItem({
+  todo,
+  modifyTodo,
+  onClick,
+  updateTodo,
+  selectTodo,
+  deselectTodo,
+}) {
   function onChange(e) {
     const newIsComplete = e.target.checked;
     updateTodo({ ...todo, isComplete: newIsComplete });
@@ -36,8 +44,16 @@ function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
     e.stopPropagation();
   }
 
+  function handleContextVisibleChange(visible) {
+    if (visible) {
+      selectTodo(todo);
+    } else {
+      deselectTodo(todo);
+    }
+  }
+
   return (
-    <TodoItemContextMenu>
+    <TodoItemContextMenu onVisibleChange={handleContextVisibleChange}>
       <List.Item
         actions={[
           <Tooltip title="Important" mouseEnterDelay={0.5}>
@@ -75,6 +91,8 @@ function TodoItem({ todo, modifyTodo, onClick, updateTodo }) {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateTodo: (todo) => dispatch(updateTodo(todo)),
+    selectTodo: (todo) => dispatch(selectTodo(todo)),
+    deselectTodo: () => dispatch(deselectTodo()),
   };
 };
 

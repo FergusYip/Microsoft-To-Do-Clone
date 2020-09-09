@@ -32,12 +32,13 @@ import UploadFileItem from './TodoMenuItems/UploadFileItem';
 const step_input_id = 'step_input_area';
 
 function TodoMenu({
-  selectedTodoDetails,
+  selectedTodo,
   onClose,
   updateTodo,
   addStep,
   removeStep,
   updateStep,
+  visible,
 }) {
   const [newStep, setNewStep] = useState('');
 
@@ -49,21 +50,6 @@ function TodoMenu({
   //   });
   //   modifyTodo(modifiedTodo);
   // }
-
-  useFirestoreConnect(() => {
-    return selectedTodoDetails
-      ? [
-          {
-            collection: 'todos',
-            doc: selectedTodoDetails.todoID,
-            storeAs: 'selectedTodo',
-          },
-        ]
-      : null;
-  });
-  const selectedTodo = useSelector(
-    ({ firestore: { data } }) => data.selectedTodo
-  );
 
   function stepInputOnChange(e) {
     setNewStep(e.target.value);
@@ -184,7 +170,7 @@ function TodoMenu({
       placement="right"
       closable={false}
       onClose={onClose}
-      visible={!!selectedTodoDetails}
+      visible={visible}
       width={300}
       style={{ overflowX: 'hidden' }}
     >
@@ -242,9 +228,10 @@ function TodoMenu({
 }
 
 const mapStateToProps = (state) => {
-  const { selectedTodoDetails } = state;
   return {
-    selectedTodoDetails,
+    selectedTodo:
+      state.firestore.data.todos &&
+      state.firestore.data.todos[state.selectedTodoID],
   };
 };
 

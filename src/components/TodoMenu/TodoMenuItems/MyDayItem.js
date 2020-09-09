@@ -45,9 +45,9 @@ function MyDayItem({ todo, updateTodo }) {
 }
 
 const mapStateToProps = (state) => {
-  const todoID = state.selectedTodoDetails && state.selectedTodoDetails.todoID;
-  if (!todoID) return {};
-  const todo = state.firestore.data.todos && state.firestore.data.todos[todoID];
+  const todo =
+    state.firestore.data.todos &&
+    state.firestore.data.todos[state.selectedTodoID];
   return { todo };
 };
 

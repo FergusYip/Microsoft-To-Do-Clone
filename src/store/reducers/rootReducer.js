@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   list: listReducer,
   firestore: firestoreReducer,
   firebase: firebaseReducer,
-  selectedTodoDetails: selectionReducer,
+  selectedTodoID: selectionReducer,
 });
 
 export default rootReducer;
