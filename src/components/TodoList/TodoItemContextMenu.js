@@ -3,25 +3,17 @@ import { Menu, Dropdown, Calendar } from 'antd';
 import moment from 'moment';
 import { updateTodo } from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
+import { todayIsMyDay, getToday } from '../../utils/myDay';
 
 const TodoItemContextMenu = ({
   onVisibleChange,
   todo,
   children,
   updateTodo,
+  lists,
 }) => {
-  const todayIsMyDay =
-    todo &&
-    todo.myDay &&
-    moment().isSame(moment.unix(todo.myDay.seconds), 'day');
-
   function updateMyDay() {
-    if (todayIsMyDay) {
-      updateTodo({ ...todo, myDay: null });
-    } else {
-      const today = moment().startOf('day').toDate();
-      updateTodo({ ...todo, myDay: today });
-    }
+    updateTodo({ ...todo, myDay: todayIsMyDay(todo) ? null : getToday() });
   }
 
   function updateImportant() {
@@ -35,7 +27,7 @@ const TodoItemContextMenu = ({
   const contextMenu = todo ? (
     <Menu mode="vertical">
       <Menu.Item onClick={updateMyDay}>
-        {todayIsMyDay ? 'Remove from My Day' : 'Add to My Day'}
+        {todayIsMyDay(todo) ? 'Remove from My Day' : 'Add to My Day'}
       </Menu.Item>
       <Menu.Item onClick={updateImportant}>
         {todo.isImportant ? 'Remove Importance' : 'Mark as Important'}
@@ -54,11 +46,17 @@ const TodoItemContextMenu = ({
       </Menu.SubMenu>
       <Menu.Divider />
       <Menu.Item>Create a New list from This Task</Menu.Item>
-      <Menu.Item>Move Task to...</Menu.Item>
+      <Menu.SubMenu title="Move Task to...">
+        {lists.map((list) => (
+          <Menu.Item>{list.title}</Menu.Item>
+        ))}
+      </Menu.SubMenu>
       <Menu.Divider />
       <Menu.Item>Delete Task</Menu.Item>
     </Menu>
-  ) : null;
+  ) : (
+    <Menu />
+  );
 
   return (
     <Dropdown
@@ -75,7 +73,8 @@ const mapStateToProps = (state) => {
   const todo =
     state.firestore.data.todos &&
     state.firestore.data.todos[state.selectedTodoID];
-  return { todo };
+  const lists = Object.values(state.firestore.data.lists);
+  return { todo, lists };
 };
 
 const mapDispatchToProps = (dispatch) => {
