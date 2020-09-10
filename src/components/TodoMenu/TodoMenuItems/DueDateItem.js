@@ -4,6 +4,11 @@ import { CalendarOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { updateTodo } from '../../../store/actions/todoActions';
+import {
+  getDueToday,
+  getDueTomorrow,
+  getDueNextWeek,
+} from '../../../utils/dueDate';
 
 const TIME_FORMAT = 'ddd';
 
@@ -13,19 +18,6 @@ function DueDateItem({ todo, updateTodo }) {
   const [dueNextWeek, setDueNextWeek] = useState(null);
 
   const id = 'due_date_item';
-
-  function getDueToday() {
-    const reminder = moment().startOf('day');
-    return reminder;
-  }
-
-  function getDueTomorrow() {
-    return moment().add(1, 'days').startOf('day');
-  }
-
-  function getDueNextWeek() {
-    return moment().day(7).startOf('day');
-  }
 
   function setReminderTimes() {
     setDueToday(getDueToday());
@@ -47,7 +39,7 @@ function DueDateItem({ todo, updateTodo }) {
     if (!dueDate) return 'Add Due Date';
 
     const due = moment.unix(dueDate.seconds);
-    const now = moment();
+    const now = moment().startOf('day');
 
     const dateDiff = Math.round(moment.duration(now.diff(due)).asDays());
     return (
