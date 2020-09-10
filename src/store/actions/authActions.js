@@ -43,10 +43,21 @@ export const signUp = (newUser) => {
 
       await Promise.all([
         list.set({ title: 'Tasks', owner: resp.user.uid, id: list.id }),
-        firestore.collection('users').doc(resp.user.uid).set({
-          name: newUser.name,
-          tasks: list.id,
-        }),
+        firestore
+          .collection('users')
+          .doc(resp.user.uid)
+          .set({
+            name: newUser.name,
+            tasks: list.id,
+            settings: {
+              myDay: {
+                showCompleted: true,
+              },
+              important: {
+                showCompleted: true,
+              },
+            },
+          }),
       ]);
 
       dispatch({ type: 'SIGNUP_SUCCESS' });
