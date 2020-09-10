@@ -1,7 +1,11 @@
 import React from 'react';
 import { Menu, Dropdown, Calendar } from 'antd';
 import moment from 'moment';
-import { updateTodo, deleteTodo } from '../../store/actions/todoActions';
+import {
+  updateTodo,
+  deleteTodo,
+  createListFromTodo,
+} from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
 import { todayIsMyDay, getToday } from '../../utils/myDay';
 import { getDueToday, getDueTomorrow } from '../../utils/dueDate';
@@ -12,6 +16,7 @@ const TodoItemContextMenu = ({
   children,
   updateTodo,
   deleteTodo,
+  createListFromTodo,
   lists,
 }) => {
   function updateMyDay() {
@@ -46,6 +51,10 @@ const TodoItemContextMenu = ({
     updateTodo({ ...todo, dueDate: date.startOf('day').toDate() });
   }
 
+  function handleCreateAndMove() {
+    createListFromTodo(todo);
+  }
+
   const contextMenu = todo ? (
     <Menu mode="vertical" selectable={false}>
       <Menu.Item onClick={updateMyDay}>
@@ -75,10 +84,19 @@ const TodoItemContextMenu = ({
         <Menu.Item onClick={removeDueDate}>Remove Due Date</Menu.Item>
       )}
       <Menu.Divider />
-      <Menu.Item>Create a New list from This Task</Menu.Item>
+      <Menu.Item onClick={handleCreateAndMove}>
+        Create a New list from This Task
+      </Menu.Item>
       <Menu.SubMenu title="Move Task to...">
         {lists.map((list) => (
-          <Menu.Item>{list.title}</Menu.Item>
+          <Menu.Item
+            onClick={() =>
+              todo.listID !== list.id &&
+              updateTodo({ ...todo, listID: list.id })
+            }
+          >
+            {list.title}
+          </Menu.Item>
         ))}
       </Menu.SubMenu>
       <Menu.Divider />
@@ -111,6 +129,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateTodo: (todo) => dispatch(updateTodo(todo)),
     deleteTodo: (todo) => dispatch(deleteTodo(todo)),
+    createListFromTodo: (todo) => dispatch(createListFromTodo(todo)),
   };
 };
 

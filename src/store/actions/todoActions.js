@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { UNTITLED_LIST } from '../../utils/constants';
 
 export const createTodo = (todo) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -112,6 +113,38 @@ export const deleteTodo = (todo) => {
       })
       .catch((err) => {
         dispatch({ type: 'DELETE_TODO_ERR', err });
+      });
+  };
+};
+
+export const createListFromTodo = (todo) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    const uid = getState().firebase.auth.uid;
+    const lists = getState().firestore.data.lists;
+
+    const batch = firestore.batch();
+
+    let listTitle = UNTITLED_LIST;
+    let postfix = 1;
+    while (Object.values(lists).some((list) => list.title === listTitle)) {
+      listTitle = `${UNTITLED_LIST} ${postfix}`;
+      postfix++;
+    }
+
+    const listRef = firestore.collection('lists').doc();
+    batch.set(listRef, { title: listTitle, owner: uid, id: listRef.id });
+
+    const todoRef = firestore.collection('todos').doc(todo.id);
+    batch.update(todoRef, { listID: listRef.id });
+
+    batch
+      .commit()
+      .then(() => {
+        dispatch({ type: 'CREATE_LIST_TODO', todo });
+      })
+      .catch((err) => {
+        dispatch({ type: 'CREATE_LIST_TODO_ERR', err });
       });
   };
 };
