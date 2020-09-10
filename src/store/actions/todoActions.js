@@ -99,3 +99,19 @@ export const updateStep = (todo, step) => {
       });
   };
 };
+
+export const deleteTodo = (todo) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    firestore
+      .collection('todos')
+      .doc(todo.id)
+      .delete()
+      .then(() => {
+        dispatch({ type: 'DELETE_TODO', todo });
+      })
+      .catch((err) => {
+        dispatch({ type: 'DELETE_TODO_ERR', err });
+      });
+  };
+};

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Dropdown, Calendar } from 'antd';
 import moment from 'moment';
-import { updateTodo } from '../../store/actions/todoActions';
+import { updateTodo, deleteTodo } from '../../store/actions/todoActions';
 import { connect } from 'react-redux';
 import { todayIsMyDay, getToday } from '../../utils/myDay';
 import { getDueToday, getDueTomorrow } from '../../utils/dueDate';
@@ -11,6 +11,7 @@ const TodoItemContextMenu = ({
   todo,
   children,
   updateTodo,
+  deleteTodo,
   lists,
 }) => {
   function updateMyDay() {
@@ -35,6 +36,10 @@ const TodoItemContextMenu = ({
 
   function removeDueDate() {
     updateTodo({ ...todo, dueDate: null });
+  }
+
+  function handleDeleteTodo() {
+    deleteTodo(todo);
   }
 
   const contextMenu = todo ? (
@@ -67,7 +72,7 @@ const TodoItemContextMenu = ({
         ))}
       </Menu.SubMenu>
       <Menu.Divider />
-      <Menu.Item>Delete Task</Menu.Item>
+      <Menu.Item onClick={handleDeleteTodo}>Delete Task</Menu.Item>
     </Menu>
   ) : (
     <Menu />
@@ -95,6 +100,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateTodo: (todo) => dispatch(updateTodo(todo)),
+    deleteTodo: (todo) => dispatch(deleteTodo(todo)),
   };
 };
 
