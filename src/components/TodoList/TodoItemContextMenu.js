@@ -42,8 +42,12 @@ const TodoItemContextMenu = ({
     deleteTodo(todo);
   }
 
+  function handleDueDateSelect(date) {
+    updateTodo({ ...todo, dueDate: date.startOf('day').toDate() });
+  }
+
   const contextMenu = todo ? (
-    <Menu mode="vertical">
+    <Menu mode="vertical" selectable={false}>
       <Menu.Item onClick={updateMyDay}>
         {todayIsMyDay(todo) ? 'Remove from My Day' : 'Add to My Day'}
       </Menu.Item>
@@ -58,7 +62,13 @@ const TodoItemContextMenu = ({
       <Menu.Item onClick={makeDueTomorrow}>Due Tomorrow</Menu.Item>
       <Menu.SubMenu title="Pick a Date">
         <Menu.Item style={{ width: 300 }} disabled>
-          <Calendar fullscreen={false} />
+          <Calendar
+            fullscreen={false}
+            onSelect={handleDueDateSelect}
+            defaultValue={
+              todo.dueDate ? moment.unix(todo.dueDate.seconds) : moment()
+            }
+          />
         </Menu.Item>
       </Menu.SubMenu>
       {todo.dueDate && (
