@@ -38,7 +38,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
   };
 
   return (
-    <Layout>
+    <Layout style={{ overflowX: 0 }}>
       <SidebarHeader />
       <span
         style={{
@@ -54,11 +54,16 @@ function Sidebar({ lists, createList, auth, tasksID }) {
         />
       </span>
       <Content>
-        <Menu mode="inline" defaultSelectedKeys={['1']}>
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={['1']}
+          style={{ border: 0, width: 200 }}
+        >
           <Menu.Item
             icon={<CoffeeOutlined />}
             onClick={() => history.push('/myday')}
             title="My Day"
+            style={{ width: 200 }}
           >
             My Day
           </Menu.Item>
@@ -66,6 +71,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
             icon={<StarOutlined />}
             onClick={() => history.push('/important')}
             title="Important"
+            style={{ width: 200 }}
           >
             Important
           </Menu.Item>
@@ -73,6 +79,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
             icon={<CalendarOutlined />}
             onClick={() => history.push('/planned')}
             title="Planned"
+            style={{ width: 200 }}
           >
             Planned
           </Menu.Item>
@@ -80,6 +87,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
             icon={<CheckCircleOutlined />}
             onClick={() => history.push('/tasks')}
             title="Tasks"
+            style={{ width: 200 }}
           >
             Tasks
           </Menu.Item>
@@ -93,6 +101,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
                   icon={<UnorderedListOutlined />}
                   onClick={() => history.push(`/list/${list.id}`)}
                   title={list.title}
+                  style={{ width: 200 }}
                 >
                   {list.title}
                   <List.Item>
