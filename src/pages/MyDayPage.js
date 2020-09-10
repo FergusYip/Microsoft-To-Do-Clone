@@ -14,19 +14,41 @@ import {
 import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
 import { todayIsMyDay, getToday } from '../utils/myDay';
+import { showCompletedTasks } from '../store/actions/myDayActions/showCompleteAction';
+import { hideCompletedTasks } from '../store/actions/myDayActions/hideCompleteAction';
 
-export const MyDayPage = ({ todos, tasksID }) => {
+export const MyDayPage = ({
+  todos,
+  tasksID,
+  myDay,
+  hideCompletedTasks,
+  showCompletedTasks,
+}) => {
+  function updateShowCompleted() {
+    if (myDay.showCompleted) {
+      hideCompletedTasks();
+    } else {
+      showCompletedTasks();
+    }
+  }
+
   const optionsDropdown = (
     <Menu>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
       <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
       <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
-      {/* <Menu.Item
-        icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+      <Menu.Item
+        icon={
+          myDay && myDay.showCompleted ? (
+            <EyeInvisibleOutlined />
+          ) : (
+            <EyeOutlined />
+          )
+        }
         onClick={updateShowCompleted}
       >
-        {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
-      </Menu.Item> */}
+        {`${myDay && myDay.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
+      </Menu.Item>
     </Menu>
   );
 
@@ -44,7 +66,7 @@ export const MyDayPage = ({ todos, tasksID }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} />
+      <TodoList todos={todos} showCompleted={myDay && myDay.showCompleted} />
       <AddTodo listID={tasksID} todoFields={{ myDay: getToday() }} />
     </div>
   );
@@ -53,6 +75,7 @@ export const MyDayPage = ({ todos, tasksID }) => {
 const mapStateToProps = (state, ownProps) => {
   const { todos } = state.firestore.data;
   return {
+    myDay: state.firebase.profile.settings.myDay,
     tasksID: state.firebase.profile.tasks,
     todos: todos
       ? Object.values(todos).filter((todo) => todo && todayIsMyDay(todo))
@@ -63,6 +86,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateList: (list) => dispatch(updateList(list)),
+    showCompletedTasks: () => dispatch(showCompletedTasks()),
+    hideCompletedTasks: () => dispatch(hideCompletedTasks()),
   };
 };
 

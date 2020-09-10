@@ -16,7 +16,6 @@ import AddTodo from '../components/TodoList/AddTodo';
 
 const TasksPage = ({ updateList, list, todos, tasksID }) => {
   const updateShowCompleted = () => {
-    console.log(list);
     list && updateList({ ...list, showCompleted: !list.showCompleted });
   };
 

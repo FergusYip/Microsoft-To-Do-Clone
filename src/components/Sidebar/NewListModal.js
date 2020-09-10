@@ -58,9 +58,19 @@ const NewListModal = ({ visible, onCreate, onCancel }) => {
               required: true,
               message: 'Please input the name of the new list!',
             },
+            {
+              type: 'string',
+              max: 100,
+              message: 'Name cannot be longer than 100 characters',
+            },
           ]}
         >
-          <Input ref={inputRef} onPressEnter={submitForm} autoFocus />
+          <Input
+            ref={inputRef}
+            onPressEnter={submitForm}
+            autoFocus
+            maxLength={101}
+          />
         </Form.Item>
       </Form>
     </Modal>

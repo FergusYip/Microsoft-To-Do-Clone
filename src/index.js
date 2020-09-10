@@ -32,13 +32,23 @@ function AuthIsLoaded({ children }) {
   return children;
 }
 
+function ProfileIsLoaded({ children }) {
+  const profile = useSelector((state) => state.firebase.profile);
+  if (!isLoaded(profile)) {
+    return <Loading />;
+  }
+  return children;
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <ReactReduxFirebaseProvider {...rrfProps}>
       <Provider store={store}>
         <PersistGate persistor={persistor}>
           <AuthIsLoaded>
-            <App />
+            <ProfileIsLoaded>
+              <App />
+            </ProfileIsLoaded>
           </AuthIsLoaded>
         </PersistGate>
       </Provider>

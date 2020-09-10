@@ -13,19 +13,45 @@ import {
 } from '@ant-design/icons';
 import { updateList } from '../store/actions/listActions';
 import AddTodo from '../components/TodoList/AddTodo';
+import {
+  showCompletedTasks,
+  hideCompletedTasks,
+} from '../store/actions/importantActions';
 
-const ImportantPage = ({ todos, tasksID }) => {
+const ImportantPage = ({
+  todos,
+  tasksID,
+  important,
+  showCompletedTasks,
+  hideCompletedTasks,
+}) => {
+  function updateShowCompleted() {
+    if (important && important.showCompleted) {
+      hideCompletedTasks();
+    } else {
+      showCompletedTasks();
+    }
+  }
+
   const optionsDropdown = (
     <Menu>
       <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
       <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
       <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
-      {/* <Menu.Item
-        icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+      <Menu.Item
+        icon={
+          important && important.showCompleted ? (
+            <EyeInvisibleOutlined />
+          ) : (
+            <EyeOutlined />
+          )
+        }
         onClick={updateShowCompleted}
       >
-        {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
-      </Menu.Item> */}
+        {`${
+          important && important.showCompleted ? 'Hide' : 'Show'
+        } Completed Tasks`}
+      </Menu.Item>
     </Menu>
   );
 
@@ -43,7 +69,10 @@ const ImportantPage = ({ todos, tasksID }) => {
           </Button>
         </Dropdown>
       </ContentHeader>
-      <TodoList todos={todos} />
+      <TodoList
+        todos={todos}
+        showCompleted={important && important.showCompleted}
+      />
       <AddTodo listID={tasksID} todoFields={{ isImportant: true }} />
     </div>
   );
@@ -53,6 +82,7 @@ const mapStateToProps = (state, ownProps) => {
   const { todos } = state.firestore.data;
   return {
     tasksID: state.firebase.profile.tasks,
+    important: state.firebase.profile.settings.important,
     todos: todos
       ? Object.values(todos).filter((todo) => todo && todo.isImportant)
       : [],
@@ -62,6 +92,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateList: (list) => dispatch(updateList(list)),
+    showCompletedTasks: () => dispatch(showCompletedTasks()),
+    hideCompletedTasks: () => dispatch(hideCompletedTasks()),
   };
 };
 

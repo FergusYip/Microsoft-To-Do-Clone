@@ -43,6 +43,10 @@ export const ListPage = ({
 }) => {
   const [isRenaming, setIsRenaming] = useState(false);
 
+  const updateShowCompleted = () => {
+    list && updateList({ ...list, showCompleted: !list.showCompleted });
+  };
+
   const optionsDropdown = list && (
     <Menu>
       <Menu.Item icon={<EditOutlined />} onClick={handleRename}>
@@ -53,7 +57,7 @@ export const ListPage = ({
       <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
       <Menu.Item
         icon={list.showCompleted ? <EyeInvisibleOutlined /> : <EyeOutlined />}
-        // onClick={updateShowCompleted}
+        onClick={updateShowCompleted}
       >
         {`${list.showCompleted ? 'Hide' : 'Show'} Completed Tasks`}
       </Menu.Item>
