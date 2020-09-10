@@ -24,13 +24,25 @@ const TodoItemContextMenu = ({
     }
   }
 
-  const contextMenu = (
+  function updateImportant() {
+    updateTodo({ ...todo, isImportant: !todo.isImportant });
+  }
+
+  function updateCompletion() {
+    updateTodo({ ...todo, isComplete: !todo.isComplete });
+  }
+
+  const contextMenu = todo ? (
     <Menu mode="vertical">
       <Menu.Item onClick={updateMyDay}>
         {todayIsMyDay ? 'Remove from My Day' : 'Add to My Day'}
       </Menu.Item>
-      <Menu.Item>Mark as Important</Menu.Item>
-      <Menu.Item>Mark as Completed</Menu.Item>
+      <Menu.Item onClick={updateImportant}>
+        {todo.isImportant ? 'Remove Importance' : 'Mark as Important'}
+      </Menu.Item>
+      <Menu.Item onClick={updateCompletion}>
+        {todo.isComplete ? 'Mark as Not Completed' : 'Mark as Completed'}
+      </Menu.Item>
       <Menu.Divider />
       <Menu.Item>Due Today</Menu.Item>
       <Menu.Item>Due Tomorrow</Menu.Item>
@@ -46,7 +58,7 @@ const TodoItemContextMenu = ({
       <Menu.Divider />
       <Menu.Item>Delete Task</Menu.Item>
     </Menu>
-  );
+  ) : null;
 
   return (
     <Dropdown
