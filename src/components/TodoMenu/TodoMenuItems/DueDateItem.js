@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { List, Dropdown, Menu, Row, Col, Typography } from 'antd';
-import { CalendarOutlined } from '@ant-design/icons';
+import { List, Dropdown, Menu, Row, Col, Typography, Button } from 'antd';
+import { CalendarOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { updateTodo } from '../../../store/actions/todoActions';
@@ -35,6 +35,10 @@ function DueDateItem({ todo, updateTodo }) {
     updateTodo({ ...todo, dueDate: dueNextWeek.toDate() });
   }
 
+  function handleCancelDueDate() {
+    updateTodo({ ...todo, dueDate: null });
+  }
+
   function getDueDateTitle(dueDate) {
     if (!dueDate) return 'Add Due Date';
 
@@ -44,7 +48,7 @@ function DueDateItem({ todo, updateTodo }) {
     const dateDiff = Math.round(moment.duration(now.diff(due)).asDays());
     return (
       <>
-        <Typography.Text>
+        <Typography.Text style={{ display: 'inline-block', width: 175 }}>
           Due{' '}
           {Math.abs(dateDiff) > 1
             ? due.format('ddd, D MMMM')
@@ -106,7 +110,26 @@ function DueDateItem({ todo, updateTodo }) {
   };
 
   return (
-    <List.Item id={id}>
+    <List.Item
+      id={id}
+      key="DueDateItem"
+      actions={
+        todo.dueDate && [
+          <Button
+            type="text"
+            shape="circle"
+            style={{
+              padding: 0,
+              height: 26,
+              width: 26,
+            }}
+            onClick={handleCancelDueDate}
+          >
+            <CloseOutlined />
+          </Button>,
+        ]
+      }
+    >
       <Dropdown
         overlay={menu}
         placement="topLeft"

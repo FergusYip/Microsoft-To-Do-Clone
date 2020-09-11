@@ -95,7 +95,7 @@ function RemindMeItem({ todo, updateTodo }) {
 
     return (
       <>
-        <Typography.Text style={{ width: 158, display: 'inline-block' }}>
+        <Typography.Text style={{ width: 170, display: 'inline-block' }}>
           Remind me at {reminder.format('h:mm a')}
         </Typography.Text>
         <br />
