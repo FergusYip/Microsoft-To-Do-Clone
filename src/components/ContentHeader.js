@@ -8,6 +8,7 @@ const ContentHeader = ({
   children,
   onRenamed = () => {},
   onCancel = () => {},
+  content,
 }) => {
   useEffect(() => {
     function handleKeyDown(event) {
@@ -42,12 +43,16 @@ const ContentHeader = ({
             onBlur={onCancel}
           />
         ) : (
-          <Typography.Title level={3}>{title}</Typography.Title>
+          <Typography.Title level={3} style={{ margin: 0 }}>
+            {title}
+          </Typography.Title>
         )
       }
       extra={children}
       style={{ height: 85 }}
-    />
+    >
+      {content}
+    </PageHeader>
   );
 };
 

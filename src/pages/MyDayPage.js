@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import TodoList from '../components/TodoList';
 import ContentHeader from '../components/ContentHeader';
-import { Button, Dropdown, Menu } from 'antd';
+import { Button, Dropdown, Menu, Typography } from 'antd';
 import {
   EllipsisOutlined,
   SortAscendingOutlined,
@@ -16,6 +16,7 @@ import AddTodo from '../components/TodoList/AddTodo';
 import { todayIsMyDay, getToday } from '../utils/myDay';
 import { showCompletedTasks } from '../store/actions/myDayActions/showCompleteAction';
 import { hideCompletedTasks } from '../store/actions/myDayActions/hideCompleteAction';
+import moment from 'moment';
 
 export const MyDayPage = ({
   todos,
@@ -54,7 +55,17 @@ export const MyDayPage = ({
 
   return (
     <div>
-      <ContentHeader title={'My Day'}>
+      <ContentHeader
+        title={'My Day'}
+        content={
+          <Typography.Title
+            level={5}
+            style={{ margin: 0, position: 'relative', top: -16 }}
+          >
+            {moment().format('dddd, D, MMMM')}
+          </Typography.Title>
+        }
+      >
         <Dropdown
           overlay={optionsDropdown}
           placement="bottomRight"
