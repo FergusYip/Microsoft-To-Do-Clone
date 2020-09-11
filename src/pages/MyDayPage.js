@@ -62,7 +62,7 @@ export const MyDayPage = ({
             level={5}
             style={{ margin: 0, position: 'relative', top: -16 }}
           >
-            {moment().format('dddd, D, MMMM')}
+            {moment().format('dddd, D MMMM')}
           </Typography.Title>
         }
       >
