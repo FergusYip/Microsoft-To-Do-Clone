@@ -63,11 +63,16 @@ function RepeatItem({ todo, updateTodo }) {
   function handleCustomCancel() {
     setIsSettingCustom(false);
   }
-  function handleCustomOK(repeat) {
+  function handleCustomOK({ repeat, daysOfWeek }) {
     setIsSettingCustom(false);
     updateTodo({
       ...todo,
-      repeat: { type: REPEAT_TYPE.CUSTOM, ...repeat, date: new Date() },
+      repeat: {
+        type: REPEAT_TYPE.CUSTOM,
+        ...repeat,
+        date: new Date(),
+        daysOfWeek,
+      },
     });
   }
 
@@ -87,6 +92,32 @@ function RepeatItem({ todo, updateTodo }) {
     return document.getElementById(id);
   };
 
+  function getDaysOfWeek(daysOfWeek) {
+    const {
+      sunday,
+      monday,
+      tuesday,
+      wednesday,
+      thursday,
+      friday,
+      saturday,
+    } = daysOfWeek;
+    if (Object.values(daysOfWeek).filter((day) => day).length === 1) {
+      return Object.keys(daysOfWeek)
+        .filter((key) => daysOfWeek[key])[0]
+        .replace(/^\w/, (c) => c.toUpperCase());
+    }
+    const sunStr = sunday && 'Sun';
+    const monStr = monday && 'Mon';
+    const tueStr = tuesday && 'Tue';
+    const wedStr = wednesday && 'Wed';
+    const thuStr = thursday && 'Thu';
+    const friStr = friday && 'Fri';
+    const satStr = saturday && 'Sat';
+    const strArray = [sunStr, monStr, tueStr, wedStr, thuStr, friStr, satStr];
+    return strArray.filter((str) => !!str).join(', ');
+  }
+
   function getCustomTitle(repeat) {
     switch (repeat.unit) {
       case REPEAT_UNIT.DAYS:
@@ -96,10 +127,16 @@ function RepeatItem({ todo, updateTodo }) {
           <TitleSubtitle title={`Every ${repeat.frequency} days`} />
         );
       case REPEAT_UNIT.WEEKS:
-        return repeat.frequency === 1 ? (
-          <TitleSubtitle title="Weekly" />
-        ) : (
-          <TitleSubtitle title={`Every ${repeat.frequency} weeks`} />
+        console.log(repeat);
+        return (
+          <TitleSubtitle
+            title={
+              repeat.frequency === 1
+                ? 'Weekly'
+                : `Every ${repeat.frequency} weeks`
+            }
+            subtitle={getDaysOfWeek(repeat.daysOfWeek)}
+          />
         );
       case REPEAT_UNIT.MONTHS:
         return repeat.frequency === 1 ? (
