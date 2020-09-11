@@ -21,9 +21,15 @@ const TasksPage = ({ updateList, list, todos, tasksID }) => {
 
   const optionsDropdown = (
     <Menu selectable={false}>
-      <Menu.Item icon={<SortAscendingOutlined />}>Sort</Menu.Item>
-      <Menu.Item icon={<BgColorsOutlined />}>Change Theme</Menu.Item>
-      <Menu.Item icon={<PrinterOutlined />}>Print List</Menu.Item>
+      <Menu.Item disabled icon={<SortAscendingOutlined />}>
+        Sort
+      </Menu.Item>
+      <Menu.Item disabled icon={<BgColorsOutlined />}>
+        Change Theme
+      </Menu.Item>
+      <Menu.Item disabled icon={<PrinterOutlined />}>
+        Print List
+      </Menu.Item>
       <Menu.Item
         icon={
           list && list.showCompleted ? (

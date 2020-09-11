@@ -51,6 +51,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
           placeholder="Search"
           onSearch={(value) => console.log(value)}
           style={{ width: '80%' }}
+          disabled
         />
       </span>
       <Content>
@@ -80,6 +81,7 @@ function Sidebar({ lists, createList, auth, tasksID }) {
             onClick={() => history.push('/planned')}
             title="Planned"
             style={{ width: 200 }}
+            disabled
           >
             Planned
           </Menu.Item>

@@ -6,7 +6,7 @@ export default function UploadFileItem() {
   return (
     <List.Item>
       <div style={{ overflow: 'hidden', marginLeft: -4 }}>
-        <Upload multiple>
+        <Upload multiple disabled>
           <div style={{ marginLeft: 4 }}>
             <PaperClipOutlined style={{ marginRight: 16 }} />
             <h4 style={{ display: 'inline' }}>Add File</h4>
