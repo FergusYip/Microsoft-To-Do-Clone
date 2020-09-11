@@ -1,13 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Form,
-  Input,
-  Button,
-  Checkbox,
-  message,
-  Space,
-  Typography,
-} from 'antd';
+import { Form, Input, Button, message, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import AuthCard from '../components/AuthCard';
 import { signIn } from '../store/actions/authActions';
@@ -34,9 +26,6 @@ function LoginPage({ signIn, authError }) {
       <Form
         layout="vertical"
         name="login"
-        initialValues={{
-          remember: true,
-        }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         requiredMark={false}
@@ -73,9 +62,6 @@ function LoginPage({ signIn, authError }) {
             <Input.Password />
           </Form.Item>
         </Space>
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Login
