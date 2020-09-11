@@ -88,16 +88,18 @@ const TodoItemContextMenu = ({
         Create a New list from This Task
       </Menu.Item>
       <Menu.SubMenu title="Move Task to...">
-        {lists.map((list) => (
-          <Menu.Item
-            onClick={() =>
-              todo.listID !== list.id &&
-              updateTodo({ ...todo, listID: list.id })
-            }
-          >
-            {list.title}
-          </Menu.Item>
-        ))}
+        {lists.map((list) =>
+          list ? (
+            <Menu.Item
+              onClick={() =>
+                todo.listID !== list.id &&
+                updateTodo({ ...todo, listID: list.id })
+              }
+            >
+              {list.title}
+            </Menu.Item>
+          ) : null
+        )}
       </Menu.SubMenu>
       <Menu.Divider />
       <Menu.Item onClick={handleDeleteTodo}>Delete Task</Menu.Item>

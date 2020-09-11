@@ -125,11 +125,21 @@ export const createListFromTodo = (todo) => {
 
     const batch = firestore.batch();
 
+    const untitledLists = Object.values(lists).filter(
+      (list) => list && list.title.match(new RegExp(`^${UNTITLED_LIST}\\b`))
+    );
+
     let listTitle = UNTITLED_LIST;
-    let postfix = 1;
-    while (Object.values(lists).some((list) => list.title === listTitle)) {
-      listTitle = `${UNTITLED_LIST} ${postfix}`;
-      postfix++;
+    if (untitledLists.length !== 0) {
+      const postFixes = untitledLists.map((list) => {
+        const re = new RegExp(`^${UNTITLED_LIST} (\\d+)$`);
+        const matches = list.title.match(re);
+        return matches ? matches[1] : null;
+      });
+
+      let postFix = Math.max(...postFixes);
+
+      listTitle = `${UNTITLED_LIST} ${postFix + 1}`;
     }
 
     const listRef = firestore.collection('lists').doc();
