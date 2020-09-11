@@ -8,8 +8,9 @@ import {
   Typography,
   Row,
   Col,
+  Button,
 } from 'antd';
-import { BellOutlined } from '@ant-design/icons';
+import { BellOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { updateTodo } from '../../../store/actions/todoActions';
@@ -83,21 +84,22 @@ function RemindMeItem({ todo, updateTodo }) {
     const now = moment();
 
     const dateDiff = Math.round(moment.duration(now.diff(reminder)).asDays());
+    const relativeTime =
+      Math.abs(dateDiff) > 1
+        ? reminder.format('ddd, D MMMM')
+        : dateDiff === 0
+        ? 'Today'
+        : dateDiff === -1
+        ? 'Tomorrow'
+        : 'Yesterday';
+
     return (
       <>
-        <Typography.Text>
+        <Typography.Text style={{ width: 158, display: 'inline-block' }}>
           Remind me at {reminder.format('h:mm a')}
         </Typography.Text>
         <br />
-        <Typography.Text>
-          {Math.abs(dateDiff) > 1
-            ? reminder.format('ddd, D MMMM')
-            : dateDiff === 0
-            ? 'Today'
-            : dateDiff === -1
-            ? 'Tomorrow'
-            : 'Yesterday'}
-        </Typography.Text>
+        <Typography.Text>{relativeTime}</Typography.Text>
       </>
     );
   }
@@ -159,8 +161,32 @@ function RemindMeItem({ todo, updateTodo }) {
     return document.getElementById(id);
   };
 
+  function handleCancelReminder(e) {
+    e.stopPropagation();
+    updateTodo({ ...todo, remindMe: null });
+  }
+
   return (
-    <List.Item id={id}>
+    <List.Item
+      id={id}
+      key="RemindMeItem"
+      actions={
+        todo.remindMe && [
+          <Button
+            type="text"
+            shape="circle"
+            style={{
+              padding: 0,
+              height: 26,
+              width: 26,
+            }}
+            onClick={handleCancelReminder}
+          >
+            <CloseOutlined />
+          </Button>,
+        ]
+      }
+    >
       <Dropdown
         overlay={menu}
         placement="bottomLeft"
@@ -168,6 +194,7 @@ function RemindMeItem({ todo, updateTodo }) {
         trigger={['click']}
         getPopupContainer={getRoot}
         onVisibleChange={setReminderTimes}
+        overlayStyle={{ width: '100%' }}
       >
         {selectingDate ? (
           <DatePicker
