@@ -137,6 +137,7 @@ function DueDateItem({ todo, updateTodo }) {
         trigger={['click']}
         getPopupContainer={getRoot}
         onVisibleChange={setReminderTimes}
+        overlayStyle={{ width: 252 }}
       >
         <List.Item.Meta
           avatar={<CalendarOutlined />}
