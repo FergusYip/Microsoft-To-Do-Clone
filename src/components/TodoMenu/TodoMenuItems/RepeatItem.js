@@ -3,7 +3,7 @@ import { List, Dropdown, Menu, Typography } from 'antd';
 import { RetweetOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { updateTodo } from '../../../store/actions/todoActions';
-import { REPEAT_PRESET } from '../../../utils/constants';
+import { REPEAT_TYPE, REPEAT_UNIT } from '../../../utils/constants';
 import moment from 'moment';
 import CustomRepeatModal from './CustomRepeatModal';
 
@@ -24,35 +24,35 @@ function RepeatItem({ todo, updateTodo }) {
   function selectDaily() {
     updateTodo({
       ...todo,
-      repeat: { type: REPEAT_PRESET.DAILY, date: new Date() },
+      repeat: { type: REPEAT_TYPE.DAILY, date: new Date() },
     });
   }
 
   function selectWeekly() {
     updateTodo({
       ...todo,
-      repeat: { type: REPEAT_PRESET.WEEKLY, date: new Date() },
+      repeat: { type: REPEAT_TYPE.WEEKLY, date: new Date() },
     });
   }
 
   function selectWeekdays() {
     updateTodo({
       ...todo,
-      repeat: { type: REPEAT_PRESET.WEEKDAYS, date: new Date() },
+      repeat: { type: REPEAT_TYPE.WEEKDAYS, date: new Date() },
     });
   }
 
   function selectMonthly() {
     updateTodo({
       ...todo,
-      repeat: { type: REPEAT_PRESET.MONTHLY, date: new Date() },
+      repeat: { type: REPEAT_TYPE.MONTHLY, date: new Date() },
     });
   }
 
   function selectYearly() {
     updateTodo({
       ...todo,
-      repeat: { type: REPEAT_PRESET.YEARLY, date: new Date() },
+      repeat: { type: REPEAT_TYPE.YEARLY, date: new Date() },
     });
   }
 
@@ -63,8 +63,12 @@ function RepeatItem({ todo, updateTodo }) {
   function handleCustomCancel() {
     setIsSettingCustom(false);
   }
-  function handleCustomOK() {
+  function handleCustomOK(repeat) {
     setIsSettingCustom(false);
+    updateTodo({
+      ...todo,
+      repeat: { type: REPEAT_TYPE.CUSTOM, ...repeat, date: new Date() },
+    });
   }
 
   const menu = (
@@ -83,25 +87,56 @@ function RepeatItem({ todo, updateTodo }) {
     return document.getElementById(id);
   };
 
-  function getTodoTitle() {
+  function getCustomTitle(repeat) {
+    switch (repeat.unit) {
+      case REPEAT_UNIT.DAYS:
+        return repeat.frequency === 1 ? (
+          <TitleSubtitle title="Daily" />
+        ) : (
+          <TitleSubtitle title={`Every ${repeat.frequency} days`} />
+        );
+      case REPEAT_UNIT.WEEKS:
+        return repeat.frequency === 1 ? (
+          <TitleSubtitle title="Weekly" />
+        ) : (
+          <TitleSubtitle title={`Every ${repeat.frequency} weeks`} />
+        );
+      case REPEAT_UNIT.MONTHS:
+        return repeat.frequency === 1 ? (
+          <TitleSubtitle title="Monthly" />
+        ) : (
+          <TitleSubtitle title={`Every ${repeat.frequency} months`} />
+        );
+      case REPEAT_UNIT.YEARS:
+        return repeat.frequency === 1 ? (
+          <TitleSubtitle title="Yearly" />
+        ) : (
+          <TitleSubtitle title={`Every ${repeat.frequency} years`} />
+        );
+    }
+  }
+
+  function getTitle() {
     if (!todo) return '';
 
     switch (todo.repeat.type) {
-      case REPEAT_PRESET.DAILY:
+      case REPEAT_TYPE.DAILY:
         return <TitleSubtitle title="Daily" />;
-      case REPEAT_PRESET.WEEKLY:
+      case REPEAT_TYPE.WEEKLY:
         return (
           <TitleSubtitle
             title="Weekly"
             subtitle={moment.unix(todo.repeat.date.seconds).format('dddd')}
           />
         );
-      case REPEAT_PRESET.WEEKDAYS:
+      case REPEAT_TYPE.WEEKDAYS:
         return <TitleSubtitle title="Weekly" subtitle="Weekdays" />;
-      case REPEAT_PRESET.MONTHLY:
+      case REPEAT_TYPE.MONTHLY:
         return <TitleSubtitle title="Monthly" />;
-      case REPEAT_PRESET.YEARLY:
+      case REPEAT_TYPE.YEARLY:
         return <TitleSubtitle title="Yearly" />;
+      case REPEAT_TYPE.CUSTOM:
+        return getCustomTitle(todo.repeat);
       default:
         break;
     }
@@ -119,7 +154,7 @@ function RepeatItem({ todo, updateTodo }) {
         {todo && todo.repeat ? (
           <List.Item.Meta
             avatar={<RetweetOutlined />}
-            title={getTodoTitle()}
+            title={getTitle()}
             style={{ margin: 0 }}
           />
         ) : (

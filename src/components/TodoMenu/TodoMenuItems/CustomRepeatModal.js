@@ -14,7 +14,7 @@ const NewListModal = ({ visible, onOK, onCancel }) => {
       .then((values) => {
         console.log(values);
         form.resetFields();
-        onOK(values);
+        onOK(values.repeat);
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
