@@ -19,7 +19,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact component={HomePage} />
+        {/* <Route path="/" exact component={HomePage} /> */}
         <UnprotectedRoute path="/login" exact component={LoginPage} />
         <UnprotectedRoute path="/register" exact component={RegisterPage} />
         <SidebarBody>
@@ -29,9 +29,7 @@ function App() {
           <ProtectedRoute path="/tasks" component={TasksPage} />
           <ProtectedRoute path="/list/:id" component={ListPage} />
         </SidebarBody>
-        <Route path="*">
-          <div>404</div>
-        </Route>
+        <Route path="*" component={LoginPage} />
       </Switch>
     </Router>
   );
