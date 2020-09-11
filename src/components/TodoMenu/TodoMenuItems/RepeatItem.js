@@ -113,6 +113,8 @@ function RepeatItem({ todo, updateTodo }) {
         ) : (
           <TitleSubtitle title={`Every ${repeat.frequency} years`} />
         );
+      default:
+        break;
     }
   }
 
