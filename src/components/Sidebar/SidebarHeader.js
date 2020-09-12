@@ -4,7 +4,7 @@ import Avatar from 'antd/lib/avatar/avatar';
 import { connect } from 'react-redux';
 import { signOut } from '../../store/actions/authActions';
 
-function SidebarHeader({ signOut, profile }) {
+function SidebarHeader({ signOut, profile, style }) {
   const avatarMenu = (
     <Menu>
       <Menu.Item key="0" onClick={signOut}>
@@ -15,6 +15,7 @@ function SidebarHeader({ signOut, profile }) {
 
   return (
     <PageHeader
+      style={style}
       title={
         <Row align="middle">
           <Dropdown overlay={avatarMenu} trigger={['click']}>

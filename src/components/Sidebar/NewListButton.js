@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Menu } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-const NewListButton = ({ onClick }) => {
+const NewListButton = ({ onClick, style }) => {
   return (
-    <Menu mode="inline" selectable={false} style={{ border: 0 }}>
+    <Menu mode="inline" selectable={false} style={{ border: 0, ...style }}>
       <Menu.Item
         icon={<PlusOutlined />}
         onClick={onClick}

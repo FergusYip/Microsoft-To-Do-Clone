@@ -19,7 +19,7 @@ export default function SidebarBody({ children }) {
         collapsedWidth="0"
         trigger={null}
         style={{
-          overflow: 'auto',
+          overflow: 'hidden',
           height: '100vh',
           position: 'fixed',
           left: 0,
