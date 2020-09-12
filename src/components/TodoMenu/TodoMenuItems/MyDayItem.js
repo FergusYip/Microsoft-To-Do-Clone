@@ -1,9 +1,10 @@
 import React from 'react';
-import { List, Button } from 'antd';
+import { List, Button, Typography } from 'antd';
 import { CoffeeOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { updateTodo } from '../../../store/actions/todoActions';
+import { CONFIRM_BLUE } from '../../../utils/constants';
 
 function MyDayItem({ todo, updateTodo }) {
   const todayIsMyDay =
@@ -35,7 +36,14 @@ function MyDayItem({ todo, updateTodo }) {
         </Button>,
       ]}
     >
-      <List.Item.Meta avatar={<CoffeeOutlined />} title={'Added to My Day'} />
+      <List.Item.Meta
+        avatar={<CoffeeOutlined style={{ color: CONFIRM_BLUE }} />}
+        title={
+          <Typography.Text style={{ color: CONFIRM_BLUE }}>
+            Added to My Day
+          </Typography.Text>
+        }
+      />
     </List.Item>
   ) : (
     <List.Item key="MyDayItem" onClick={updateMyDay}>

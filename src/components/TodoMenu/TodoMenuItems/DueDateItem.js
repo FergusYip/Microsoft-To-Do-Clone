@@ -9,7 +9,7 @@ import {
   getDueTomorrow,
   getDueNextWeek,
 } from '../../../utils/dueDate';
-import { red } from '@ant-design/colors';
+import { WARNING_RED } from '../../../utils/constants';
 
 const TIME_FORMAT = 'ddd';
 
@@ -57,7 +57,7 @@ function DueDateItem({ todo, updateTodo }) {
     if (!dueDate) return 'Add Due Date';
     const due = moment.unix(dueDate.seconds).startOf('day');
     const now = moment().startOf('day');
-    const overdueStyle = isOverdue ? { color: red[4] } : {};
+    const overdueStyle = isOverdue ? { color: WARNING_RED } : {};
     const diff = dateDiff(now, due);
     return (
       <>
@@ -159,7 +159,7 @@ function DueDateItem({ todo, updateTodo }) {
       >
         <List.Item.Meta
           avatar={
-            <CalendarOutlined style={isOverdue ? { color: red[4] } : {}} />
+            <CalendarOutlined style={isOverdue ? { color: WARNING_RED } : {}} />
           }
           title={todo && getDueDateTitle(todo.dueDate)}
         />

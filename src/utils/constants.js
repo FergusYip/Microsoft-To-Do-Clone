@@ -1,3 +1,8 @@
+import { blue, red } from '@ant-design/colors';
+
+export const WARNING_RED = red[4];
+export const CONFIRM_BLUE = blue[5];
+
 export const UNTITLED_LIST = 'Untitled List';
 
 export const REPEAT_TYPE = {
