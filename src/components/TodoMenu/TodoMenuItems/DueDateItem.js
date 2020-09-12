@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { List, Dropdown, Menu, Row, Col, Typography, Button } from 'antd';
 import { CalendarOutlined, CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import {
   getDueTomorrow,
   getDueNextWeek,
 } from '../../../utils/dueDate';
+import { red } from '@ant-design/colors';
 
 const TIME_FORMAT = 'ddd';
 
@@ -16,6 +17,7 @@ function DueDateItem({ todo, updateTodo }) {
   const [dueToday, setDueToday] = useState(null);
   const [dueTomorrow, setDueTomorrow] = useState(null);
   const [dueNextWeek, setDueNextWeek] = useState(null);
+  const [isOverdue, setIsOverdue] = useState(false);
 
   const id = 'due_date_item';
 
@@ -39,24 +41,30 @@ function DueDateItem({ todo, updateTodo }) {
     updateTodo({ ...todo, dueDate: null });
   }
 
+  function dateDiff(now, due) {
+    return Math.round(moment.duration(due.diff(now)).asDays());
+  }
+
+  function getRelativeDate(date, diff) {
+    console.log('diff', diff);
+    if (Math.abs(diff) > 1) return date.format('ddd, D MMMM');
+    if (diff === 0) return 'Today';
+    if (diff === -1) return 'Yesterday';
+    return 'Tomorrow';
+  }
+
   function getDueDateTitle(dueDate) {
     if (!dueDate) return 'Add Due Date';
-
-    const due = moment.unix(dueDate.seconds);
+    const due = moment.unix(dueDate.seconds).startOf('day');
     const now = moment().startOf('day');
-
-    const dateDiff = Math.round(moment.duration(now.diff(due)).asDays());
+    const overdueStyle = isOverdue ? { color: red[4] } : {};
+    const diff = dateDiff(now, due);
     return (
       <>
-        <Typography.Text style={{ display: 'inline-block', width: 175 }}>
-          Due{' '}
-          {Math.abs(dateDiff) > 1
-            ? due.format('ddd, D MMMM')
-            : dateDiff === 0
-            ? 'Today'
-            : dateDiff === -1
-            ? 'Tomorrow'
-            : 'Yesterday'}
+        <Typography.Text
+          style={{ display: 'inline-block', width: 175, ...overdueStyle }}
+        >
+          {`Due ${getRelativeDate(due, diff)}`}
         </Typography.Text>
       </>
     );
@@ -109,6 +117,16 @@ function DueDateItem({ todo, updateTodo }) {
     return document.getElementById(id);
   };
 
+  useEffect(() => {
+    if (!todo || !todo.dueDate) {
+      setIsOverdue(false);
+    } else {
+      const due = moment.unix(todo.dueDate.seconds);
+      const now = moment().startOf('day');
+      setIsOverdue(dateDiff(now, due) < 0);
+    }
+  }, [todo]);
+
   return (
     <List.Item
       id={id}
@@ -140,7 +158,9 @@ function DueDateItem({ todo, updateTodo }) {
         overlayStyle={{ width: 252 }}
       >
         <List.Item.Meta
-          avatar={<CalendarOutlined />}
+          avatar={
+            <CalendarOutlined style={isOverdue ? { color: red[4] } : {}} />
+          }
           title={todo && getDueDateTitle(todo.dueDate)}
         />
       </Dropdown>
